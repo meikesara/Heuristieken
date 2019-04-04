@@ -15,6 +15,7 @@ class Protein(object):
         """
         self.proteinString = proteinString
         self.aminoList = []
+        self.stability = []
 
 
     def createAminoList(self):

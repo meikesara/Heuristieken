@@ -12,14 +12,28 @@ class Fold(object):
     """
     """
 
-    def __init__(self):
+    def __init__(self, proteinString):
         """
         """
-        self.protein = Protein(sys.argv[1]).createAminoList()
+        self.initProtein = Protein(proteinString).createAminoList()
+        self.protein = self.initProtein #Check of deze niet in elkaar updaten
 
 
 
+
+def checkInput():
+    if len(sys.argv) != 2:
+        print("A proteinstring is needed")
+        exit(1)
+
+    for i in sys.argv[1]:
+        if i != "H" or i != "P" or i != "h" or i != "p": # dit klopt nog niet
+            print("Protein should only contain H and P")
+            exit(2)
+
+    return sys.argv[1]
 
 
 if __name__ == "__main__":
-    proteinString = sys.argv[1]
+    proteinString = checkInput()
+    folding = Fold(proteinString)
