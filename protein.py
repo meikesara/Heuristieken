@@ -20,7 +20,7 @@ class Protein(object):
     def createAminoList(self):
         """
         """
-        for i in self.proteinString:
+        for i in range(len(self.proteinString)):
             self.aminoList.append(Amino(i, self.proteinString[i]))
             if i == 0:
                 self.aminoList[0].addCoordinate([0,0])
