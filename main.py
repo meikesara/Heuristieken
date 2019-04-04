@@ -27,7 +27,7 @@ def checkInput():
         exit(1)
 
     for i in sys.argv[1]:
-        if i != "H" or i != "P" or i != "h" or i != "p": # dit klopt nog niet
+        if i != "H" and i != "P" and i != "h" and i != "p":
             print("Protein should only contain H and P")
             exit(2)
 
