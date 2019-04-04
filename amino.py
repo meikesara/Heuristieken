@@ -1,4 +1,7 @@
 """
+Class for Amino-acids.
+
+Meike, Janneke, Nicole
 """
 
 
