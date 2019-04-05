@@ -1,4 +1,4 @@
 # Heuristieken
 Protein Pow(d)er
 
-Dit is een merchconflict
+Dit is een test
