@@ -48,6 +48,15 @@ class Protein(object):
                 self.aminoList[i].addCoordinate(coordinate)
                 self.occupied.append(coordinate)
 
+                aroundCo = []
+                aroundCo.append([(coordinate[0] - 1), coordinate[1]])
+                aroundCo.append([(coordinate[0] + 1), coordinate[1]])
+                aroundCo.append([coordinate[0], (coordinate[1] - 1)])
+                aroundCo.append([coordinate[0], (coordinate[1] + 1)])
+                for l in aroundCo:
+                    if l in self.occupied:
+                        if 
+
         print(self.occupied)
 
 
