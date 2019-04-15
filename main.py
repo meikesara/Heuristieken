@@ -42,7 +42,6 @@ if __name__ == "__main__":
         #print("i = ", i)
         folding = Fold(proteinString)
         print(folding.initProtein.stability)
-        print(folding.initProtein.aminoList)
     #   stabilityList.append(folding.initProtein.stability)
 
     #print(stabilityList)
