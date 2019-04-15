@@ -40,7 +40,7 @@ class Protein(object):
         """
         """
         for i in range(len(self.proteinString)):
-            self.aminoList.append(Amino(i, self.proteinString[i]))
+            self.aminoList.append(Amino(i, self.proteinString[i].upper()))
             if i == 0 or i == 1:
                 self.aminoList[i].addCoordinate([0, i])
                 self.occupied.append([0, i])
@@ -57,18 +57,24 @@ class Protein(object):
                         posCo.remove(k)
 
                 if not posCo:
+                    self.stability = 0
                     break
                 coordinate = random.choice(posCo)
                 self.aminoList[i].addCoordinate(coordinate)
                 self.occupied.append(coordinate)
 
                 aroundCo = self.getSurroundCo(coordinate)
-                if self.aminoList[i].type == "H":
+                typeCo = self.aminoList[i].type
+                if typeCo == "H" or typeCo == "C":
                     for l in aroundCo:
                         if l in self.occupied:
-                            if self.aminoList[self.occupied.index(l)].type == "H":
+                            nextCo = self.aminoList[self.occupied.index(l)].type
+                            if nextCo == "H" or nextCo == "C":
                                 if (self.occupied.index(l) + 1) != i:
-                                    self.stability -= 1
+                                    if typeCo == "C" and nextCo == "C":
+                                        self.stability -= 5
+                                    else:
+                                        self.stability -= 1
 
 
         #print( self.stability) #"stability = ",
