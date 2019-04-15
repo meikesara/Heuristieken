@@ -31,17 +31,20 @@ def checkInput():
         if i != "H" and i != "P" and i != "h" and i != "p":
             print("Protein should only contain H and P")
             exit(2)
-
     return sys.argv[1]
 
 
 if __name__ == "__main__":
     proteinString = checkInput()
-    #stabilityList = []
-    for i in range(10):
-        #print("i = ", i)
-        folding = Fold(proteinString)
-        print(folding.initProtein.stability)
-    #   stabilityList.append(folding.initProtein.stability)
+    folding = Fold(proteinString)
+    stability = folding.initProtein.stability
 
-    #print(stabilityList)
+    while stability > -3:
+        newfold = Fold(proteinString)
+
+        if newfold.initProtein.stability < stability:
+            folding = newfold
+            stability = folding.initProtein.stability
+
+    print(stability)
+    print(folding.initProtein)

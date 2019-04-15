@@ -19,6 +19,13 @@ class Protein(object):
         self.stability = 0
         self.occupied = []
 
+    def __str__(self):
+        output = ""
+        for amino in self.aminoList:
+            output += amino.type
+            output += str(amino.getCoordinates()) + " "
+        return output
+
 
     def getSurroundCo(self, prevCo):
         posCo = []
