@@ -57,7 +57,6 @@ class Protein(object):
                         posCo.remove(k)
 
                 if not posCo:
-                    print("jeeeej!!!")
                     break
                 coordinate = random.choice(posCo)
                 self.aminoList[i].addCoordinate(coordinate)
