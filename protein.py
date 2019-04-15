@@ -23,6 +23,7 @@ class Protein(object):
         """
         for i in range(len(self.proteinString)):
             self.aminoList.append(Amino(i, self.proteinString[i]))
-            if i == 0:
-                self.aminoList[0].addCoordinate([0,0])
+            if i == 0 or i == 1:
+                self.aminoList[i].addCoordinate([0, i])
+
                 # coordinate should be (0,0)
