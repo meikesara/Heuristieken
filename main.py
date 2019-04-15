@@ -15,7 +15,8 @@ class Fold(object):
     def __init__(self, proteinString):
         """
         """
-        self.initProtein = Protein(proteinString).createAminoList()
+        self.initProtein = Protein(proteinString)
+        self.initProtein.createAminoList()
         #self.protein = self.initProtein #Check of deze niet in elkaar updaten
 
 
@@ -37,8 +38,11 @@ def checkInput():
 if __name__ == "__main__":
     proteinString = checkInput()
     #stabilityList = []
-    for i in range(10000):
+    for i in range(10):
+        #print("i = ", i)
         folding = Fold(proteinString)
-    #    stabilityList.append(folding.initProtein.stability)
+        print(folding.initProtein.stability)
+        print(folding.initProtein.aminoList)
+    #   stabilityList.append(folding.initProtein.stability)
 
     #print(stabilityList)

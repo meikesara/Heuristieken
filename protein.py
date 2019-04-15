@@ -65,5 +65,5 @@ class Protein(object):
                                     self.stability -= 1
 
 
-        print( self.stability) #"stability = ",
+        #print( self.stability) #"stability = ",
         #print("occupied final = ", self.occupied)
