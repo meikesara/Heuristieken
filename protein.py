@@ -36,17 +36,19 @@ class Protein(object):
                 posCo.append([prevCo[0], (prevCo[1] - 1)])
                 posCo.append([prevCo[0], (prevCo[1] + 1)])
 
-
-                print(posCo)
                 toRemove = []
-                for i in posCo:
-                    print(i)
-                    if i in self.occupied:
-                        toRemove.append(i)
-                for i in toRemove:
-                    if i in self.occupied:
-                        posCo.remove(i)
-                print(posCo)
+                for j in posCo:
+                    if j in self.occupied:
+                        toRemove.append(j)
+                for k in toRemove:
+                    if k in self.occupied:
+                        posCo.remove(k)
+
+                coordinate = random.choice(posCo)
+                self.aminoList[i].addCoordinate(coordinate)
+                self.occupied.append(coordinate)
+
+        print(self.occupied)
 
 
                 # coordinate should be (0,0)
