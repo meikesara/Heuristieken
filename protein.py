@@ -20,6 +20,17 @@ class Protein(object):
         self.occupied = []
 
 
+    def getSurroundCo(self, prevCo):
+        posCo = []
+        posCo.append([(prevCo[0] - 1), prevCo[1]])
+        posCo.append([(prevCo[0] + 1), prevCo[1]])
+        posCo.append([prevCo[0], (prevCo[1] - 1)])
+        posCo.append([prevCo[0], (prevCo[1] + 1)])
+        return posCo
+
+
+
+
     def createAminoList(self):
         """
         """
@@ -30,12 +41,8 @@ class Protein(object):
                 self.occupied.append([0, i])
             else:
                 prevCo = self.aminoList[(i - 1)].getCoordinates()
-                posCo = []
-                posCo.append([(prevCo[0] - 1), prevCo[1]])
-                posCo.append([(prevCo[0] + 1), prevCo[1]])
-                posCo.append([prevCo[0], (prevCo[1] - 1)])
-                posCo.append([prevCo[0], (prevCo[1] + 1)])
-
+                posCo = getSurroundCo(prevCo)
+                
                 toRemove = []
                 for j in posCo:
                     if j in self.occupied:
@@ -47,8 +54,6 @@ class Protein(object):
                 coordinate = random.choice(posCo)
                 self.aminoList[i].addCoordinate(coordinate)
                 self.occupied.append(coordinate)
-
-        print(self.occupied)
 
 
                 # coordinate should be (0,0)
