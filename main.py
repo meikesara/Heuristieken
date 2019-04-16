@@ -38,13 +38,16 @@ if __name__ == "__main__":
     proteinString = checkInput()
     folding = Fold(proteinString)
     stability = folding.initProtein.stability
+    print(stability)
 
-    while stability > -20:
+    while stability > -3:
         newfold = Fold(proteinString)
 
         if newfold.initProtein.stability < stability:
             folding = newfold
             stability = folding.initProtein.stability
+            print(stability)
 
-    print(stability)
+    #print(stability)
     print(folding.initProtein)
+    folding.initProtein.createPlot()

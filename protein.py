@@ -6,6 +6,7 @@ Meike, Janneke, Nicole
 
 from amino import Amino
 import random
+import matplotlib.pyplot as plt
 
 class Protein(object):
     """
@@ -79,3 +80,15 @@ class Protein(object):
 
         #print( self.stability) #"stability = ",
         #print("occupied final = ", self.occupied)
+
+    def createPlot(self):
+        colorDict = {"P": 'go', "H": 'ro', "C": 'bo'}
+        for i in range(len(self.aminoList)):
+            amino = self.aminoList[i]
+            theseCo = amino.coordinate
+            if i != 0:
+                prevCo = self.aminoList[(i - 1)].coordinate
+                plt.plot([prevCo[0], theseCo[0]], [prevCo[1], theseCo[1]], '-k')
+            plt.plot([theseCo[0]], [theseCo[1]], colorDict[amino.type])
+        plt.title("P = groen; H = rood; C = blauw")
+        plt.show()
