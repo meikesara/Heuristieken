@@ -39,16 +39,28 @@ class Protein(object):
         return output
 
 
-    def getSurroundCo(self, prevCo):
+    def getSurroundCo(self, prevCo, occupied):
         """
         This method gets the 4 surrounding coordinates
+        occupied is true if you want to know which surrounding coordinates are occupied
+        occupies is false if you want to know which surrounding coordinates are not occupied
         """
 
         posCo = []
-        posCo.append([(prevCo[0] - 1), prevCo[1]])
-        posCo.append([(prevCo[0] + 1), prevCo[1]])
-        posCo.append([prevCo[0], (prevCo[1] - 1)])
-        posCo.append([prevCo[0], (prevCo[1] + 1)])
+        coordinates = [[(prevCo[0] - 1), prevCo[1]], [(prevCo[0] + 1), prevCo[1]], [prevCo[0], (prevCo[1] - 1)], [prevCo[0], (prevCo[1] + 1)]]
+
+        for coordinate in coordinates:
+            if occupied is True:
+                if coordinate in self.occupied:
+                    posCo.append(coordinate)
+            else:
+                if coordinate not in self.occupied:
+                    posCo.append(coordinate)
+
+        # posCo.append([(prevCo[0] - 1), prevCo[1]])
+        # posCo.append([(prevCo[0] + 1), prevCo[1]])
+        # posCo.append([prevCo[0], (prevCo[1] - 1)])
+        # posCo.append([prevCo[0], (prevCo[1] + 1)])
         return posCo
 
 
@@ -76,15 +88,15 @@ class Protein(object):
                 prevCo = self.aminoList[(id - 1)].coordinate
 
                 # Get the surrounding coordinates
-                posCo = self.getSurroundCo(prevCo)
+                posCo = self.getSurroundCo(prevCo, False)
 
                 toRemove = []
-                for j in posCo:
-                    if j in self.occupied:
-                        toRemove.append(j)
-                for k in toRemove:
-                    if k in self.occupied:
-                        posCo.remove(k)
+                # for j in posCo:
+                #     if j in self.occupied:
+                #         toRemove.append(j)
+                # for k in toRemove:
+                #     if k in self.occupied:
+                #         posCo.remove(k)
 
                 if not posCo:
                     self.stability = 0
@@ -93,7 +105,7 @@ class Protein(object):
                 self.aminoList[id].addCoordinate(coordinate)
                 self.occupied.append(coordinate)
 
-                aroundCo = self.getSurroundCo(coordinate)
+                aroundCo = self.getSurroundCo(coordinate, True)
                 typeCo = self.aminoList[id].type
                 if typeCo == "H" or typeCo == "C":
                     for l in aroundCo:
