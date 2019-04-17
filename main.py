@@ -8,25 +8,18 @@ from amino import Amino
 from protein import Protein
 import sys
 
-class Fold(object):
-    """
-    """
-
-    def __init__(self, proteinString):
-        """
-        """
-        self.initProtein = Protein(proteinString)
-        self.initProtein.createAminoList()
-        #self.protein = self.initProtein #Check of deze niet in elkaar updaten
-
-
-
 
 def checkInput():
+    """
+    This function checks the input into the main
+    """
+
+    # Check if the amount of arguments is 2
     if len(sys.argv) != 2:
         print("A proteinstring is needed")
         exit(1)
 
+    # Check if the second argument only contains H, P or C's
     for i in sys.argv[1]:
         if i != "H" and i != "P" and i != "C" and i != "h" and i != "p" and i != "c":
             print("Protein should only contain H, P or C")
@@ -35,19 +28,38 @@ def checkInput():
 
 
 if __name__ == "__main__":
+
+    # Check the input and save the protein string
     proteinString = checkInput()
-    folding = Fold(proteinString)
-    stability = folding.initProtein.stability
+
+    # Create the protein
+    protein = Protein(proteinString)
+
+    # Fold the protein once
+    protein.createAminoList()
+
+    # Initialise the stability
+    stability = protein.stability
     print(stability)
 
-    while stability > -20:
-        newfold = Fold(proteinString)
+    # Initialise the lowest stability
+    minStability = -8
 
-        if newfold.initProtein.stability < stability:
-            folding = newfold
-            stability = folding.initProtein.stability
+    # Loop while the stability is bigger than the minStability
+    while stability > minStability:
+
+        newProtein = Protein(proteinString)
+
+        # Fold the protein again
+        newProtein.createAminoList()
+
+        # If the stability of the newly folded protein is higher replace the stability and fold
+        if newProtein.stability < stability:
+            protein = newProtein
+            stability = newProtein.stability
             print(stability)
 
     #print(stability)
-    print(folding.initProtein)
-    folding.initProtein.createPlot()
+    print(protein)
+    # Create a visual of the final fold
+    protein.createPlot()

@@ -11,6 +11,7 @@ class Amino(object):
 
     def __init__(self, id, type):
         """
+        Initialise variables
         """
         self.id = id
         self.type = type
@@ -19,8 +20,6 @@ class Amino(object):
 
     def addCoordinate(self, coordinate):
         """
+        Add coordinates to the amino-acid
         """
         self.coordinate = coordinate
-
-    def getCoordinates(self):
-        return self.coordinate
