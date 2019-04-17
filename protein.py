@@ -47,20 +47,22 @@ class Protein(object):
         """
 
         posCo = []
+
+        # Create a list of all the possible coordinates
         coordinates = [[(prevCo[0] - 1), prevCo[1]], [(prevCo[0] + 1), prevCo[1]], [prevCo[0], (prevCo[1] - 1)], [prevCo[0], (prevCo[1] + 1)]]
 
+        # Loop over all the coordinates
         for coordinate in coordinates:
+
+            # Only add the coordinates to the possible coordinates list if they are occupied
             if occupied is True:
                 if coordinate in self.occupied:
                     posCo.append(coordinate)
+
+            # Only add the coordinates to the possible coordinates list if they are not occupied
             else:
                 if coordinate not in self.occupied:
                     posCo.append(coordinate)
-
-        # posCo.append([(prevCo[0] - 1), prevCo[1]])
-        # posCo.append([(prevCo[0] + 1), prevCo[1]])
-        # posCo.append([prevCo[0], (prevCo[1] - 1)])
-        # posCo.append([prevCo[0], (prevCo[1] + 1)])
         return posCo
 
 
@@ -87,36 +89,47 @@ class Protein(object):
                 # Get the coordinates of the previous amino-acid
                 prevCo = self.aminoList[(id - 1)].coordinate
 
-                # Get the surrounding coordinates
+                # Get the surrounding coordinates that are not occupied
                 posCo = self.getSurroundCo(prevCo, False)
 
-                toRemove = []
-                # for j in posCo:
-                #     if j in self.occupied:
-                #         toRemove.append(j)
-                # for k in toRemove:
-                #     if k in self.occupied:
-                #         posCo.remove(k)
-
+                # If there are no surrounding coordinates available break from the loop
                 if not posCo:
                     self.stability = 0
                     break
+
+                # Randomly choose one of the possible coordinates
                 coordinate = random.choice(posCo)
+
+                # Place the amino-acid on that coordinate
                 self.aminoList[id].addCoordinate(coordinate)
+
+                # Add the coordinate to the list of occupied coordinates
                 self.occupied.append(coordinate)
 
-                aroundCo = self.getSurroundCo(coordinate, True)
+                # Get the coordinates of the surrounding amino acids that are occupied
+                aroundCos = self.getSurroundCo(coordinate, True)
+
+                # Get the type of the current amino-acid
                 typeCo = self.aminoList[id].type
+
+                # Check if the type is H or C
                 if typeCo == "H" or typeCo == "C":
-                    for l in aroundCo:
-                        if l in self.occupied:
-                            nextCo = self.aminoList[self.occupied.index(l)].type
-                            if nextCo == "H" or nextCo == "C":
-                                if (self.occupied.index(l) + 1) != id:
-                                    if typeCo == "C" and nextCo == "C":
-                                        self.stability -= 5
-                                    else:
-                                        self.stability -= 1
+
+                    # Loop over the occupied coordinates around the current amino-acid
+                    for aroundCo in aroundCos:
+
+                        # Get the type of the amino-acid
+                        nextCo = self.aminoList[self.occupied.index(aroundCo)].type
+
+                        if nextCo == "H" or nextCo == "C":
+                            # Wat doet deze regel?
+                            if (self.occupied.index(aroundCo) + 1) != id:
+                                # If both amino-acids are of type C subtract 5 from the stability
+                                if typeCo == "C" and nextCo == "C":
+                                    self.stability -= 5
+                                # Else subtract 1
+                                else:
+                                    self.stability -= 1
 
 
         #print( self.stability) #"stability = ",
@@ -128,12 +141,23 @@ class Protein(object):
         """
 
         colorDict = {"P": 'go', "H": 'ro', "C": 'bo'}
+
+        # Loop over the aminoList
         for i in range(len(self.aminoList)):
             amino = self.aminoList[i]
+
+            # Get the coordinates of the previous amino-acid
             theseCo = amino.coordinate
+
             if i != 0:
+                # Get the coordinates of the previous amino-acid
                 prevCo = self.aminoList[(i - 1)].coordinate
+
+                # Place a line from between the amino-acids
                 plt.plot([prevCo[0], theseCo[0]], [prevCo[1], theseCo[1]], '-k')
+
+            # Place a dot for the amino-acid
             plt.plot([theseCo[0]], [theseCo[1]], colorDict[amino.type])
+ 
         plt.title("P = groen; H = rood; C = blauw")
         plt.show()
