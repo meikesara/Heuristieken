@@ -158,6 +158,7 @@ class Protein(object):
 
             # Place a dot for the amino-acid
             plt.plot([theseCo[0]], [theseCo[1]], colorDict[amino.type])
- 
+
         plt.title("P = groen; H = rood; C = blauw")
+        plt.axis('off')
         plt.show()
