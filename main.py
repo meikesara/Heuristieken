@@ -44,6 +44,7 @@ if __name__ == "__main__":
 
     # Initialise the lowest stability
     minStability = input('Stability: ')
+    minStability = int(minStability)
 
     # Loop while the stability is bigger than the minStability
     while stability > minStability:
