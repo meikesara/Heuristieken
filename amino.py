@@ -21,6 +21,3 @@ class Amino(object):
         """
         """
         self.coordinate = coordinate
-
-    def getCoordinates(self):
-        return self.coordinate

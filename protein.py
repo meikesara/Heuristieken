@@ -12,23 +12,38 @@ class Protein(object):
     """
     """
 
+    # Initialise variables
     def __init__(self, proteinString):
         """
         """
+
         self.proteinString = proteinString
         self.aminoList = []
         self.stability = 0
         self.occupied = []
 
     def __str__(self):
+        """
+        This method prints the type of amino acids in the protein and their coordinates
+        """
+
         output = ""
+
+        # Loop over the aminoacids in the aminoList
         for amino in self.aminoList:
+            # Add the type to the output
             output += amino.type
-            output += str(amino.getCoordinates()) + " "
+
+            # Add the coordinates to the output
+            output += str(amino.coordinate) + " "
         return output
 
 
     def getSurroundCo(self, prevCo):
+        """
+        This method gets the 4 surrounding coordinates
+        """
+
         posCo = []
         posCo.append([(prevCo[0] - 1), prevCo[1]])
         posCo.append([(prevCo[0] + 1), prevCo[1]])
@@ -39,14 +54,28 @@ class Protein(object):
 
     def createAminoList(self):
         """
+        This method folds the protein
         """
-        for i in range(len(self.proteinString)):
-            self.aminoList.append(Amino(i, self.proteinString[i].upper()))
-            if i == 0 or i == 1:
-                self.aminoList[i].addCoordinate([0, i])
-                self.occupied.append([0, i])
+
+        # Loop over the letters in the proteinString
+        for id in range(len(self.proteinString)):
+
+            # Add amino acid to the aminoList
+            self.aminoList.append(Amino(id, self.proteinString[id].upper()))
+
+            # Place the first and second amino-acid
+            # The coordinates of the first amino-acid are (0,0)
+            # The coordinates of the second amino-acis are (0,1)
+            if id == 0 or id == 1:
+                self.aminoList[id].addCoordinate([0, id])
+                self.occupied.append([0, id])
+
+            # The remaining amino-acids are randomly placed
             else:
-                prevCo = self.aminoList[(i - 1)].getCoordinates()
+                # Get the coordinates of the previous amino-acid
+                prevCo = self.aminoList[(id - 1)].coordinate
+
+                # Get the surrounding coordinates
                 posCo = self.getSurroundCo(prevCo)
 
                 toRemove = []
@@ -61,17 +90,17 @@ class Protein(object):
                     self.stability = 0
                     break
                 coordinate = random.choice(posCo)
-                self.aminoList[i].addCoordinate(coordinate)
+                self.aminoList[id].addCoordinate(coordinate)
                 self.occupied.append(coordinate)
 
                 aroundCo = self.getSurroundCo(coordinate)
-                typeCo = self.aminoList[i].type
+                typeCo = self.aminoList[id].type
                 if typeCo == "H" or typeCo == "C":
                     for l in aroundCo:
                         if l in self.occupied:
                             nextCo = self.aminoList[self.occupied.index(l)].type
                             if nextCo == "H" or nextCo == "C":
-                                if (self.occupied.index(l) + 1) != i:
+                                if (self.occupied.index(l) + 1) != id:
                                     if typeCo == "C" and nextCo == "C":
                                         self.stability -= 5
                                     else:
@@ -82,6 +111,10 @@ class Protein(object):
         #print("occupied final = ", self.occupied)
 
     def createPlot(self):
+        """
+        This method creates a visual representation of a folded protein
+        """
+
         colorDict = {"P": 'go', "H": 'ro', "C": 'bo'}
         for i in range(len(self.aminoList)):
             amino = self.aminoList[i]
