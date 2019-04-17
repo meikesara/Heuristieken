@@ -40,7 +40,7 @@ if __name__ == "__main__":
     stability = folding.initProtein.stability
     print(stability)
 
-    while stability > -3:
+    while stability > -20:
         newfold = Fold(proteinString)
 
         if newfold.initProtein.stability < stability:
