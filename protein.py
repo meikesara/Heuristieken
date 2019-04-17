@@ -154,7 +154,7 @@ class Protein(object):
                 prevCo = self.aminoList[(i - 1)].coordinate
 
                 # Place a line from between the amino-acids
-                plt.plot([prevCo[0], theseCo[0]], [prevCo[1], theseCo[1]], '-k')
+                plt.plot([prevCo[0], theseCo[0]], [prevCo[1], theseCo[1]], '-k', zorder=-1)
 
             # Place a dot for the amino-acid
             plt.plot([theseCo[0]], [theseCo[1]], colorDict[amino.type])
