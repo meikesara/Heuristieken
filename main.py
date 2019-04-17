@@ -8,18 +8,6 @@ from amino import Amino
 from protein import Protein
 import sys
 
-### Willen we dit nog bewaren?
-class Fold(object):
-    """
-    """
-
-    def __init__(self, proteinString):
-        """
-        """
-        self.initProtein = Protein(proteinString)
-        self.initProtein.createAminoList()
-        #self.protein = self.initProtein #Check of deze niet in elkaar updaten
-
 
 def checkInput():
     """
@@ -44,11 +32,14 @@ if __name__ == "__main__":
     # Check the input and save the protein string
     proteinString = checkInput()
 
+    # Create the protein
+    protein = Protein(proteinString)
+
     # Fold the protein once
-    folding = Fold(proteinString)
+    protein.createAminoList()
 
     # Initialise the stability
-    stability = folding.initProtein.stability
+    stability = protein.stability
     print(stability)
 
     # Initialise the lowest stability
@@ -57,16 +48,18 @@ if __name__ == "__main__":
     # Loop while the stability is bigger than the minStability
     while stability > minStability:
 
+        newProtein = Protein(proteinString)
+
         # Fold the protein again
-        newfold = Fold(proteinString)
+        newProtein.createAminoList()
 
         # If the stability of the newly folded protein is higher replace the stability and fold
-        if newfold.initProtein.stability < stability:
-            folding = newfold
-            stability = folding.initProtein.stability
+        if newProtein.stability < stability:
+            protein = newProtein
+            stability = newProtein.stability
             print(stability)
 
     #print(stability)
-    print(folding.initProtein)
+    print(protein)
     # Create a visual of the final fold
-    folding.initProtein.createPlot()
+    protein.createPlot()
