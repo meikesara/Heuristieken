@@ -32,6 +32,10 @@ if __name__ == "__main__":
     # Check the input and save the protein string
     proteinString = checkInput()
 
+    # Initialise the lowest stability
+    minStability = input('Stability: ')
+    minStability = int(minStability)
+
     # Create the protein
     protein = Protein(proteinString)
 
@@ -41,10 +45,6 @@ if __name__ == "__main__":
     # Initialise the stability
     stability = protein.stability
     print(stability)
-
-    # Initialise the lowest stability
-    minStability = input('Stability: ')
-    minStability = int(minStability)
 
     # Loop while the stability is bigger than the minStability
     while stability > minStability:

@@ -160,5 +160,6 @@ class Protein(object):
             plt.plot([theseCo[0]], [theseCo[1]], colorDict[amino.type])
 
         plt.title("P = groen; H = rood; C = blauw")
+        plt.axis('equal')
         plt.axis('off')
         plt.show()
