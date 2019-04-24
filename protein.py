@@ -40,15 +40,19 @@ class Protein(object):
             output += str(amino.coordinate) + " "
         return output
 
-    def getDiagonalCo(self, currentCo):
+    def getDiagonalCo(self, currentAmino):
 
         posDia = []
+
+        currentCo = currentAmino.coordinate
 
         coordinates = [[(currentCo[0] + 1), (currentCo[1] + 1)], [(currentCo[0] + 1), (currentCo[1] - 1)], [(currentCo[0] - 1), (currentCo[1] + 1)], [(currentCo[0] - 1), (currentCo[1] - 1)]]
 
         for coordinate in coordinates:
             if (coordinate not in self.occupied) and self.getSurroundCo(coordinate, False):
                 posDia.append(coordinate)
+
+
 
         return posDia
 
