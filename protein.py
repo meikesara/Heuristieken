@@ -45,14 +45,27 @@ class Protein(object):
         posDia = []
 
         currentCo = currentAmino.coordinate
+        nextAmino = self.aminoList[self.aminoList.index(currentAmino) + 1]
+        nextCo = nextAmino.coordinate
+
+        previousAmino = self.aminoList[self.aminoList.index(currentAmino) - 1]
+        previousCo = previousAmino.coordinate
+
+        x = abs(currentCo[0] - nextCo[0])
+        y = abs(currentCo[1] - nextCo[1])
 
         coordinates = [[(currentCo[0] + 1), (currentCo[1] + 1)], [(currentCo[0] + 1), (currentCo[1] - 1)], [(currentCo[0] - 1), (currentCo[1] + 1)], [(currentCo[0] - 1), (currentCo[1] - 1)]]
 
-        for coordinate in coordinates:
-            if (coordinate not in self.occupied) and self.getSurroundCo(coordinate, False):
-                posDia.append(coordinate)
-
-
+        for diagonal in coordinates:
+            if diagonal not in self.occupied:
+                surroundCo = getSurroundCo(diagonal, True)
+                    if nextCo in surroundCo:
+                        if x = 1:
+                            CCo = [diagonal[0], currentCo[1]]
+                        else:
+                            CCo = [currentCo[0], diagonal[1]]
+                        if CCo not in self.occupied:
+                            posDia.append(diagonal)
 
         return posDia
 
