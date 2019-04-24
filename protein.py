@@ -223,13 +223,16 @@ class Protein(object):
         print(newProtein.aminoList)
         print(self.aminoList)
 
-
+        #check stabiliteit voor verplaatsen
+        if amino.type in ["H", "C"]:
+            surCo = self.getSurroundCo(amino.coordinate, True)
         #chosenCo = random.choice(coordinates)
-        # chosenCo = coordinates[0] #aannemend dat output getDiagonalCo: [diaCo (L), CCo] (of [diaCo] als animo = eerste of laatste)
-        # newAminolist[amino.id].coordinate = chosenCo
-        # newOccupied[amino.id] = chosenCo
-        #
-        # if len(coordinates) == 2:
+        chosenCo = coordinates[0] #aannemend dat output getDiagonalCo: [diaCo (L), CCo] (of [diaCo] als animo = eerste of laatste)
+        newAminolist[amino.id].coordinate = chosenCo
+        newOccupied[amino.id] = chosenCo
+
+        if len(coordinates) == 2:
+
 
 
 
