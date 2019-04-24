@@ -38,12 +38,24 @@ class Protein(object):
             output += str(amino.coordinate) + " "
         return output
 
+    def getDiagonalCo(self, currentCo):
+
+        posDia = []
+
+        coordinates = [[(currentCo[0] + 1), (currentCo[1] + 1)], [(currentCo[0] + 1), (currentCo[1] - 1)], [(currentCo[0] - 1), (currentCo[1] + 1)], [(currentCo[0] - 1), (currentCo[1] - 1)]]
+
+        for coordinate in coordinates:
+            if (coordinate not in self.occupied) and getSurroundCo(coordinate, False):
+                posDia.append(coordinate)
+
+        return posDia
+
 
     def getSurroundCo(self, prevCo, occupied):
         """
         This method gets the 4 surrounding coordinates
         occupied is true if you want to know which surrounding coordinates are occupied
-        occupies is false if you want to know which surrounding coordinates are not occupied
+        occupied is false if you want to know which surrounding coordinates are not occupied
         """
 
         posCo = []
