@@ -45,27 +45,63 @@ class Protein(object):
         posDia = []
 
         currentCo = currentAmino.coordinate
-        nextAmino = self.aminoList[self.aminoList.index(currentAmino) + 1]
-        nextCo = nextAmino.coordinate
 
-        previousAmino = self.aminoList[self.aminoList.index(currentAmino) - 1]
-        previousCo = previousAmino.coordinate
+        index = self.aminoList.index(currentAmino)
 
-        x = abs(currentCo[0] - nextCo[0])
-        y = abs(currentCo[1] - nextCo[1])
+        if (index + 1) == len(aminoList):
+            previousAmino = self.aminoList[index - 1]
+            previousCo = previousAmino.coordinate
 
-        coordinates = [[(currentCo[0] + 1), (currentCo[1] + 1)], [(currentCo[0] + 1), (currentCo[1] - 1)], [(currentCo[0] - 1), (currentCo[1] + 1)], [(currentCo[0] - 1), (currentCo[1] - 1)]]
+            x = abs(currentCo[0] - previousCo[0])
+            y = abs(currentCo[1] - previoudCo[1])
 
-        for diagonal in coordinates:
-            if diagonal not in self.occupied:
-                surroundCo = self.getSurroundCo(diagonal, True)
-                if nextCo in surroundCo:
-                    if x == 1:
-                        CCo = [diagonal[0], currentCo[1]]
-                    else:
-                        CCo = [currentCo[0], diagonal[1]]
-                    if CCo not in self.occupied:
-                        posDia.append(diagonal)
+            if x == 1:
+                diagonals = [[previousCo[0], (previousCo[1] - 1)], [previousCo[0], (previousCo[1] + 1)]]
+            else:
+                diagonals = [[(previousCo[0] + 1), previousCo[1]], [(previousCo[0] - 1), previousCo[1]]]
+
+            for diagonal in diagonals:
+                if diagonal not in self.occupied:
+                    posDia.append(diagonal)
+
+        elif index == 0:
+            nextAmino = self.aminoList[index + 1]
+            nextCo = nextAmino.coordinate
+
+            x = abs(currentCo[0] - nextCo[0])
+            y = abs(currentCo[1] - nextCo[1])
+
+            if x == 1:
+                diagonals = [[nextCo[0], (nextCo[1] - 1)], [nextCo[0], (nextCo[1] + 1)]]
+            else:
+                diagonals = [[(nextCo[0] + 1), nextCo[1]], [(nextCo[0] - 1), nextCo[1]]]
+
+            for diagonal in diagonals:
+                if diagonal not in self.occupied:
+                    posDia.append(diagonal)
+
+        else:
+            nextAmino = self.aminoList[index + 1]
+            nextCo = nextAmino.coordinate
+
+            previousAmino = self.aminoList[index - 1]
+            previousCo = previousAmino.coordinate
+
+            coordinates = [[(currentCo[0] + 1), (currentCo[1] + 1)], [(currentCo[0] + 1), (currentCo[1] - 1)], [(currentCo[0] - 1), (currentCo[1] + 1)], [(currentCo[0] - 1), (currentCo[1] - 1)]]
+
+            x = abs(currentCo[0] - nextCo[0])
+            y = abs(currentCo[1] - nextCo[1])
+
+            for diagonal in coordinates:
+                if diagonal not in self.occupied:
+                    surroundCo = self.getSurroundCo(diagonal, True)
+                    if nextCo in surroundCo:
+                        if x == 1:
+                            CCo = [currentCo[0], diagonal[1]]
+                        else:
+                            CCo = [diagonal[0], currentCo[1]]
+                        if CCo not in self.occupied:
+                            posDia.append(diagonal)
 
         return posDia
 
