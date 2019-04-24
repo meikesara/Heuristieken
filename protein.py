@@ -170,6 +170,7 @@ class Protein(object):
     def hillClimber(self):
         # Choose random amino to move
         amino = random.choice(self.aminoList)
+        print("id = ", amino.id)
         coordinates = self.getDiagonalCo(amino)
 
         # Make sure amino can be moved
@@ -180,14 +181,27 @@ class Protein(object):
         print(amino.coordinate)
         print("coordinates = ", coordinates)
 
-        newAminolist = copy.deepcopy(self.aminoList)
-        newStability = copy.copy(self.stability)
-        newOccupied = copy.deepcopy(self.occupied)
+        # Create copies of
+        # newAminolist = copy.deepcopy(self.aminoList)
+        # newStability = copy.copy(self.stability)
+        # newOccupied = copy.deepcopy(self.occupied)
 
-        newAminolist[amino.id].coordinate = random.choice(coordinates)
-        print('hoi')
-        print(self.aminoList[amino.id].coordinate)
-        print(newAminolist[amino.id].coordinate)
+        newProtein = copy.deepcopy(self)
+        newProtein.aminoList = [2]
+        print(newProtein.aminoList)
+        print(self.aminoList)
+
+
+        #chosenCo = random.choice(coordinates)
+        # chosenCo = coordinates[0] #aannemend dat output getDiagonalCo: [diaCo (L), CCo] (of [diaCo] als animo = eerste of laatste)
+        # newAminolist[amino.id].coordinate = chosenCo
+        # newOccupied[amino.id] = chosenCo
+        #
+        # if len(coordinates) == 2:
+
+
+
+
 
 
 
