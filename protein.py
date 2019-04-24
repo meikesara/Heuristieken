@@ -58,14 +58,14 @@ class Protein(object):
 
         for diagonal in coordinates:
             if diagonal not in self.occupied:
-                surroundCo = getSurroundCo(diagonal, True)
-                    if nextCo in surroundCo:
-                        if x = 1:
-                            CCo = [diagonal[0], currentCo[1]]
-                        else:
-                            CCo = [currentCo[0], diagonal[1]]
-                        if CCo not in self.occupied:
-                            posDia.append(diagonal)
+                surroundCo = self.getSurroundCo(diagonal, True)
+                if nextCo in surroundCo:
+                    if x == 1:
+                        CCo = [diagonal[0], currentCo[1]]
+                    else:
+                        CCo = [currentCo[0], diagonal[1]]
+                    if CCo not in self.occupied:
+                        posDia.append(diagonal)
 
         return posDia
 
