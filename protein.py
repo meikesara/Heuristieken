@@ -60,9 +60,11 @@ class Protein(object):
             else:
                 diagonals = [[(previousCo[0] + 1), previousCo[1]], [(previousCo[0] - 1), previousCo[1]]]
 
+            random.shuffle(diagonals)
+
             for diagonal in diagonals:
                 if diagonal not in self.occupied:
-                    posDia.append(diagonal)
+                    return [diagonal]
 
         elif index == 0:
             nextAmino = self.aminoList[index + 1]
@@ -76,9 +78,11 @@ class Protein(object):
             else:
                 diagonals = [[(nextCo[0] + 1), nextCo[1]], [(nextCo[0] - 1), nextCo[1]]]
 
+            random.shuffle(diagonals)
+
             for diagonal in diagonals:
                 if diagonal not in self.occupied:
-                    posDia.append(diagonal)
+                    return [diagonal]
 
         else:
             nextAmino = self.aminoList[index + 1]
@@ -87,12 +91,13 @@ class Protein(object):
             previousAmino = self.aminoList[index - 1]
             previousCo = previousAmino.coordinate
 
-            coordinates = [[(currentCo[0] + 1), (currentCo[1] + 1)], [(currentCo[0] + 1), (currentCo[1] - 1)], [(currentCo[0] - 1), (currentCo[1] + 1)], [(currentCo[0] - 1), (currentCo[1] - 1)]]
+            diagonals = [[(currentCo[0] + 1), (currentCo[1] + 1)], [(currentCo[0] + 1), (currentCo[1] - 1)], [(currentCo[0] - 1), (currentCo[1] + 1)], [(currentCo[0] - 1), (currentCo[1] - 1)]]
+            random.shuffle(coordinates)
 
             x = abs(currentCo[0] - nextCo[0])
             y = abs(currentCo[1] - nextCo[1])
 
-            for diagonal in coordinates:
+            for diagonal in diagonals:
                 if diagonal not in self.occupied:
                     surroundCo = self.getSurroundCo(diagonal, True)
                     if nextCo in surroundCo:
@@ -100,10 +105,8 @@ class Protein(object):
                             CCo = [currentCo[0], diagonal[1]]
                         else:
                             CCo = [diagonal[0], currentCo[1]]
-                        if CCo not in self.occupied:
-                            posDia.append(diagonal)
-
-        return posDia
+                        if (CCo not in self.occupied) or (CCo == previousCo):
+                            return [diagonal, CCo]
 
 
     def getSurroundCo(self, prevCo, occupied):
