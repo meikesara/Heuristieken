@@ -48,7 +48,7 @@ class Protein(object):
 
         index = self.aminoList.index(currentAmino)
 
-        if (index + 1) == len(aminoList):
+        if (index + 1) == len(self.aminoList):
             previousAmino = self.aminoList[index - 1]
             previousCo = previousAmino.coordinate
 
@@ -218,10 +218,6 @@ class Protein(object):
         print("coordinates = ", coordinates)
 
         # Create copies of
-        # newAminolist = copy.deepcopy(self.aminoList)
-        # newStability = copy.copy(self.stability)
-        # newOccupied = copy.deepcopy(self.occupied)
-
         newProtein = copy.deepcopy(self)
         newProtein.aminoList = [2]
         print(newProtein.aminoList)
