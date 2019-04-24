@@ -165,15 +165,16 @@ class Protein(object):
             coordinates = self.getDiagonalCo(amino)
 
         print(amino.coordinate)
-        print(coordinates)
-        # print("hoi!")
-        # a = copy.copy(self.aminoList)
-        # b = copy.copy(self.stability)
-        # c = copy.copy(self.occupied)
-        # print(a)
-        # a[1] = 0
-        # print(a[1])
-        # print(self.aminoList[1])
+        print("coordinates = ", coordinates)
+
+        newAminolist = copy.deepcopy(self.aminoList)
+        newStability = copy.copy(self.stability)
+        newOccupied = copy.deepcopy(self.occupied)
+
+        newAminolist[amino.id].coordinate = random.choice(coordinates)
+        print('hoi')
+        print(self.aminoList[amino.id].coordinate)
+        print(newAminolist[amino.id].coordinate)
 
 
 
