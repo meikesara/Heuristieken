@@ -149,15 +149,16 @@ class Protein(object):
         #print( self.stability) #"stability = ",
         #print("occupied final = ", self.occupied)
 
+
     def hillClimber(self):
         # Choose random amino to move
         amino = random.choice(self.aminoList)
-        coordinates = self.getDiagonalCo(amino.coordinate)
+        coordinates = self.getDiagonalCo(amino)
 
         # Make sure amino can be moved
         while not coordinates:
             amino = random.choice(self.aminoList)
-            coordinates = self.getDiagonalCo(amino.coordinate)
+            coordinates = self.getDiagonalCo(amino)
 
         print(amino.coordinate)
         print(coordinates)
