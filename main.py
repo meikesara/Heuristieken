@@ -65,3 +65,4 @@ if __name__ == "__main__":
     print(protein)
     # Create a visual of the final fold
     protein.createPlot()
+    protein.hillClimber()

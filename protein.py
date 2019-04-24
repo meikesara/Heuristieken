@@ -1,12 +1,14 @@
 """
 Class for protein.
 
-Meike, Janneke, Nicole
+Meike, Nicole
 """
 
 from amino import Amino
 import random
 import matplotlib.pyplot as plt
+import copy
+
 
 class Protein(object):
     """
@@ -134,6 +136,29 @@ class Protein(object):
 
         #print( self.stability) #"stability = ",
         #print("occupied final = ", self.occupied)
+
+    def hillClimber(self):
+        # Choose random amino to move
+        amino = random.choice(self.aminoList)
+        coordinates = self.getDiagonalCo(amino.coordinate)
+
+        # Make sure amino can be moved
+        while not coordinates:
+            amino = random.choice(self.aminoList)
+            coordinates = self.getDiagonalCo(amino.coordinate)
+
+        print("hoi!")
+        a = copy.copy(self.aminoList)
+        b = copy.copy(self.stability)
+        c = copy.copy(self.occupied)
+        print(a)
+        a[1] = 0
+        print(a[1])
+        print(self.aminoList[1])
+
+
+
+
 
     def createPlot(self):
         """
