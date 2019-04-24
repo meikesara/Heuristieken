@@ -192,7 +192,7 @@ class Protein(object):
                         nextCo = self.aminoList[self.occupied.index(aroundCo)].type
 
                         if nextCo == "H" or nextCo == "C":
-                            # Wat doet deze regel?
+                            # Check if amino is not connected in protein to amino
                             if (self.occupied.index(aroundCo) + 1) != id:
                                 # If both amino-acids are of type C subtract 5 from the stability
                                 if typeCo == "C" and nextCo == "C":
@@ -229,6 +229,8 @@ class Protein(object):
         #check stabiliteit voor verplaatsen
         if amino.type in ["H", "C"]:
             surCo = self.getSurroundCo(amino.coordinate, True)
+            #regel 188 protein.py
+
         #chosenCo = random.choice(coordinates)
         chosenCo = coordinates[0] #aannemend dat output getDiagonalCo: [diaCo (L), CCo] (of [diaCo] als animo = eerste of laatste)
         newAminolist[amino.id].coordinate = chosenCo
