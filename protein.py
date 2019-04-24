@@ -47,7 +47,7 @@ class Protein(object):
         coordinates = [[(currentCo[0] + 1), (currentCo[1] + 1)], [(currentCo[0] + 1), (currentCo[1] - 1)], [(currentCo[0] - 1), (currentCo[1] + 1)], [(currentCo[0] - 1), (currentCo[1] - 1)]]
 
         for coordinate in coordinates:
-            if (coordinate not in self.occupied) and getSurroundCo(coordinate, False):
+            if (coordinate not in self.occupied) and self.getSurroundCo(coordinate, False):
                 posDia.append(coordinate)
 
         return posDia
@@ -159,14 +159,16 @@ class Protein(object):
             amino = random.choice(self.aminoList)
             coordinates = self.getDiagonalCo(amino.coordinate)
 
-        print("hoi!")
-        a = copy.copy(self.aminoList)
-        b = copy.copy(self.stability)
-        c = copy.copy(self.occupied)
-        print(a)
-        a[1] = 0
-        print(a[1])
-        print(self.aminoList[1])
+        print(amino.coordinate)
+        print(coordinates)
+        # print("hoi!")
+        # a = copy.copy(self.aminoList)
+        # b = copy.copy(self.stability)
+        # c = copy.copy(self.occupied)
+        # print(a)
+        # a[1] = 0
+        # print(a[1])
+        # print(self.aminoList[1])
 
 
 
