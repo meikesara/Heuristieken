@@ -1,7 +1,7 @@
 """
 Main file
 
-Meike, Janneke, Nicole
+Meike, Nicole
 """
 
 from amino import Amino
@@ -65,4 +65,7 @@ if __name__ == "__main__":
     print(protein)
     # Create a visual of the final fold
     protein.createPlot()
-    protein.hillClimber()
+
+    # Hill climber (deze loop zou ook nog in de functie zelf kunnen (of als recursief met extra argument als counter))
+    for i in range(500):
+        protein.hillClimber()

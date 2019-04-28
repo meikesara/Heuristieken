@@ -53,7 +53,7 @@ class Protein(object):
             previousCo = previousAmino.coordinate
 
             x = abs(currentCo[0] - previousCo[0])
-            y = abs(currentCo[1] - previoudCo[1])
+            y = abs(currentCo[1] - previousCo[1])
 
             if x == 1:
                 diagonals = [[previousCo[0], (previousCo[1] - 1)], [previousCo[0], (previousCo[1] + 1)]]
@@ -92,7 +92,7 @@ class Protein(object):
             previousCo = previousAmino.coordinate
 
             diagonals = [[(currentCo[0] + 1), (currentCo[1] + 1)], [(currentCo[0] + 1), (currentCo[1] - 1)], [(currentCo[0] - 1), (currentCo[1] + 1)], [(currentCo[0] - 1), (currentCo[1] - 1)]]
-            random.shuffle(coordinates)
+            random.shuffle(diagonals)
 
             x = abs(currentCo[0] - nextCo[0])
             y = abs(currentCo[1] - nextCo[1])
@@ -207,6 +207,9 @@ class Protein(object):
 
 
     def hillClimber(self):
+        """
+        """
+
         # Choose random amino to move
         amino = random.choice(self.aminoList)
         print("id = ", amino.id)
@@ -217,34 +220,61 @@ class Protein(object):
             amino = random.choice(self.aminoList)
             coordinates = self.getDiagonalCo(amino)
 
-        print(amino.coordinate)
+        #print(amino.coordinate)
         print("coordinates = ", coordinates)
 
-        # Create copies of
+        # Create copy of self (original protein)
         newProtein = copy.deepcopy(self)
-        newProtein.aminoList = [2]
-        print(newProtein.aminoList)
-        print(self.aminoList)
 
         #check stabiliteit voor verplaatsen
         if amino.type in ["H", "C"]:
             surCo = self.getSurroundCo(amino.coordinate, True)
-            #regel 188 protein.py
+            #regel 188 protein.py #aannemend dat hier een functie voor is (check of eromheen aminozuren zitten die stabiliteit verlagen)
 
-        #chosenCo = random.choice(coordinates)
         chosenCo = coordinates[0] #aannemend dat output getDiagonalCo: [diaCo (L), CCo] (of [diaCo] als animo = eerste of laatste)
-        newAminolist[amino.id].coordinate = chosenCo
-        newOccupied[amino.id] = chosenCo
+        newProtein.aminoList[amino.id].coordinate = chosenCo
+        newProtein.occupied[amino.id] = chosenCo
 
+        # TODO: update stability met (nog te maken) functie nu amino verplaatst is
+
+        # if random chosen amino to move is not first or last, make sure other
+        # aminoacids are replaced to keep validity of the protein
         if len(coordinates) == 2:
+            print(newProtein.aminoList[(amino.id - 1)].coordinate)
+            if newProtein.aminoList[(amino.id - 1)].coordinate != coordinates[1]:
+                # TODO: update stability met (nog te maken) functie
+                newProtein.aminoList[(amino.id - 1)].coordinate = coordinates[1]
+                newProtein.occupied[(amino.id - 1)] = coordinates[1]
+                # TODO: update stability nu amino verplaatst
+            print(newProtein.aminoList[(amino.id - 1)].coordinate)
+            surCoPrev = newProtein.getSurroundCo(newProtein.aminoList[(amino.id - 1)].coordinate, True)
+            print(surCoPrev)
+
+            if newProtein.aminoList[(amino.id - 2)].coordinate not in surCoPrev:
+                newProtein.moveAminos(self, (amino.id - 2))
+
+        if newProtein.stability < self.stability:
+            self = newProtein
 
 
+    def moveAminos(self, oldProtein, idToMove):
+        """
+        Method for moving aminoacids to create a valid protein.
+        oldProtein is the protein from which the new protein (neighbourhood) is
+        created.
+        idToMove is the id of the aminoacid that needs to be moved.
+        """
 
+        surCoPrev = self.getSurroundCo(self.aminoList[(idToMove + 1)].coordinate, True)
+        if (self.aminoList[idToMove].coordinate in surCoPrev) or (idToMove < 0):
+            return
 
+        # TODO: update stability met (nog te maken) functie
+        self.aminoList[idToMove].coordinate = oldProtein.aminoList[(idToMove + 2)].coordinate
+        self.occupied[idToMove] = oldProtein.aminoList[(idToMove + 2)]
+        # TODO: update stability nu amino verplaatst
 
-
-
-
+        self.moveAminos(oldProtein, (idToMove - 1))
 
 
     def createPlot(self):
@@ -253,6 +283,8 @@ class Protein(object):
         """
 
         colorDict = {"P": 'go', "H": 'ro', "C": 'bo'}
+
+        #fig = plt.figure()
 
         # Loop over the aminoList
         for i in range(len(self.aminoList)):
