@@ -351,7 +351,7 @@ class Protein(object):
             ax.scatter([theseCo[0]], [theseCo[1]], color=colorDict[amino.type]) #, label=amino.type)
 
         # plt.title("P = groen; H = rood; C = blauw")
-        ax.legend()
+        #ax.legend()
         ax.axis('equal')
         ax.axis('off')
         plt.show()

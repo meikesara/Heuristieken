@@ -69,3 +69,6 @@ if __name__ == "__main__":
     # Hill climber (deze loop zou ook nog in de functie zelf kunnen (of als recursief met extra argument als counter))
     for i in range(1):
         protein.hillClimber()
+
+
+    print("stability =", protein.stability)
