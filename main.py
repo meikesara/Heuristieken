@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     # Initialise the stability
     stability = protein.stability
-    print(stability)
+    # print(stability)
 
     # Loop while the stability is bigger than the minStability
     while stability > minStability:
@@ -59,16 +59,15 @@ if __name__ == "__main__":
         if newProtein.stability < stability:
             protein = newProtein
             stability = newProtein.stability
-            print(stability)
+            # print(stability)
 
-    #print(stability)
-    print(protein)
-    # Create a visual of the final fold
     protein.createPlot()
 
     # Hill climber (deze loop zou ook nog in de functie zelf kunnen (of als recursief met extra argument als counter))
-    for i in range(1):
-        protein.hillClimber()
+    for i in range(10):
+        protein = protein.hillClimber()
+        print(protein.stability)
 
-
-    print("stability =", protein.stability)
+    # Create a visual of the final fold
+    print(protein.stability)
+    protein.createPlot()
