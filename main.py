@@ -65,9 +65,11 @@ if __name__ == "__main__":
 
     # Hill climber (deze loop zou ook nog in de functie zelf kunnen (of als recursief met extra argument als counter))
     for i in range(10):
+        print(i)
         protein = protein.hillClimber()
         print(protein.stability)
 
     # Create a visual of the final fold
     print(protein.stability)
+    print(protein)
     protein.createPlot()

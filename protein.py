@@ -40,6 +40,7 @@ class Protein(object):
             output += str(amino.coordinate) + " "
         return output
 
+
     def getDiagonalCo(self, currentAmino):
 
         posDia = []
@@ -204,8 +205,9 @@ class Protein(object):
                 # print("nextCo:", nextCo, self.aminoList[self.occupied.index(aroundCo)].id)
 
                 if nextCo == "H" or nextCo == "C":
+
                     # Check if amino is not connected in protein to amino
-                    if (self.occupied.index(aroundCo)) != id + 1 and (self.occupied.index(aroundCo)) != id - 1:
+                    if (self.occupied.index(aroundCo)) != (id + 1) and (self.occupied.index(aroundCo)) != (id - 1):
 
                         # If both amino-acids are of type C subtract 5 from the stability
                         if typeCo == "C" and nextCo == "C":
@@ -223,9 +225,6 @@ class Protein(object):
                             else:
                                 self.stability -= 1
                                 # print("-1s")
-
-        if self.stability > 0:
-            self.stability = 0
 
 
     def hillClimber(self):
@@ -249,9 +248,9 @@ class Protein(object):
         newProtein = copy.deepcopy(self)
 
         newProtein.stabilityUpdate(amino.id, amino.coordinate, True)
-
-        if amino.type in ["H", "C"]:
-            surCo = self.getSurroundCo(amino.coordinate, True)
+        #
+        # if amino.type in ["H", "C"]:
+        #     surCo = self.getSurroundCo(amino.coordinate, True)
             #regel 188 protein.py #aannemend dat hier een functie voor is (check of eromheen aminozuren zitten die stabiliteit verlagen)
 
         chosenCo = coordinates[0] #aannemend dat output getDiagonalCo: [diaCo (L), CCo] (of [diaCo] als animo = eerste of laatste)
@@ -298,8 +297,12 @@ class Protein(object):
                 newProtein.moveAminos(self, (amino.id - 2))
 
         if newProtein.stability <= self.stability:
+            print("self: ", self.stability)
+            print("new: ", newProtein.stability)
             self = newProtein
-            return self
+            print("self: ", self.stability)
+
+        return self
 
 
 
