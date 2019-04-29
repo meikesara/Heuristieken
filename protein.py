@@ -235,6 +235,8 @@ class Protein(object):
         newProtein.aminoList[amino.id].coordinate = chosenCo
         newProtein.occupied[amino.id] = chosenCo
 
+        print(newProtein)
+        newProtein.createPlot()
         # TODO: update stability met (nog te maken) functie nu amino verplaatst is
 
         # if random chosen amino to move is not first or last, make sure other
@@ -246,6 +248,8 @@ class Protein(object):
                 newProtein.aminoList[(amino.id - 1)].coordinate = coordinates[1]
                 newProtein.occupied[(amino.id - 1)] = coordinates[1]
                 # TODO: update stability nu amino verplaatst
+                print(newProtein)
+                newProtein.createPlot()
             print(newProtein.aminoList[(amino.id - 1)].coordinate)
             surCoPrev = newProtein.getSurroundCo(newProtein.aminoList[(amino.id - 1)].coordinate, True)
             print(surCoPrev)
@@ -273,6 +277,9 @@ class Protein(object):
         self.aminoList[idToMove].coordinate = oldProtein.aminoList[(idToMove + 2)].coordinate
         self.occupied[idToMove] = oldProtein.aminoList[(idToMove + 2)]
         # TODO: update stability nu amino verplaatst
+
+        print(self)
+        self.createPlot()
 
         self.moveAminos(oldProtein, (idToMove - 1))
 
