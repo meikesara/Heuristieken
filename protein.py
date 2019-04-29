@@ -289,9 +289,11 @@ class Protein(object):
         This method creates a visual representation of a folded protein
         """
 
-        colorDict = {"P": 'go', "H": 'ro', "C": 'bo'}
+        #colorDict = {"P": 'go', "H": 'ro', "C": 'bo'}
+        colorDict = {"P": 'g', "H": 'r', "C": 'b'}
 
         #fig = plt.figure()
+        fig, ax = plt.subplots()
 
         # Loop over the aminoList
         for i in range(len(self.aminoList)):
@@ -305,12 +307,13 @@ class Protein(object):
                 prevCo = self.aminoList[(i - 1)].coordinate
 
                 # Place a line from between the amino-acids
-                plt.plot([prevCo[0], theseCo[0]], [prevCo[1], theseCo[1]], '-k', zorder=-1)
+                ax.plot([prevCo[0], theseCo[0]], [prevCo[1], theseCo[1]], '-k', zorder=-1)
 
             # Place a dot for the amino-acid
-            plt.plot([theseCo[0]], [theseCo[1]], colorDict[amino.type])
+            ax.scatter([theseCo[0]], [theseCo[1]], color=colorDict[amino.type]) #, label=amino.type)
 
-        plt.title("P = groen; H = rood; C = blauw")
-        plt.axis('equal')
-        plt.axis('off')
+        # plt.title("P = groen; H = rood; C = blauw")
+        ax.legend()
+        ax.axis('equal')
+        ax.axis('off')
         plt.show()
