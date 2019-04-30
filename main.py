@@ -59,17 +59,21 @@ if __name__ == "__main__":
         if newProtein.stability < stability:
             protein = newProtein
             stability = newProtein.stability
-            # print(stability)
-
+            print(stability)
+    print(stability)
+    print(protein)
     protein.createPlot()
 
     # Hill climber (deze loop zou ook nog in de functie zelf kunnen (of als recursief met extra argument als counter))
     for i in range(10):
-        print(i)
+        # print(i)
         protein = protein.hillClimber()
+        #print(protein.stability)
         print(protein.stability)
+        print(protein)
+        protein.createPlot()
 
     # Create a visual of the final fold
-    print(protein.stability)
-    print(protein)
-    protein.createPlot()
+    # print(protein.stability)
+    # print(protein)
+    # protein.createPlot()

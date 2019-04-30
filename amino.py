@@ -18,6 +18,13 @@ class Amino(object):
         self.coordinate = []
 
 
+    def __str__(self):
+        """
+        """
+
+        return ("id:" + str(self.id) + ", type:" + str(self.type) + ", coordinate:" + str(self.coordinate))
+
+
     def addCoordinate(self, coordinate):
         """
         Add coordinates to the amino-acid
