@@ -168,7 +168,7 @@ class Protein(object):
                 #   ipv break iets als return False (en dan buiten for-loop return True)
                 if not posCo:
                     self.stability = 0
-                    break
+                    return False
 
                 # Randomly choose one of the possible coordinates
                 coordinate = random.choice(posCo)
@@ -182,6 +182,7 @@ class Protein(object):
                 # Update the stability
                 self.stabilityUpdate(id, coordinate, False)
 
+        return True
 
     def stabilityUpdate(self, id, coordinate, replace):
         """
@@ -367,10 +368,12 @@ class Protein(object):
                 ax.plot([prevCo[0], theseCo[0]], [prevCo[1], theseCo[1]], '-k', zorder=-1)
 
             # Place a dot for the amino-acid
-            ax.scatter([theseCo[0]], [theseCo[1]], color=colorDict[amino.type]) #, label=amino.type)
+            ax.scatter([theseCo[0]], [theseCo[1]], color=colorDict[amino.type], label=amino.type)
 
         # plt.title("P = groen; H = rood; C = blauw")
         #ax.legend()
         ax.axis('equal')
+        ax.grid(True)
         ax.axis('off')
+
         plt.show()

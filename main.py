@@ -40,8 +40,18 @@ if __name__ == "__main__":
     protein = Protein(proteinString)
 
     # Fold the protein once
-    protein.createAminoList()
+    validFolding = protein.createAminoList()
 
+    while not validFolding:
+        print("aa")
+        newProtein = Protein(proteinString)
+
+        # Fold the protein again
+        validFolding = newProtein.createAminoList()
+        protein = newProtein
+
+
+    # print(protein)
     # Initialise the stability
     stability = protein.stability
     # print(stability)
@@ -61,7 +71,7 @@ if __name__ == "__main__":
             stability = newProtein.stability
             print(stability)
     print(stability)
-    print(protein)
+    # print(protein)
     protein.createPlot()
 
     # Hill climber (deze loop zou ook nog in de functie zelf kunnen (of als recursief met extra argument als counter))
@@ -69,11 +79,12 @@ if __name__ == "__main__":
         # print(i)
         protein = protein.hillClimber()
         #print(protein.stability)
-        # print(protein.stability)
+        if (i % 1000) == 0:
+            print(protein.stability)
         # print(protein)
         # protein.createPlot()
 
     # Create a visual of the final fold
     print(protein.stability)
-    # print(protein)
+    print(protein)
     protein.createPlot()
