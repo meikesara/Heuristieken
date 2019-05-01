@@ -303,10 +303,10 @@ class Protein(object):
                 newProtein.moveAminos(self, (amino.id - 2))
 
         if newProtein.stability <= self.stability:
-            print("self: ", self.stability)
-            print("new: ", newProtein.stability)
+            # print("self: ", self.stability)
+            # print("new: ", newProtein.stability)
             self = newProtein
-            print("self: ", self.stability)
+            # print("self: ", self.stability)
 
         return self
 
