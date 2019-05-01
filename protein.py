@@ -145,6 +145,7 @@ class Protein(object):
             else:
                 if coordinate not in self.occupied:
                     posCo.append(coordinate)
+
         return posCo
 
 
@@ -152,6 +153,8 @@ class Protein(object):
         """
         This method folds the protein
         """
+
+        # TODO: misschien kunnen we ook voorkomen dat een eiwit niet goed vouwt 
 
         # Loop over the letters in the proteinString
         for id in range(len(self.proteinString)):
@@ -175,8 +178,6 @@ class Protein(object):
                 posCo = self.getSurroundCo(prevCo, False)
 
                 # If there are no surrounding coordinates available break from the loop
-                # TODO: while-loop (main) niet ->
-                #   ipv break iets als return False (en dan buiten for-loop return True)
                 if not posCo:
                     self.stability = 0
                     return False
