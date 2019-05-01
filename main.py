@@ -75,11 +75,11 @@ if __name__ == "__main__":
     protein.createPlot()
 
     # Hill climber (deze loop zou ook nog in de functie zelf kunnen (of als recursief met extra argument als counter))
-    for i in range(100000):
+    for i in range(1000):
         # print(i)
         protein = protein.hillClimber()
         #print(protein.stability)
-        if (i % 1000) == 0:
+        if (i % 10) == 0:
             print(protein.stability)
         # print(protein)
         # protein.createPlot()

@@ -17,6 +17,7 @@ class Protein(object):
     # Initialise variables
     def __init__(self, proteinString):
         """
+        This method initialises the variables of the Protein object
         """
 
         self.proteinString = proteinString
@@ -42,70 +43,80 @@ class Protein(object):
 
 
     def getDiagonalCo(self, currentAmino):
+        """
+        This method returns a diagonal of the current amino acid, that is not occupied
+        and the C if the current amino acid is not the last or the first
+        """
 
-        posDia = []
-
+        # Get the coordinates and position of the current amino acid
         currentCo = currentAmino.coordinate
-
         index = self.aminoList.index(currentAmino)
 
+        # If the amino acid is the last get the coordinates of the previous amino acid
         if (index + 1) == len(self.aminoList):
+            previousAmino = self.aminoList[index - 1]
+            otherCo = previousAmino.coordinate
+
+        # If the amino acid is the first get the coordinates of the next amino acid
+        elif index == 0:
+            nextAmino = self.aminoList[index + 1]
+            otherCo = nextAmino.coordinate
+
+        # If the amino acid is in the middle get the coordinates of the next and previous amino acid
+        else:
+            nextAmino = self.aminoList[index + 1]
+            otherCo = nextAmino.coordinate
+
             previousAmino = self.aminoList[index - 1]
             previousCo = previousAmino.coordinate
 
-            x = abs(currentCo[0] - previousCo[0])
-            y = abs(currentCo[1] - previousCo[1])
+        # Calculate the absolute difference between the x and y coordinates
+        x = abs(currentCo[0] - otherCo[0])
+        y = abs(currentCo[1] - otherCo[1])
 
+        # Check if the amino acid is the first or last in the protein
+        if (index + 1) == len(self.aminoList) or index == 0:
+
+            # Create a list of diagonals
             if x == 1:
-                diagonals = [[previousCo[0], (previousCo[1] - 1)], [previousCo[0], (previousCo[1] + 1)]]
+                diagonals = [[otherCo[0], (otherCo[1] - 1)], [otherCo[0], (otherCo[1] + 1)]]
             else:
-                diagonals = [[(previousCo[0] + 1), previousCo[1]], [(previousCo[0] - 1), previousCo[1]]]
+                diagonals = [[(otherCo[0] + 1), otherCo[1]], [(otherCo[0] - 1), otherCo[1]]]
 
+            # Randomly shuffle the diagonals
             random.shuffle(diagonals)
 
-            for diagonal in diagonals:
-                if diagonal not in self.occupied:
-                    return [diagonal]
-
-        elif index == 0:
-            nextAmino = self.aminoList[index + 1]
-            nextCo = nextAmino.coordinate
-
-            x = abs(currentCo[0] - nextCo[0])
-            y = abs(currentCo[1] - nextCo[1])
-
-            if x == 1:
-                diagonals = [[nextCo[0], (nextCo[1] - 1)], [nextCo[0], (nextCo[1] + 1)]]
-            else:
-                diagonals = [[(nextCo[0] + 1), nextCo[1]], [(nextCo[0] - 1), nextCo[1]]]
-
-            random.shuffle(diagonals)
-
+            # Return the first diagonal that is not occupied
             for diagonal in diagonals:
                 if diagonal not in self.occupied:
                     return [diagonal]
 
         else:
-            nextAmino = self.aminoList[index + 1]
-            nextCo = nextAmino.coordinate
-
-            previousAmino = self.aminoList[index - 1]
-            previousCo = previousAmino.coordinate
-
+            # Create a list of diagonals of the currentCoordinates
             diagonals = [[(currentCo[0] + 1), (currentCo[1] + 1)], [(currentCo[0] + 1), (currentCo[1] - 1)], [(currentCo[0] - 1), (currentCo[1] + 1)], [(currentCo[0] - 1), (currentCo[1] - 1)]]
+
+            # Randomly shuffle the diagonals
             random.shuffle(diagonals)
 
-            x = abs(currentCo[0] - nextCo[0])
-            y = abs(currentCo[1] - nextCo[1])
-
+            # Return the first available diagonal and C
             for diagonal in diagonals:
+
+                # Check if the diagonal is not occupied
                 if diagonal not in self.occupied:
+
+                    # Get the occupied surrounding coordinates of the diagonal
                     surroundCo = self.getSurroundCo(diagonal, True)
-                    if nextCo in surroundCo:
+
+                    # Check if the coordinates of the next aminoacid ar in the surrounding cordinates of the diagonal
+                    if otherCo in surroundCo:
+
+                        # Get the coordinates of the C
                         if x == 1:
                             CCo = [currentCo[0], diagonal[1]]
                         else:
                             CCo = [diagonal[0], currentCo[1]]
+
+                        # Check if C is not occupied or if they are the coordinates of the previous amino acid
                         if (CCo not in self.occupied) or (CCo == previousCo):
                             return [diagonal, CCo]
 
