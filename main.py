@@ -7,6 +7,7 @@ Meike, Nicole
 from amino import Amino
 from protein import Protein
 import sys
+import matplotlib.pyplot as plt
 
 
 def checkInput():
@@ -32,9 +33,11 @@ if __name__ == "__main__":
     # Check the input and save the protein string
     proteinString = checkInput()
 
+    stabilityList = []
+
     # Initialise the lowest stability
-    minStability = input('Stability: ')
-    minStability = int(minStability)
+    # minStability = input('Stability: ')
+    # minStability = int(minStability)
 
     # Create the protein
     protein = Protein(proteinString)
@@ -43,40 +46,39 @@ if __name__ == "__main__":
     validFolding = protein.createAminoList()
 
     while not validFolding:
-        print("aa")
         newProtein = Protein(proteinString)
 
         # Fold the protein again
         validFolding = newProtein.createAminoList()
         protein = newProtein
 
-
-    # print(protein)
     # Initialise the stability
     stability = protein.stability
+
+    stabilityList.append(stability)
+
+    # # Loop while the stability is bigger than the minStability
+    # while stability > minStability:
+    # # for i in range(minStability):
+    #
+    #     newProtein = Protein(proteinString)
+    #
+    #     # Fold the protein again
+    #     newProtein.createAminoList()
+    #
+    #     # If the stability of the newly folded protein is higher replace the stability and fold
+    #     if newProtein.stability < stability:
+    #         protein = newProtein
+    #         stability = newProtein.stability
+    #         print(stability)
     # print(stability)
-
-    # Loop while the stability is bigger than the minStability
-    while stability > minStability:
-    # for i in range(minStability):
-
-        newProtein = Protein(proteinString)
-
-        # Fold the protein again
-        newProtein.createAminoList()
-
-        # If the stability of the newly folded protein is higher replace the stability and fold
-        if newProtein.stability < stability:
-            protein = newProtein
-            stability = newProtein.stability
-            print(stability)
-    print(stability)
-    # print(protein)
+    # # print(protein)
     protein.createPlot()
 
     # Hill climber (deze loop zou ook nog in de functie zelf kunnen (of als recursief met extra argument als counter))
     for i in range(1000):
         # print(i)
+        stabilityList.append(protein.stability)
         protein = protein.hillClimber()
         #print(protein.stability)
         if (i % 10) == 0:
@@ -88,3 +90,10 @@ if __name__ == "__main__":
     print(protein.stability)
     print(protein)
     protein.createPlot()
+
+    fig = plt.figure()
+    ax = plt.axes()
+
+    ax.plot(stabilityList)
+
+    plt.show()
