@@ -5,19 +5,19 @@
 import matplotlib.pyplot as plt
 
 # Global variables
-colorDict = {"P": 'b', "H": 'r', "C": 'g'}
-nameDict = {"P": "polair", "H": "hydrofoob", "C": "cysteine"}
-xPoints = {"P": [], "H": [], "C": []}
-yPoints = {"P": [], "H": [], "C": []}
-xLines = []
-yLines = []
 
-def createPlot(protein):
+
+def plotProtein(protein):
     """
-    # TODO: comment
+    Function for creating a visual representation of a folded protein
     """
 
-    preprocessData(protein)
+    colorDict = {"P": "b", "H": "r", "C": "C6"}
+    nameDict = {"P": "polair", "H": "hydrofoob", "C": "cysteine"}
+
+    xPoints, yPoints, xLines, yLines = processData(protein)
+    # plt.cla()
+    # plt.clf()
 
     fig, ax = plt.subplots()
 
@@ -36,10 +36,30 @@ def createPlot(protein):
     plt.show()
 
 
-def preprocessData(protein):
+def plotStability(stabilityList):
+    """
+    Function for plotting how stability changes over time
+    """
+
+    fig = plt.figure()
+    # ax = plt.axes()
+    plt.plot(stabilityList)
+    plt.xlim(0, len(stabilityList))
+    plt.ylim(min(stabilityList)-5, 0)
+    plt.xlabel("Iteraties")
+    plt.ylabel("Stabiliteit");
+    plt.show()
+
+
+def processData(protein):
     """
     # TODO: comment
     """
+
+    xPoints = {"P": [], "H": [], "C": []}
+    yPoints = {"P": [], "H": [], "C": []}
+    xLines = []
+    yLines = []
 
     for amino in protein.aminoList:
         xLines.append(amino.coordinate[0])
@@ -47,3 +67,5 @@ def preprocessData(protein):
 
         xPoints[amino.type].append(amino.coordinate[0])
         yPoints[amino.type].append(amino.coordinate[1])
+
+    return xPoints, yPoints, xLines, yLines

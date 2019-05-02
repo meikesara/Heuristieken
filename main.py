@@ -74,7 +74,7 @@ if __name__ == "__main__":
     #         print(stability)
     # print(stability)
     # # print(protein)
-    protein.createPlot()
+    visualizer.plotProtein(protein)
 
     # Hill climber (deze loop zou ook nog in de functie zelf kunnen (of als recursief met extra argument als counter))
     for i in range(1000):
@@ -85,20 +85,10 @@ if __name__ == "__main__":
         if (i % 10) == 0:
             print(protein.stability)
         # print(protein)
-        # protein.createPlot()
+        # visualizer.plotProtein(protein)
 
     # Create a visual of the final fold
     print(protein.stability)
     print(protein)
-    protein.createPlot()
-
-    fig = plt.figure()
-    ax = plt.axes()
-    ax.plot(stabilityList)
-    plt.xlim(0, len(stabilityList))
-    plt.ylim(min(stabilityList)-5, 0)
-    plt.xlabel("Iteraties")
-    plt.ylabel("Stabiliteit");
-    plt.show()
-
-    visualizer.createPlot(protein)
+    visualizer.plotProtein(protein)
+    visualizer.plotStability(stabilityList)

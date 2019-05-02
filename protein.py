@@ -199,62 +199,51 @@ class Protein(object):
     def stabilityUpdate(self, id, coordinate, replace):
         """
         """
-        # print("stability before update", self.stability)
-        # print("print protein: ", self)
-        # print("print occupied: ", self.occupied)
+
         # Get the type of the current amino-acid
         typeCo = self.aminoList[id].type
-        # print("typeCo:", typeCo, id)
 
         # Check if the type is H or C
         if typeCo == "H" or typeCo == "C":
+
             # Get the coordinates of the surrounding amino acids that are occupied
             aroundCos = self.getSurroundCo(coordinate, True)
-            # print("aroundCos = ", aroundCos)
 
             # Loop over the occupied coordinates around the current amino-acid
             for aroundCo in aroundCos:
-                # print()
-                # print("aroundCo = ", aroundCo)
+
                 # Get the type of the amino-acid
                 nextCo = self.aminoList[self.occupied.index(aroundCo)].type
-                # print("nextCo:", nextCo, self.aminoList[self.occupied.index(aroundCo)].id)
-                # print("self.occupied.index(aroundCo) = ", self.occupied.index(aroundCo))
-                # print("self.aminoList[self.occupied.index(aroundCo)] = ", self.aminoList[self.occupied.index(aroundCo)])
 
                 if nextCo == "H" or nextCo == "C":
+
                     # Check if amino is not connected in protein to amino
                     if (self.occupied.index(aroundCo)) != (id + 1) and (self.occupied.index(aroundCo)) != (id - 1):
 
-                        # If both amino-acids are of type C subtract 5 from the stability
+                        # If both amino-acids are of type C subtract 5 from the stability  # TODO:
                         if typeCo == "C" and nextCo == "C":
                             if replace == True:
                                 self.stability += 5
-                                # print("stability +5s, new stability = ", self.stability)
-                                # print("typeCo[cor], nextCo[cor]", typeCo, coordinate, nextCo, aroundCo)
                             else:
                                 self.stability -= 5
-                                # print("stability -5s, new stability = ", self.stability)
-                                # print("typeCo[cor], nextCo[cor]", typeCo, coordinate, nextCo, aroundCo)
-                        # Else subtract 1
+
+                        # Else subtract 1  # TODO:
                         else:
                             if replace == True:
                                 self.stability += 1
-                                # print("stability +1s, new stability = ", self.stability)
-                                # print("typeCo[cor], nextCo[cor]", typeCo, coordinate, nextCo, aroundCo)
                             else:
                                 self.stability -= 1
-                                # print("stability -1s, new stability = ", self.stability)
-                                # print("typeCo[cor], nextCo[cor]", typeCo, coordinate, nextCo, aroundCo)
-            # print("stability after update", self.stability)
+
 
     def hillClimber(self):
         """
+        # TODO:
         """
 
         # Choose random amino to move
         amino = random.choice(self.aminoList)
-        # print("id = ", amino.id)
+
+        # Get coordinates of where to move chosen amino to
         coordinates = self.getDiagonalCo(amino)
 
         # Make sure amino can be moved
@@ -280,7 +269,6 @@ class Protein(object):
 
         # print(newProtein)
         # print(newProtein.stability)
-        # newProtein.createPlot()
 
         newProtein.stabilityUpdate(amino.id, chosenCo, False)
 
@@ -306,7 +294,6 @@ class Protein(object):
                 # print(newProtein.stability)
 
                 # print(newProtein)
-                # newProtein.createPlot()
 
             # print(newProtein.aminoList[(amino.id - 1)].coordinate)
             surCoPrev = newProtein.getSurroundCo(newProtein.aminoList[(amino.id - 1)].coordinate, True)
@@ -349,43 +336,5 @@ class Protein(object):
 
         # print(self.stability)
 
-        # self.createPlot()
 
         self.moveAminos(oldProtein, (idToMove - 1))
-
-
-    def createPlot(self):
-        """
-        This method creates a visual representation of a folded protein
-        """
-
-        #colorDict = {"P": 'go', "H": 'ro', "C": 'bo'}
-        colorDict = {"P": 'b', "H": 'r', "C": 'g'}
-
-        #fig = plt.figure()
-        fig, ax = plt.subplots()
-
-        # Loop over the aminoList
-        for i in range(len(self.aminoList)):
-            amino = self.aminoList[i]
-
-            # Get the coordinates of the previous amino-acid
-            theseCo = amino.coordinate
-
-            if i != 0:
-                # Get the coordinates of the previous amino-acid
-                prevCo = self.aminoList[(i - 1)].coordinate
-
-                # Place a line from between the amino-acids
-                ax.plot([prevCo[0], theseCo[0]], [prevCo[1], theseCo[1]], '-k', zorder=-1)
-
-            # Place a dot for the amino-acid
-            ax.scatter([theseCo[0]], [theseCo[1]], color=colorDict[amino.type], label=amino.type)
-
-        plt.title("P = blauw; H = rood; C = groen; stability = " + str(self.stability))
-        #ax.legend()
-        ax.axis('equal')
-        ax.grid(True)
-        ax.axis('off')
-
-        plt.show()
