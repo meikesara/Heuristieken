@@ -1,7 +1,7 @@
 """
 Class for protein.
 
-Meike, Nicole
+Meike Kortleve, Nicole Jansen
 """
 
 from amino import Amino
@@ -12,9 +12,10 @@ import copy
 
 class Protein(object):
     """
+    Protein class containing necessary attributes and methods for setting up
+    and updating protein.
     """
 
-    # Initialise variables
     def __init__(self, proteinString):
         """
         This method initialises the variables of the Protein object
@@ -24,6 +25,7 @@ class Protein(object):
         self.aminoList = []
         self.stability = 0
         self.occupied = []
+
 
     def __str__(self):
         """
@@ -192,46 +194,51 @@ class Protein(object):
                 self.occupied.append(coordinate)
 
                 # Update the stability
-                self.stabilityUpdate(id, coordinate, False)
+                self.stabilityUpdate(self.aminoList[id])
 
         return True
 
 
-    def stabilityUpdate(self, id, coordinate, replace):
+    def stabilityUpdate(self, amino, replace=False):
         """
-        Method for updating the stability of the protein
+        Method for updating the stability of the protein.
+        If replace is set to True, stability will be increased (worsened)
         """
 
-        # Get the type of the current amino-acid
-        typeCo = self.aminoList[id].type
+        # Get id, coordinate and type of the current amino-acid
+        id = amino.id
+        coordinate = amino.coordinate
+        typeCo = amino.type
 
-        # Check if the type is H or C
-        if typeCo == "H" or typeCo == "C":
+        # Only need to update stability if amino is H or C
+        if typeCo in {"H", "C"}:
 
-            # Get the coordinates of the surrounding amino acids that are occupied
+            # Get surrounding coordinates of given amino acid that are occupied
             aroundCos = self.getSurroundCo(coordinate, True)
 
-            # Loop over the occupied coordinates around the current amino-acid
+            # For each amino next to given amino, check if they create a bond
             for aroundCo in aroundCos:
 
-                # Get the type of the amino-acid
-                nextCo = self.aminoList[self.occupied.index(aroundCo)].type
+                # Get the id and type of the neighboring amino acid
+                idAround = self.occupied.index(aroundCo)
+                aroundType = self.aminoList[idAround].type
 
-                if nextCo == "H" or nextCo == "C":
+                # Bond can only be created when both amino acids are H and/or C
+                if aroundType in {"H", "C"}:
 
-                    # Check if amino is not connected in protein to amino
-                    if (self.occupied.index(aroundCo)) != (id + 1) and (self.occupied.index(aroundCo)) != (id - 1):
+                    # Check if amino is not connected in protein to given amino
+                    if idAround != (id + 1) and idAround != (id - 1):
 
-                        # If both amino-acids are of type C subtract 5 from the stability  # TODO:
-                        if typeCo == "C" and nextCo == "C":
-                            if replace == True:
+                        # Stronger bond created when both aminos are type C
+                        if typeCo == "C" and aroundType == "C":
+                            if replace:
                                 self.stability += 5
                             else:
                                 self.stability -= 5
 
-                        # Else subtract 1  # TODO:
+                        # Weaker bond created when at least one amino is type H
                         else:
-                            if replace == True:
+                            if replace:
                                 self.stability += 1
                             else:
                                 self.stability -= 1
@@ -256,16 +263,16 @@ class Protein(object):
         # Create copy of self (original protein)
         newProtein = copy.deepcopy(self)
 
-        newProtein.stabilityUpdate(amino.id, amino.coordinate, True)
+        newProtein.stabilityUpdate(amino, True)
 
         chosenCo = coordinates[0]
         newProtein.aminoList[amino.id].coordinate = chosenCo
         newProtein.occupied[amino.id] = chosenCo
 
-        newProtein.stabilityUpdate(amino.id, chosenCo, False)
+        newProtein.stabilityUpdate(newProtein.aminoList[amino.id])
 
         # if random chosen amino to move is not first or last, make sure other
-        # aminoacids are replaced to keep validity of the protein
+        # amino acids are replaced to keep validity of the protein
         if len(coordinates) == 2:
 
             previousAmino = self.aminoList[(amino.id - 1)]
@@ -275,13 +282,12 @@ class Protein(object):
 
             if previousAminoCo != coordinates[1]:
 
-                newProtein.stabilityUpdate(previousAminoId, previousAminoCo,True)
+                newProtein.stabilityUpdate(previousAmino, True)
 
                 newProtein.aminoList[(amino.id - 1)].coordinate = coordinates[1]
                 newProtein.occupied[(amino.id - 1)] = coordinates[1]
 
-                newProtein.stabilityUpdate(previousAminoId, coordinates[1], False)
-
+                newProtein.stabilityUpdate(newProtein.aminoList[(amino.id - 1)])
 
             surCoPrev = newProtein.getSurroundCo(newProtein.aminoList[(amino.id - 1)].coordinate, True)
 
@@ -306,11 +312,11 @@ class Protein(object):
         if (self.aminoList[idToMove].coordinate in surCoPrev) or (idToMove < 0):
             return
 
-        self.stabilityUpdate(idToMove, self.aminoList[idToMove].coordinate, True)
+        self.stabilityUpdate(self.aminoList[idToMove], True)
 
         self.aminoList[idToMove].coordinate = oldProtein.aminoList[(idToMove + 2)].coordinate
         self.occupied[idToMove] = oldProtein.aminoList[(idToMove + 2)].coordinate
 
-        self.stabilityUpdate(idToMove, self.aminoList[idToMove].coordinate, False)
+        self.stabilityUpdate(self.aminoList[idToMove])
 
         self.moveAminos(oldProtein, (idToMove - 1))
