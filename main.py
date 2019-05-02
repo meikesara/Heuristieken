@@ -40,16 +40,16 @@ if __name__ == "__main__":
     # minStability = int(minStability)
 
     # Create the protein
-    protein = Protein(proteinString)
+    protein = Protein()
 
     # Fold the protein once
-    validFolding = protein.createAminoList()
+    validFolding = protein.createAminoList(proteinString)
 
     while not validFolding:
-        newProtein = Protein(proteinString)
+        newProtein = Protein()
 
         # Fold the protein again
-        validFolding = newProtein.createAminoList()
+        validFolding = newProtein.createAminoList(proteinString)
         protein = newProtein
 
     # Initialise the stability

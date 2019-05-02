@@ -15,12 +15,11 @@ class Protein(object):
     """
 
     # Initialise variables
-    def __init__(self, proteinString):
+    def __init__(self):
         """
         This method initialises the variables of the Protein object
         """
 
-        self.proteinString = proteinString
         self.aminoList = []
         self.stability = 0
         self.occupied = []
@@ -149,18 +148,18 @@ class Protein(object):
         return posCo
 
 
-    def createAminoList(self):
+    def createAminoList(self, proteinString):
         """
         This method folds the protein
         """
 
-        # TODO: misschien kunnen we ook voorkomen dat een eiwit niet goed vouwt 
+        # TODO: misschien kunnen we ook voorkomen dat een eiwit niet goed vouwt
 
         # Loop over the letters in the proteinString
-        for id in range(len(self.proteinString)):
+        for id in range(len(proteinString)):
 
             # Add amino acid to the aminoList
-            self.aminoList.append(Amino(id, self.proteinString[id].upper()))
+            self.aminoList.append(Amino(id, proteinString[id].upper()))
 
             # Place the first and second amino-acid
             # The coordinates of the first amino-acid are (0,0)
