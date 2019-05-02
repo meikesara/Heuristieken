@@ -154,7 +154,7 @@ class Protein(object):
         This method folds the protein
         """
 
-        # TODO: misschien kunnen we ook voorkomen dat een eiwit niet goed vouwt 
+        # TODO: misschien kunnen we ook voorkomen dat een eiwit niet goed vouwt
 
         # Loop over the letters in the proteinString
         for id in range(len(self.proteinString)):
@@ -360,7 +360,7 @@ class Protein(object):
         """
 
         #colorDict = {"P": 'go', "H": 'ro', "C": 'bo'}
-        colorDict = {"P": 'g', "H": 'r', "C": 'b'}
+        colorDict = {"P": 'b', "H": 'r', "C": 'g'}
 
         #fig = plt.figure()
         fig, ax = plt.subplots()
@@ -382,7 +382,7 @@ class Protein(object):
             # Place a dot for the amino-acid
             ax.scatter([theseCo[0]], [theseCo[1]], color=colorDict[amino.type], label=amino.type)
 
-        # plt.title("P = groen; H = rood; C = blauw")
+        plt.title("P = blauw; H = rood; C = groen; stability = " + str(self.stability))
         #ax.legend()
         ax.axis('equal')
         ax.grid(True)

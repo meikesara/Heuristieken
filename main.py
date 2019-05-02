@@ -8,6 +8,7 @@ from amino import Amino
 from protein import Protein
 import sys
 import matplotlib.pyplot as plt
+import visualizer
 
 
 def checkInput():
@@ -99,3 +100,5 @@ if __name__ == "__main__":
     plt.xlabel("Iteraties")
     plt.ylabel("Stabiliteit");
     plt.show()
+
+    visualizer.createPlot(protein)
