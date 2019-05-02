@@ -196,8 +196,10 @@ class Protein(object):
 
         return True
 
+
     def stabilityUpdate(self, id, coordinate, replace):
         """
+        Method for updating the stability of the protein
         """
 
         # Get the type of the current amino-acid
@@ -243,7 +245,7 @@ class Protein(object):
         # Choose random amino to move
         amino = random.choice(self.aminoList)
 
-        # Get coordinates of where to move chosen amino to
+        # Get coordinates of where to move chosen and previous amino to
         coordinates = self.getDiagonalCo(amino)
 
         # Make sure amino can be moved
@@ -251,24 +253,14 @@ class Protein(object):
             amino = random.choice(self.aminoList)
             coordinates = self.getDiagonalCo(amino)
 
-        #print(amino.coordinate)
-        # print("coordinates = ", coordinates)
-
         # Create copy of self (original protein)
         newProtein = copy.deepcopy(self)
 
         newProtein.stabilityUpdate(amino.id, amino.coordinate, True)
-        #
-        # if amino.type in ["H", "C"]:
-        #     surCo = self.getSurroundCo(amino.coordinate, True)
-            #regel 188 protein.py #aannemend dat hier een functie voor is (check of eromheen aminozuren zitten die stabiliteit verlagen)
 
-        chosenCo = coordinates[0] #aannemend dat output getDiagonalCo: [diaCo (L), CCo] (of [diaCo] als animo = eerste of laatste)
+        chosenCo = coordinates[0]
         newProtein.aminoList[amino.id].coordinate = chosenCo
         newProtein.occupied[amino.id] = chosenCo
-
-        # print(newProtein)
-        # print(newProtein.stability)
 
         newProtein.stabilityUpdate(amino.id, chosenCo, False)
 
@@ -280,7 +272,6 @@ class Protein(object):
             previousAminoCo = previousAmino.coordinate
             previousAminoId = previousAmino.id
 
-            # print(previousAminoCo)
 
             if previousAminoCo != coordinates[1]:
 
@@ -291,22 +282,14 @@ class Protein(object):
 
                 newProtein.stabilityUpdate(previousAminoId, coordinates[1], False)
 
-                # print(newProtein.stability)
 
-                # print(newProtein)
-
-            # print(newProtein.aminoList[(amino.id - 1)].coordinate)
             surCoPrev = newProtein.getSurroundCo(newProtein.aminoList[(amino.id - 1)].coordinate, True)
-            # print(surCoPrev)
 
             if newProtein.aminoList[(amino.id - 2)].coordinate not in surCoPrev:
                 newProtein.moveAminos(self, (amino.id - 2))
 
         if newProtein.stability <= self.stability:
-            # print("self: ", self.stability)
-            # print("new: ", newProtein.stability)
             self = newProtein
-            # print("self: ", self.stability)
 
         return self
 
@@ -323,18 +306,11 @@ class Protein(object):
         if (self.aminoList[idToMove].coordinate in surCoPrev) or (idToMove < 0):
             return
 
-        # print("self.aminoList[idToMove].coordinate", self.aminoList[idToMove].coordinate)
         self.stabilityUpdate(idToMove, self.aminoList[idToMove].coordinate, True)
 
         self.aminoList[idToMove].coordinate = oldProtein.aminoList[(idToMove + 2)].coordinate
         self.occupied[idToMove] = oldProtein.aminoList[(idToMove + 2)].coordinate
 
-        # print("self.aminoList[idToMove].coordinate", self.aminoList[idToMove].coordinate)
         self.stabilityUpdate(idToMove, self.aminoList[idToMove].coordinate, False)
-
-        # print(self)
-
-        # print(self.stability)
-
 
         self.moveAminos(oldProtein, (idToMove - 1))

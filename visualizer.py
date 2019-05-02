@@ -16,8 +16,6 @@ def plotProtein(protein):
     nameDict = {"P": "polair", "H": "hydrofoob", "C": "cysteine"}
 
     xPoints, yPoints, xLines, yLines = processData(protein)
-    # plt.cla()
-    # plt.clf()
 
     if not xPoints["C"]:
         del colorDict["C"]
@@ -25,6 +23,12 @@ def plotProtein(protein):
     fig, ax = plt.subplots()
 
     ax.plot(xLines, yLines, "-k", zorder=-1)
+
+    for amino in protein.aminoList:
+        coordinates = getStabilityCo(amino, protein)
+        for coordinate in coordinates:
+            ax.plot([amino.coordinate[0], coordinate[0]],
+                    [amino.coordinate[1], coordinate[1]], ":k", zorder=-1)
 
     for i in colorDict:
         ax.scatter(xPoints[i], yPoints[i], color=colorDict[i], label=nameDict[i])
@@ -72,3 +76,35 @@ def processData(protein):
         yPoints[amino.type].append(amino.coordinate[1])
 
     return xPoints, yPoints, xLines, yLines
+
+
+def getStabilityCo(amino, protein):
+    """
+    Function for determining if bonds are made with the amino acid
+    """
+
+    coordinates = []
+
+    # Get type of current amino acid # TODO: bepaal of deze comment nodig is
+    typeCo = amino.type
+
+    if typeCo == "H" or typeCo == "C":
+        # Get surrounding coordinates of given amino acid that are occupied
+        aroundCos = protein.getSurroundCo(amino.coordinate, True)
+
+        # Loop over occupied coordinates around current amino-acid # TODO: comment nodig?
+        for aroundCo in aroundCos:
+            # TODO: comment(?)
+            idAround = protein.occupied.index(aroundCo)
+
+            # Get the type of the amino-acid # TODO: comment nodig(?)
+            nextCo = protein.aminoList[idAround].type
+
+            if nextCo == "H" or nextCo == "C":
+                # Check if amino is not connected in protein to amino
+                if idAround != (amino.id + 1) and idAround != (amino.id - 1):
+                    # Only add coordinates to list if aroundAmino is earlier in protein
+                    if amino.id > idAround:
+                        coordinates.append(aroundCo)
+
+    return coordinates
