@@ -19,6 +19,10 @@ def plotProtein(protein):
     # plt.cla()
     # plt.clf()
 
+    if not xPoints["C"]:
+        del colorDict["C"]
+        del nameDict["C"]
+
     fig, ax = plt.subplots()
 
     ax.plot(xLines, yLines, "-k", zorder=-1)
