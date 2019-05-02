@@ -21,7 +21,6 @@ def plotProtein(protein):
 
     if not xPoints["C"]:
         del colorDict["C"]
-        del nameDict["C"]
 
     fig, ax = plt.subplots()
 
@@ -30,7 +29,7 @@ def plotProtein(protein):
     for i in colorDict:
         ax.scatter(xPoints[i], yPoints[i], color=colorDict[i], label=nameDict[i])
 
-    plt.title("stability = " + str(protein.stability))
+    plt.title("stabiliteit = " + str(protein.stability))
 
     ax.legend()
     ax.axis('equal')
