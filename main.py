@@ -93,7 +93,9 @@ if __name__ == "__main__":
 
     fig = plt.figure()
     ax = plt.axes()
-
     ax.plot(stabilityList)
-
+    plt.xlim(0, len(stabilityList))
+    plt.ylim(min(stabilityList)-5, 0)
+    plt.xlabel("Iteraties")
+    plt.ylabel("Stabiliteit");
     plt.show()
