@@ -42,6 +42,10 @@ def createFolded(protein, idToMove):
     except:
         protein.aminoList.append(Amino(idToMove, protein.proteinString[idToMove].upper()))
 
+    # Heel misschien maakt dit het (net ietsje) beter
+    if not possibleCos:
+        return
+
     for possibleCo in possibleCos:
         # Reset stability voor nieuwe vouwing
         protein.stability = 0
@@ -102,4 +106,4 @@ def getStability(protein):
 
 
 if __name__ == "__main__":
-    constructive("HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH")
+    constructive("PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP")
