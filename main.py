@@ -1,7 +1,7 @@
 """
 Main file
 
-Meike, Nicole
+Meike Kortleve, Nicole Jansen
 """
 
 from amino import Amino
@@ -23,7 +23,7 @@ def checkInput():
 
     # Check if the second argument only contains H, P or C's
     for i in sys.argv[1]:
-        if i != "H" and i != "P" and i != "C" and i != "h" and i != "p" and i != "c":
+        if i not in {"H", "P", "C", "h", "p", "c"}:
             print("Protein should only contain H, P or C")
             exit(2)
     return sys.argv[1]
