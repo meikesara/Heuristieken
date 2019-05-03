@@ -106,4 +106,4 @@ def getStability(protein):
 
 
 if __name__ == "__main__":
-    constructive("PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP")
+    constructive("HPHPPHHPHPPHPHHPPHPH")
