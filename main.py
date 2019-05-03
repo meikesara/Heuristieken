@@ -77,12 +77,12 @@ if __name__ == "__main__":
     visualizer.plotProtein(protein)
 
     # Hill climber (deze loop zou ook nog in de functie zelf kunnen (of als recursief met extra argument als counter))
-    for i in range(1000):
+    for i in range(10000):
         # print(i)
         stabilityList.append(protein.stability)
         protein = protein.hillClimber()
         #print(protein.stability)
-        if (i % 10) == 0:
+        if (i % 100) == 0:
             print(protein.stability)
         # print(protein)
         # visualizer.plotProtein(protein)
