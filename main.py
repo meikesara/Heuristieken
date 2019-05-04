@@ -33,25 +33,21 @@ if __name__ == "__main__":
 
     finalStability = []
 
-    for j in range(1000):
+    for j in range(1):
 
         # Check the input and save the protein string
         proteinString = checkInput()
 
         stabilityList = []
 
-        # Initialise the lowest stability
-        # minStability = input('Stability: ')
-        # minStability = int(minStability)
-
         # Create the protein
-        protein = Protein()
+        protein = Protein(proteinString)
 
         # Fold the protein once
-        validFolding = protein.createAminoList(proteinString)
+        validFolding = protein.createAminoList()
 
         while not validFolding:
-            newProtein = Protein()
+            newProtein = Protein(proteinString)
 
             # Fold the protein again
             validFolding = newProtein.createAminoList(proteinString)
@@ -78,28 +74,27 @@ if __name__ == "__main__":
         #         print(stability)
         # print(stability)
         # # print(protein)
-        # visualizer.plotProtein(protein)
+
+        visualizer.plotProtein(protein)
 
         # Hill climber (deze loop zou ook nog in de functie zelf kunnen (of als recursief met extra argument als counter))
         for i in range(1000):
-            # print(i)
             stabilityList.append(protein.stability)
             protein = protein.hillClimber()
-            #print(protein.stability)
             # if (i % 10) == 0:
-                # print(protein.stability)
-            # print(protein)
-            # visualizer.plotProtein(protein)
-        print(j)
+            #     print(protein.stability)
+
         # Create a visual of the final fold
         # print(protein.stability)
         finalStability.append(protein.stability)
 
-    plt.hist(finalStability)
-    plt.xlabel("Stabiliteit")
-    plt.ylabel("Aantal vouwingen")
+        # Create a visual of the final fold
+        print(protein.stability)
+        print(protein)
+        visualizer.plotProtein(protein)
+        visualizer.plotStability(stabilityList)
 
-    plt.show()
-        # print(protein)
-        # visualizer.plotProtein(protein)
-        # visualizer.plotStability(stabilityList)
+    # # plt.hist(finalStability)
+    # plt.xlabel("Stabiliteit")
+    # plt.ylabel("Aantal vouwingen")
+    # plt.show()

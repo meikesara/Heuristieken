@@ -14,19 +14,19 @@ def constructive(proteinString): #, protein, validFolds=[]
 
     # Initialize protein
     protein = Protein(proteinString)
-    protein.aminoList.append(Amino(0, proteinString[0].upper()))
+    protein.aminoList.append(Amino(0, protein.proteinString[0].upper()))
     protein.aminoList[0].addCoordinate([0, 0])
     protein.occupied.append([0, 0])
-    protein.aminoList.append(Amino(1, proteinString[1].upper()))
+    protein.aminoList.append(Amino(1, protein.proteinString[1].upper()))
     protein.aminoList[1].addCoordinate([0, 1])
     protein.occupied.append([0, 1])
 
     createFolded(protein, 2)
     print(proteinString)
     # print(bestFolded[0].stability)
-    for bestFold in bestFolded:
-        print(bestFold)
-        visualizer.plotProtein(bestFold)
+    # for bestFold in bestFolded:
+    #     print(bestFold)
+    #     visualizer.plotProtein(bestFold)
     print(minStability[0])
 
 def createFolded(protein, idToMove):
@@ -38,13 +38,13 @@ def createFolded(protein, idToMove):
     prevCo = protein.aminoList[(idToMove - 1)].coordinate
     possibleCos = protein.getSurroundCo(prevCo, False)
     try:
-        protein.aminoList[idToMove] = Amino(idToMove, proteinString[idToMove].upper())
+        protein.aminoList[idToMove] = Amino(idToMove, protein.proteinString[idToMove].upper())
     except:
-        protein.aminoList.append(Amino(idToMove, proteinString[idToMove].upper()))
+        protein.aminoList.append(Amino(idToMove, protein.proteinString[idToMove].upper()))
 
     # # Heel misschien maakt dit het (net ietsje) beter
-    # if not possibleCos:
-    #     return
+    if not possibleCos:
+        return
 
     for possibleCo in possibleCos:
         # Reset stability voor nieuwe vouwing
@@ -58,20 +58,20 @@ def createFolded(protein, idToMove):
         if idToMove == (lengthProtein - 1):
             getStability(protein)
 
-            # Determine current best stability
-            if not bestFolded:
-                minStability = 0
-            else:
-                minStability = bestFolded[0].stability
+            # # Determine current best stability
+            # if not bestFolded:
+            #     minStability = 0
+            # else:
+            #     minStability = bestFolded[0].stability
 
-            if protein.stability < minStability:
-                # Clear list with best folds, before adding new best
-                bestFolded.clear()
-                bestFolded.append(copy.deepcopy(protein))
-                minStability = protein.stability
-                print(minStability)
-            if protein.stability == minStability:
-                bestFolded.append(copy.deepcopy(protein))
+            # if protein.stability < minStability:
+            #     # Clear list with best folds, before adding new best
+            #     bestFolded.clear()
+            #     bestFolded.append(copy.deepcopy(protein))
+            #     minStability = protein.stability
+            #     print(minStability)
+            # if protein.stability == minStability:
+            #     bestFolded.append(copy.deepcopy(protein))
 
             if protein.stability < minStability[0]:
                 minStability[0] = protein.stability
