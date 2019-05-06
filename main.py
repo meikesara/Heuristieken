@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import visualizer
 from hillclimber import hillClimber
 
-
 def checkInput():
     """
     This function checks the input into the main
@@ -33,13 +32,14 @@ def checkInput():
 if __name__ == "__main__":
 
     finalStability = []
+    sys.setrecursionlimit(1500)
 
     for j in range(1):
 
         # Check the input and save the protein string
         proteinString = checkInput()
 
-        stabilityList = []
+        # stabilityList = []
 
         # Create the protein
         protein = Protein(proteinString)
@@ -57,7 +57,7 @@ if __name__ == "__main__":
         # Initialise the stability
         stability = protein.stability
 
-        stabilityList.append(stability)
+        # stabilityList.append(stability)
 
         # # Loop while the stability is bigger than the minStability
         # while stability > minStability:
@@ -84,17 +84,17 @@ if __name__ == "__main__":
         #     protein = protein.hillClimber()
         #     # if (i % 10) == 0:
         #     #     print(protein.stability)
-        new = hillClimber(protein, 2)
+        protein, stabilityList = hillClimber(protein, 10000, True)
 
         # # Create a visual of the final fold
         # # print(protein.stability)
         # finalStability.append(protein.stability)
 
         # Create a visual of the final fold
-        # print(protein.stability)
-        print(new)
-        # visualizer.plotProtein(protein)
-        # visualizer.plotStability(stabilityList)
+        print(protein.stability)
+        print(protein)
+        visualizer.plotProtein(protein)
+        visualizer.plotStability(stabilityList)
 
     # # plt.hist(finalStability)
     # plt.xlabel("Stabiliteit")
