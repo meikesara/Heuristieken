@@ -3,31 +3,36 @@ from amino import Amino
 import copy
 import visualizer
 import matplotlib.pyplot as plt
+import visualizer
+import time
+
+start_time = time.time()
 
 bestFolded=[]
 minStability=[0]
 
 
-def constructive(proteinString): #, protein, validFolds=[]
+def constructive(proteinString):
     """
     """
-
+    # Capitalize all letters in proteinString
+    proteinString = proteinString.upper()
     # Initialize protein
     protein = Protein(proteinString)
-    protein.aminoList.append(Amino(0, protein.proteinString[0].upper()))
-    protein.aminoList[0].addCoordinate([0, 0])
-    protein.occupied.append([0, 0])
-    protein.aminoList.append(Amino(1, protein.proteinString[1].upper()))
-    protein.aminoList[1].addCoordinate([0, 1])
-    protein.occupied.append([0, 1])
+    for i in range(2):
+        protein.aminoList.append(Amino(i, protein.proteinString[i]))
+        protein.aminoList[i].addCoordinate([0, i])
+        protein.occupied.append([0, i])
 
     createFolded(protein, 2)
     print(proteinString)
+    # print(totalFolds)
     # print(bestFolded[0].stability)
     # for bestFold in bestFolded:
     #     print(bestFold)
     #     visualizer.plotProtein(bestFold)
     print(minStability[0])
+
 
 def createFolded(protein, idToMove):
 
@@ -35,23 +40,40 @@ def createFolded(protein, idToMove):
     if idToMove > (lengthProtein - 1):
         return
 
+    # NOTE: dit verwijderd de verdere eiwitten
+    # TODO: if-statement toevoegen zodat dit niet altijd gebeurt, maar ik kan nu niet nadenken
+    del protein.aminoList[(idToMove + 1):]
+    del protein.occupied[(idToMove + 1):]
+    # NOTE: dit is hetzelfde als de vorige 2 regels code
+    # protein.aminoList = protein.aminoList[0:idToMove + 1]
+    # protein.occupied = protein.occupied[0:idToMove + 1]
+
+
     prevCo = protein.aminoList[(idToMove - 1)].coordinate
     possibleCos = protein.getSurroundCo(prevCo, False)
-    try:
-        protein.aminoList[idToMove] = Amino(idToMove, protein.proteinString[idToMove].upper())
-    except:
-        protein.aminoList.append(Amino(idToMove, protein.proteinString[idToMove].upper()))
 
-    # Heel misschien maakt dit het (net ietsje) beter
-    if not possibleCos:
-        return
-    print("possibleCos = ", possibleCos)
-    print("idToMove = ", idToMove)
+    # # NOTE: volgens mij wordt hij hier alleen maar slomer van
+    # if not possibleCos:
+    #     return
+
+    try:
+        protein.aminoList[idToMove] = Amino(idToMove, protein.proteinString[idToMove])
+    except:
+        protein.aminoList.append(Amino(idToMove, protein.proteinString[idToMove]))
+
+
+    # NOTE: dit zorgt ervoor dat een aantal spiegelbeelden niet wordt gemaakt --> sneller
+    xTotal = sum([item[0] for item in protein.occupied])
+    if xTotal == 0 and len(possibleCos) == 3:
+        possibleCos.pop(1)
+
+
     for possibleCo in possibleCos:
         print("possibleCo = ", possibleCo)
         print(protein)
         # Reset stability voor nieuwe vouwing
         protein.stability = 0
+
         protein.aminoList[idToMove].addCoordinate(possibleCo)
         try:
             protein.occupied[idToMove] = possibleCo
@@ -61,6 +83,8 @@ def createFolded(protein, idToMove):
         print()
         if idToMove == (lengthProtein - 1):
             getStability(protein)
+            # visualizer.plotProtein(protein)
+
 
             # # Determine current best stability
             # if not bestFolded:
@@ -111,17 +135,7 @@ def getStability(protein):
 
 
 if __name__ == "__main__":
-    constructive("HHPP")
-
-    """
-    HHPHHHPH
-    HHPHHHPHPHHHPH
-    HPHPPHHPHPPHPHHPPHPH
-    PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP
-
-    HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH
-    PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP
-    CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC
-    HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH
-    HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH
-    """
+    constructive("HPHPPHHPHPPHPHHPPHPH")
+    # constructive("HHPHHHPHPHHHPH")
+    # constructive("HHPHHHPH")
+    print("--- %s seconds ---" % (time.time() - start_time))

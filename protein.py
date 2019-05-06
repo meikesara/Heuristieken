@@ -16,7 +16,9 @@ class Protein(object):
     and updating protein.
     """
 
+    # Initialise variables
     def __init__(self, proteinString):
+
         """
         This method initialises the variables of the Protein object
         """

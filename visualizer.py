@@ -60,9 +60,9 @@ def plotStability(stabilityList):
     # ax = plt.axes()
     plt.plot(stabilityList, "k")
     plt.xlim(0, len(stabilityList))
-    plt.ylim(min(stabilityList)-5, 0)
+    plt.ylim(-20, 0)
     plt.xlabel("Iteraties")
-    plt.ylabel("Stabiliteit");
+    plt.ylabel("Stabiliteit")
     plt.show()
 
 
