@@ -10,6 +10,7 @@ import sys
 import matplotlib.pyplot as plt
 import visualizer
 from hillclimber import hillClimber
+from randomfold import randomFold
 
 def checkInput():
     """
@@ -38,8 +39,6 @@ if __name__ == "__main__":
         # Check the input and save the protein string
         proteinString = checkInput()
 
-        # stabilityList = []
-
         # Create the protein
         protein = Protein(proteinString)
 
@@ -56,35 +55,15 @@ if __name__ == "__main__":
         # Initialise the stability
         stability = protein.stability
 
-        # stabilityList.append(stability)
-
-        # # Loop while the stability is bigger than the minStability
-        # while stability > minStability:
-        # # for i in range(minStability):
-        #
-        #     newProtein = Protein(proteinString)
-        #
-        #     # Fold the protein again
-        #     newProtein.createAminoList()
-        #
-        #     # If the stability of the newly folded protein is higher replace the stability and fold
-        #     if newProtein.stability < stability:
-        #         protein = newProtein
-        #         stability = newProtein.stability
-        #         print(stability)
-        # print(stability)
-        # # print(protein)
-        print(protein.stability)
+        # # Random folding of protein
+        # protein = randomFold(protein, -3)
+        # print(protein)
+        # print(protein.stability)
         # visualizer.plotProtein(protein)
 
-        # Hill climber (deze loop zou ook nog in de functie zelf kunnen (of als recursief met extra argument als counter))
-        # for i in range(1000):
-        #     stabilityList.append(protein.stability)
-        #     protein = protein.hillClimber()
-        #     # if (i % 10) == 0:
-        #     #     print(protein.stability)
+        # Hill climber
         protein, stabilityList = hillClimber(protein, 10000, True)
-
+        protein = hillClimber(protein, 10000)
         # # Create a visual of the final fold
         # # print(protein.stability)
         # finalStability.append(protein.stability)
