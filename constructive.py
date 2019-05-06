@@ -12,15 +12,14 @@ bestFolded=[]
 minStability=[0]
 
 
-def constructive(proteinString):
+def constructive(proteinString): 
     """
     """
-    # Capitalize all letters in proteinString
-    proteinString = proteinString.upper()
+
     # Initialize protein
     protein = Protein(proteinString)
     for i in range(2):
-        protein.aminoList.append(Amino(i, protein.proteinString[i]))
+        protein.aminoList.append(Amino(i, protein.proteinString[i].upper()))
         protein.aminoList[i].addCoordinate([0, i])
         protein.occupied.append([0, i])
 
@@ -42,8 +41,8 @@ def createFolded(protein, idToMove):
 
     # NOTE: dit verwijderd de verdere eiwitten
     # TODO: if-statement toevoegen zodat dit niet altijd gebeurt, maar ik kan nu niet nadenken
-    del protein.aminoList[(idToMove + 1):]
-    del protein.occupied[(idToMove + 1):]
+    del protein.aminoList[idToMove + 1:]
+    del protein.occupied[idToMove + 1 :]
     # NOTE: dit is hetzelfde als de vorige 2 regels code
     # protein.aminoList = protein.aminoList[0:idToMove + 1]
     # protein.occupied = protein.occupied[0:idToMove + 1]
@@ -57,10 +56,9 @@ def createFolded(protein, idToMove):
     #     return
 
     try:
-        protein.aminoList[idToMove] = Amino(idToMove, protein.proteinString[idToMove])
+        protein.aminoList[idToMove] = Amino(idToMove, protein.proteinString[idToMove].upper())
     except:
-        protein.aminoList.append(Amino(idToMove, protein.proteinString[idToMove]))
-
+        protein.aminoList.append(Amino(idToMove, protein.proteinString[idToMove].upper()))
 
     # NOTE: dit zorgt ervoor dat een aantal spiegelbeelden niet wordt gemaakt --> sneller
     xTotal = sum([item[0] for item in protein.occupied])
@@ -69,8 +67,6 @@ def createFolded(protein, idToMove):
 
 
     for possibleCo in possibleCos:
-        print("possibleCo = ", possibleCo)
-        print(protein)
         # Reset stability voor nieuwe vouwing
         protein.stability = 0
 
@@ -79,12 +75,14 @@ def createFolded(protein, idToMove):
             protein.occupied[idToMove] = possibleCo
         except:
             protein.occupied.append(possibleCo)
-        print(protein)
-        print()
-        if idToMove == (lengthProtein - 1):
+
+        xTotal = sum([item[0] for item in protein.occupied])
+        yTotal = sum([item[1] for item in protein.occupied])
+        total =  abs(xTotal) + abs(yTotal)
+
+        if idToMove == (lengthProtein - 1) and total != lengthProtein * 2:
             getStability(protein)
             # visualizer.plotProtein(protein)
-
 
             # # Determine current best stability
             # if not bestFolded:
@@ -103,7 +101,6 @@ def createFolded(protein, idToMove):
 
             if protein.stability < minStability[0]:
                 minStability[0] = protein.stability
-        visualizer.plotProtein(protein)
         createFolded(protein, (idToMove + 1))
 
 
@@ -135,7 +132,8 @@ def getStability(protein):
 
 
 if __name__ == "__main__":
-    constructive("HPHPPHHPHPPHPHHPPHPH")
+    constructive("HHPHHHPHPHHHPHHHHPP")
     # constructive("HHPHHHPHPHHHPH")
     # constructive("HHPHHHPH")
+    # constructive("HHHHP")
     print("--- %s seconds ---" % (time.time() - start_time))
