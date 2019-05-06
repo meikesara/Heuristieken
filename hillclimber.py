@@ -20,17 +20,24 @@ def hillClimber(protein, iterations, stabilityChange=False):
     if stabilityChange:
         stabilityList = []
 
+    counter = 0
     for i in range(iterations):
         if stabilityChange:
             stabilityList.append(protein.stability)
         newProtein = protein.pullMove()
         if newProtein.stability <= protein.stability:
             protein = newProtein
+            print("ik ben slechter! i =", i, counter)
+
+            counter = 0
+        else:
+            counter += 1
 
         if stabilityChange and (i == (iterations - 1)):
             stabilityList.append(protein.stability)
 
     if stabilityChange:
+        print("ik ben slechter! i = ", i, counter)
         return protein, stabilityList
     else:
         return protein
