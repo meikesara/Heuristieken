@@ -32,7 +32,13 @@ def randomFold(protein, minStability):
         newProtein = Protein(protein.proteinString)
 
         # Fold the protein again
-        newProtein.createAminoList()
+        validFolding = newProtein.createAminoList()
+
+        while not validFolding:
+            newProtein = Protein(protein.proteinString)
+
+            # Fold the protein again
+            validFolding = newProtein.createAminoList()
 
         # If stability of newly folded protein is higher update stability and fold
         if newProtein.stability < stability:

@@ -49,11 +49,11 @@ if __name__ == "__main__":
             newProtein = Protein(proteinString)
 
             # Fold the protein again
-            validFolding = newProtein.createAminoList(proteinString)
+            validFolding = newProtein.createAminoList()
             protein = newProtein
 
         # # Random folding of protein
-        # protein = randomFold(protein, -3)
+        # protein = randomFold(protein, -6)
         # print(protein)
         # print(protein.stability)
         # visualizer.plotProtein(protein)
