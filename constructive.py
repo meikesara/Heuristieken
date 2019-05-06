@@ -45,8 +45,11 @@ def createFolded(protein, idToMove):
     # Heel misschien maakt dit het (net ietsje) beter
     if not possibleCos:
         return
-
+    print("possibleCos = ", possibleCos)
+    print("idToMove = ", idToMove)
     for possibleCo in possibleCos:
+        print("possibleCo = ", possibleCo)
+        print(protein)
         # Reset stability voor nieuwe vouwing
         protein.stability = 0
         protein.aminoList[idToMove].addCoordinate(possibleCo)
@@ -54,7 +57,8 @@ def createFolded(protein, idToMove):
             protein.occupied[idToMove] = possibleCo
         except:
             protein.occupied.append(possibleCo)
-
+        print(protein)
+        print()
         if idToMove == (lengthProtein - 1):
             getStability(protein)
 
@@ -75,6 +79,7 @@ def createFolded(protein, idToMove):
 
             if protein.stability < minStability[0]:
                 minStability[0] = protein.stability
+        visualizer.plotProtein(protein)
         createFolded(protein, (idToMove + 1))
 
 
@@ -106,4 +111,17 @@ def getStability(protein):
 
 
 if __name__ == "__main__":
-    constructive("HPHPPHHPHPPHPHHPPHPH")
+    constructive("HHPP")
+
+    """
+    HHPHHHPH
+    HHPHHHPHPHHHPH
+    HPHPPHHPHPPHPHHPPHPH
+    PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP
+
+    HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH
+    PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP
+    CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC
+    HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH
+    HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH
+    """

@@ -9,6 +9,7 @@ from protein import Protein
 import sys
 import matplotlib.pyplot as plt
 import visualizer
+from hillclimber import hillClimber
 
 
 def checkInput():
@@ -74,21 +75,23 @@ if __name__ == "__main__":
     #         print(stability)
     # print(stability)
     # # print(protein)
-    visualizer.plotProtein(protein)
+    print(protein.stability)
+    # visualizer.plotProtein(protein)
 
     # Hill climber (deze loop zou ook nog in de functie zelf kunnen (of als recursief met extra argument als counter))
-    for i in range(10000):
-        # print(i)
-        stabilityList.append(protein.stability)
-        protein = protein.hillClimber()
-        #print(protein.stability)
-        if (i % 100) == 0:
-            print(protein.stability)
-        # print(protein)
-        # visualizer.plotProtein(protein)
+    # for i in range(10000):
+    #     # print(i)
+    #     stabilityList.append(protein.stability)
+    #     protein = protein.hillClimber()
+    #     #print(protein.stability)
+    #     if (i % 100) == 0:
+    #         print(protein.stability)
+    #     # print(protein)
+    #     # visualizer.plotProtein(protein)
+    new = hillClimber(protein, 2)
 
     # Create a visual of the final fold
-    print(protein.stability)
-    print(protein)
-    visualizer.plotProtein(protein)
-    visualizer.plotStability(stabilityList)
+    # print(protein.stability)
+    print(new)
+    # visualizer.plotProtein(protein)
+    # visualizer.plotStability(stabilityList)
