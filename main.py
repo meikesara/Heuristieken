@@ -52,9 +52,6 @@ if __name__ == "__main__":
             validFolding = newProtein.createAminoList(proteinString)
             protein = newProtein
 
-        # Initialise the stability
-        stability = protein.stability
-
         # # Random folding of protein
         # protein = randomFold(protein, -3)
         # print(protein)
