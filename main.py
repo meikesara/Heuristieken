@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
     finalStability = []
 
-    for j in range(1):
+    for j in range(100):
 
         # Check the input and save the protein string
         proteinString = checkInput()
@@ -49,7 +49,7 @@ if __name__ == "__main__":
             newProtein = Protein(proteinString)
 
             # Fold the protein again
-            validFolding = newProtein.createAminoList(proteinString)
+            validFolding = newProtein.createAminoList()
             protein = newProtein
 
         # # Random folding of protein
@@ -59,19 +59,19 @@ if __name__ == "__main__":
         # visualizer.plotProtein(protein)
 
         # Hill climber
-        protein, stabilityList = hillClimber(protein, 10000, True)
-        protein = hillClimber(protein, 10000)
-        # # Create a visual of the final fold
-        # # print(protein.stability)
-        # finalStability.append(protein.stability)
+        protein, stabilityList = hillClimber(protein, 1000, True)
 
         # Create a visual of the final fold
-        print(protein.stability)
-        print(protein)
-        visualizer.plotProtein(protein)
-        visualizer.plotStability(stabilityList)
+        # print(protein.stability)
+        finalStability.append(protein.stability)
 
-    # # plt.hist(finalStability)
-    # plt.xlabel("Stabiliteit")
-    # plt.ylabel("Aantal vouwingen")
-    # plt.show()
+        # Create a visual of the final fold
+        # print(protein.stability)
+        # print(protein)
+        # visualizer.plotProtein(protein)
+        # visualizer.plotStability(stabilityList)
+
+    plt.hist(finalStability)
+    plt.xlabel("Stabiliteit")
+    plt.ylabel("Aantal vouwingen")
+    plt.show()
