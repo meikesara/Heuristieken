@@ -41,8 +41,8 @@ def createFolded(protein, idToMove):
 
     # NOTE: dit verwijderd de verdere eiwitten
     # TODO: if-statement toevoegen zodat dit niet altijd gebeurt, maar ik kan nu niet nadenken
-    del protein.aminoList[idToMove + 1 : -1]
-    del protein.occupied[idToMove + 1 : -1]
+    del protein.aminoList[idToMove + 1:]
+    del protein.occupied[idToMove + 1 :]
     # NOTE: dit is hetzelfde als de vorige 2 regels code
     # protein.aminoList = protein.aminoList[0:idToMove + 1]
     # protein.occupied = protein.occupied[0:idToMove + 1]
@@ -76,10 +76,13 @@ def createFolded(protein, idToMove):
         except:
             protein.occupied.append(possibleCo)
 
-        if idToMove == (lengthProtein - 1):
+        xTotal = sum([item[0] for item in protein.occupied])
+        yTotal = sum([item[1] for item in protein.occupied])
+        total =  abs(xTotal) + abs(yTotal)
+
+        if idToMove == (lengthProtein - 1) and total != lengthProtein * 2:
             getStability(protein)
             # visualizer.plotProtein(protein)
-
 
             # # Determine current best stability
             # if not bestFolded:
@@ -129,7 +132,8 @@ def getStability(protein):
 
 
 if __name__ == "__main__":
-    constructive("HPHPPHHPHPPHPHHPPHPH")
+    constructive("HHPHHHPHPHHHPHHHHPP")
     # constructive("HHPHHHPHPHHHPH")
     # constructive("HHPHHHPH")
+    # constructive("HHHHP")
     print("--- %s seconds ---" % (time.time() - start_time))
