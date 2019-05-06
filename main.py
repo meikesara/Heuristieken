@@ -32,7 +32,6 @@ def checkInput():
 if __name__ == "__main__":
 
     finalStability = []
-    sys.setrecursionlimit(1500)
 
     for j in range(1):
 
