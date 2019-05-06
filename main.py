@@ -58,9 +58,11 @@ if __name__ == "__main__":
         # print(protein.stability)
         # visualizer.plotProtein(protein)
 
+        print(protein.stability)
+        visualizer.plotProtein(protein)
         # Hill climber
-        protein, stabilityList = hillClimber(protein, 10000, True)
-        protein = hillClimber(protein, 10000)
+        protein, stabilityList = hillClimber(protein, 100000, True)
+
         # # Create a visual of the final fold
         # # print(protein.stability)
         # finalStability.append(protein.stability)
