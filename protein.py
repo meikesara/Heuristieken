@@ -246,9 +246,9 @@ class Protein(object):
                                 self.stability -= 1
 
 
-    def hillClimber(self):
+    def pullMove(self):
         """
-        # TODO:
+        # TODO: comment
         """
 
         # Choose random amino to move
@@ -262,7 +262,7 @@ class Protein(object):
             amino = random.choice(self.aminoList)
             coordinates = self.getDiagonalCo(amino)
 
-        # Create copy of self (original protein)
+        # Create copy of protein (original protein)
         newProtein = copy.deepcopy(self)
 
         newProtein.stabilityUpdate(amino, True)
@@ -293,13 +293,12 @@ class Protein(object):
 
             surCoPrev = newProtein.getSurroundCo(newProtein.aminoList[(amino.id - 1)].coordinate, True)
 
+            # NOTE: vraag me af of deze if-statement (nog) nodig is,
+            # aangezien hetzelfde gecontroleerd wordt in functie
             if newProtein.aminoList[(amino.id - 2)].coordinate not in surCoPrev:
                 newProtein.moveAminos(self, (amino.id - 2))
 
-        if newProtein.stability <= self.stability:
-            self = newProtein
-
-        return self
+        return newProtein
 
 
     def moveAminos(self, oldProtein, idToMove):

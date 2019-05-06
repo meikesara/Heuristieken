@@ -12,7 +12,7 @@ bestFolded=[]
 minStability=[0]
 
 
-def constructive(proteinString): #, protein, validFolds=[]
+def constructive(proteinString): 
     """
     """
 

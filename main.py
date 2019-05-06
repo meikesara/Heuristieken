@@ -9,7 +9,7 @@ from protein import Protein
 import sys
 import matplotlib.pyplot as plt
 import visualizer
-
+from hillclimber import hillClimber
 
 def checkInput():
     """
@@ -38,7 +38,7 @@ if __name__ == "__main__":
         # Check the input and save the protein string
         proteinString = checkInput()
 
-        stabilityList = []
+        # stabilityList = []
 
         # Create the protein
         protein = Protein(proteinString)
@@ -56,7 +56,7 @@ if __name__ == "__main__":
         # Initialise the stability
         stability = protein.stability
 
-        stabilityList.append(stability)
+        # stabilityList.append(stability)
 
         # # Loop while the stability is bigger than the minStability
         # while stability > minStability:
@@ -74,19 +74,20 @@ if __name__ == "__main__":
         #         print(stability)
         # print(stability)
         # # print(protein)
-
-        visualizer.plotProtein(protein)
+        print(protein.stability)
+        # visualizer.plotProtein(protein)
 
         # Hill climber (deze loop zou ook nog in de functie zelf kunnen (of als recursief met extra argument als counter))
-        for i in range(1000):
-            stabilityList.append(protein.stability)
-            protein = protein.hillClimber()
-            # if (i % 10) == 0:
-            #     print(protein.stability)
+        # for i in range(1000):
+        #     stabilityList.append(protein.stability)
+        #     protein = protein.hillClimber()
+        #     # if (i % 10) == 0:
+        #     #     print(protein.stability)
+        protein, stabilityList = hillClimber(protein, 10000, True)
 
-        # Create a visual of the final fold
-        # print(protein.stability)
-        finalStability.append(protein.stability)
+        # # Create a visual of the final fold
+        # # print(protein.stability)
+        # finalStability.append(protein.stability)
 
         # Create a visual of the final fold
         print(protein.stability)
