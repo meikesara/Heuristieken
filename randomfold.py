@@ -25,7 +25,7 @@ def randomFold(protein, minStability):
     # Loop while the stability is bigger than the minStability
     while stability > minStability:
         # Exit while loop if iterations exceeds one billion
-        if counter > pow(10, 9):
+        if counter > pow(10, 6):
             return protein
 
         # Initialize new protein
