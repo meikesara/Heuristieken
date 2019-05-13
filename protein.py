@@ -27,6 +27,7 @@ class Protein(object):
         self.aminoList = []
         self.stability = 0
         self.occupied = []
+        self.proteinLength = len(proteinString)
 
 
     def __str__(self):

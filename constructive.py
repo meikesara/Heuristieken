@@ -10,7 +10,9 @@ import re
 
 start_time = time.time()
 minStability=[0]
-
+lengthProtein = 0
+# xTotal = []
+# yTotal = []
 
 def constructive(proteinString):
     """
@@ -22,6 +24,8 @@ def constructive(proteinString):
         protein.aminoList.append(Amino(i, protein.proteinString[i].upper()))
         protein.aminoList[i].addCoordinate([0, i])
         protein.occupied.append([0, i])
+        # xTotal.append(0)
+        # yTotal.append(i)
 
     createFolded(protein, 2)
     print(proteinString)
@@ -31,18 +35,18 @@ def constructive(proteinString):
 def createFolded(protein, idToMove):
 
     # NOTE: dit hoeft maar een keer.
-    lengthProtein = len(protein.proteinString)
+
     if idToMove > (lengthProtein - 1):
         return
 
     # NOTE: dit verwijderd de verdere eiwitten
     # TODO: if-statement toevoegen zodat dit niet altijd gebeurt, maar ik kan nu niet nadenken
+    # if idToMove < len(protein.aminoList) - 1:
     del protein.aminoList[idToMove + 1:]
     del protein.occupied[idToMove + 1 :]
     # NOTE: dit is hetzelfde als de vorige 2 regels code
     # protein.aminoList = protein.aminoList[0:idToMove + 1]
     # protein.occupied = protein.occupied[0:idToMove + 1]
-
 
     prevCo = protein.aminoList[(idToMove - 1)].coordinate
     possibleCos = protein.getSurroundCo(prevCo, False)
@@ -63,18 +67,27 @@ def createFolded(protein, idToMove):
     if xTotal == 0 and len(possibleCos) == 3:
         possibleCos.pop(1)
 
+    # if sum(xTotal) == 0 and len(possibleCos) == 3:
+    #     possibleCos.pop(1)
+
+
 
     for possibleCo in possibleCos:
 
         protein.aminoList[idToMove].addCoordinate(possibleCo)
         try:
             protein.occupied[idToMove] = possibleCo
+            # xTotal[idToMove] = possibleCo[0]
+            # yTotal[idToMove] = possibleCo[1]
         except:
             protein.occupied.append(possibleCo)
+            # xTotal.append(possibleCo[0])
+            # yTotal.append(possibleCo[1])
 
         # NOTE: dit kan nog op een slimmere manier
         xTotal = sum([item[0] for item in protein.occupied])
         yTotal = sum([item[1] for item in protein.occupied])
+        # total =  abs(sum(xTotal)) + abs(sum(yTotal))
         total =  abs(xTotal) + abs(yTotal)
 
         if idToMove == (lengthProtein - 1) and total != lengthProtein * 2:
@@ -118,9 +131,14 @@ def getStability(protein):
 
 
 if __name__ == "__main__":
+    lengthProtein = len("PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP")
     # constructive("HPHPPHHPHPPHPHHPPHPH")
     constructive("PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP")
     # constructive("HHPHHHPH")
-    # constructive("HHHHP")
+
+    # constructive("HHPHHHPHPHHHPH")
+
+    # constructive("HHPHHHPHPHHHPH")
+    # constructive("HHPHHHPHPHHHPH")
     print("--- %s seconds ---" % (time.time() - start_time))
     # cProfile.run('re.compile("constructive("HHPHHHPHPHHHPH")")')
