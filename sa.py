@@ -10,6 +10,7 @@ import random
 import copy
 import math
 import visualizer
+import matplotlib.pyplot as plt
 
 # bestProtein = 0
 
@@ -22,11 +23,17 @@ def simulatedAnnealing(protein, beginTemp, bestProtein):
     """
 
     stabilityList = []
+    tempList = []
     temperature = beginTemp
-    alfa = 0.995
+    alfa = 0.9995
     k = 1
+    D = 10
 
-    while temperature > 0.0005:
+    # NOTE: gebruik voor de log/ln een hogere temp om er eerder uit te komen;
+        #Is alleen misschien niet helemaal precies wat je officieel zou willen doen,
+        #zou ook D kleiner kunnen maken, dan komt de acceptance eerder bij een
+        #lagere temp
+    while temperature > 0.0005: #0.5:
         stabilityList.append(protein.stability)
 
         newProtein = protein.pullMove()
@@ -55,12 +62,21 @@ def simulatedAnnealing(protein, beginTemp, bestProtein):
         # temperature *= alfa
         # print(temperature)
         temperature = beginTemp * pow(alfa,k)
+        # temperature = D/math.log(k + 2)
+        tempList.append(temperature)
 
     stabilityList.append(protein.stability)
     print("Final solution stability: ", protein.stability)
     print("Best stability: ", bestProtein.stability)
     visualizer.plotProtein(bestProtein)
     visualizer.plotStability(stabilityList)
+
+    # Plot temperatuur verloop
+    plt.plot(tempList)
+    # Plot acceptance verloop
+    plt.figure()
+    plt.plot([math.exp(-1/elem) for elem in tempList])
+    plt.show()
 
             # print("ik ben slechter! i =", i, counter)
 

@@ -159,7 +159,7 @@ def removeBonds(counterDict, stability, lengthProtein, strengthBond):
 
 
 if __name__ == "__main__":
-    proteinString = "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC"
+    proteinString = "HHPHHHPHPHHHPH"
     # "HHPHHHPH"
     # "HHPHHHPHPHHHPH"
     # "HPHPPHHPHPPHPHHPPHPH"
