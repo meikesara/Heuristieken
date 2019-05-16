@@ -32,48 +32,49 @@ def checkInput():
 
 if __name__ == "__main__":
 
+    # Check the input and save the protein string
+    proteinString = checkInput()
+
     finalStability = []
-
-    for j in range(1):
-
-        # Check the input and save the protein string
-        proteinString = checkInput()
+    times = 75
+    for j in range(times):
 
         # Create the protein
-        protein = Protein(proteinString)
+        protein = Protein(proteinString, "3D")
 
         # Fold the protein once
         validFolding = protein.createAminoList()
 
         while not validFolding:
-            newProtein = Protein(proteinString)
+            newProtein = Protein(proteinString, "3D")
 
             # Fold the protein again
             validFolding = newProtein.createAminoList()
             protein = newProtein
 
-        # Random folding of protein
-        protein = randomFold(protein, -38)
-        print(protein)
-        print(protein.stability)
-        visualizer.plotProtein(protein)
+        # # Random folding of protein
+        # protein = randomFold(protein, -10)
+        # print(protein)
+        # print(protein.stability)
+        # visualizer.plotProtein(protein)
 
         # print(protein.stability)
         # visualizer.plotProtein(protein)
-    #     # Hill climber
-    #     protein, stabilityList = hillClimber(protein, 1000, True)
-    #
-    #     # Create a visual of the final fold
-    #     # print(protein.stability)
-    #     finalStability.append(protein.stability)
-    #
-    #     # Create a visual of the final fold
-    #     # print(protein.stability)
-    #     # print(protein)
-    #     # visualizer.plotProtein(protein)
-    #     # visualizer.plotStability(stabilityList)
-    #
-    # plt.hist(finalStability)
-    # plt.xlabel("Stabiliteit")
-    # plt.ylabel("Aantal vouwingen")
-    # plt.show()
+        # Hill climber
+        protein, stabilityList = hillClimber(protein, 1000, True)
+
+        # Create a visual of the final fold
+        # print(protein.stability)
+        finalStability.append(protein.stability)
+
+        # Create a visual of the final fold
+        if j == (times - 1):
+            print(protein.stability)
+            print(protein)
+            visualizer.plotProtein(protein)
+            visualizer.plotStability(stabilityList)
+
+    plt.hist(finalStability)
+    plt.xlabel("Stabiliteit")
+    plt.ylabel("Aantal vouwingen")
+    plt.show()

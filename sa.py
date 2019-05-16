@@ -96,7 +96,7 @@ def simulatedAnnealing(protein, beginTemp, bestProtein):
 if __name__ == "__main__":
     proteinString = "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH"
 
-    protein = Protein(proteinString)
+    protein = Protein(proteinString, "2D")
 
     validFolding = protein.createAminoList()
 
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     # coolingRate = 0.0003
 
     while not validFolding:
-        newProtein = Protein(proteinString)
+        newProtein = Protein(proteinString, "2D")
 
         # Fold the protein again
         validFolding = newProtein.createAminoList()

@@ -17,7 +17,7 @@ class Protein(object):
     """
 
     # Initialise variables
-    def __init__(self, proteinString):
+    def __init__(self, proteinString, plane):
 
         """
         This method initialises the variables of the Protein object
@@ -28,6 +28,7 @@ class Protein(object):
         self.stability = 0
         self.occupied = []
         self.proteinLength = len(proteinString)
+        self.plane = plane
 
 
     def __str__(self):
@@ -78,15 +79,40 @@ class Protein(object):
         # Calculate the absolute difference between the x and y coordinates
         x = abs(currentCo[0] - otherCo[0])
         y = abs(currentCo[1] - otherCo[1])
+        # print('x,y:', x,y)
+        if self.plane == "3D":
+            z = abs(currentCo[2] - otherCo[2])
+            # print("z:", z)
 
         # Check if the amino acid is the first or last in the protein
+        # NOTE: zou je ipv len(self.aminoList) ook self.proteinLength kunnen gebruiken?
         if (index + 1) == len(self.aminoList) or index == 0:
-
+            # TODO: Voor eerste en laatste nog 3D doen
             # Create a list of diagonals
-            if x == 1:
-                diagonals = [[otherCo[0], (otherCo[1] - 1)], [otherCo[0], (otherCo[1] + 1)]]
+            if self.plane == "2D":
+                if x == 1:
+                    diagonals = [[otherCo[0], (otherCo[1] - 1)], [otherCo[0], (otherCo[1] + 1)]]
+                else:
+                    diagonals = [[(otherCo[0] + 1), otherCo[1]], [(otherCo[0] - 1), otherCo[1]]]
             else:
-                diagonals = [[(otherCo[0] + 1), otherCo[1]], [(otherCo[0] - 1), otherCo[1]]]
+                if x == 1:
+                    diagonals = [[otherCo[0], (otherCo[1] - 1), otherCo[2]],
+                                 [otherCo[0], (otherCo[1] + 1), otherCo[2]],
+                                 [otherCo[0], otherCo[1], (otherCo[2] - 1)],
+                                 [otherCo[0], otherCo[1], (otherCo[2] + 1)]]
+                elif y == 1:
+                    diagonals = [[(otherCo[0] - 1), otherCo[1], otherCo[2]],
+                                 [(otherCo[0] + 1), otherCo[1], otherCo[2]],
+                                 [otherCo[0], otherCo[1], (otherCo[2] - 1)],
+                                 [otherCo[0], otherCo[1], (otherCo[2] + 1)]]
+                else:
+                    diagonals = [[(otherCo[0] - 1), otherCo[1], otherCo[2]],
+                                 [(otherCo[0] + 1), otherCo[1], otherCo[2]],
+                                 [otherCo[0], (otherCo[1] - 1), otherCo[2]],
+                                 [otherCo[0], (otherCo[1] + 1), otherCo[2]]]
+
+
+
 
             # Randomly shuffle the diagonals
             random.shuffle(diagonals)
@@ -98,8 +124,71 @@ class Protein(object):
 
         else:
             # Create a list of diagonals of the currentCoordinates
-            diagonals = [[(currentCo[0] + 1), (currentCo[1] + 1)], [(currentCo[0] + 1), (currentCo[1] - 1)], [(currentCo[0] - 1), (currentCo[1] + 1)], [(currentCo[0] - 1), (currentCo[1] - 1)]]
+            diagonals = []
+            if self.plane == "2D":
+                # Only xy-plane
+                planes = [[0, 1]]
+            else:
+                planes = [[0, 1], [0, 2], [1, 2]]
 
+            for plane in planes:
+                # TODO: zorgen dat deze code écht beter/netter wordt
+                if self.plane == "2D":
+                    check = ["0", "1"]
+                else:
+                    check = ["0", "1", "2"]
+                check[plane[0]] = (currentCo[plane[0]] + 1)
+                check[plane[1]] = (currentCo[plane[1]] + 1)
+                if self.plane == "3D":
+                    for i in check:
+                        if type(i) == str:
+                            check[int(i)] = currentCo[int(i)]
+                diagonals.append(check)
+
+                if self.plane == "2D":
+                    check = ["0", "1"]
+                else:
+                    check = ["0", "1", "2"]
+                check[plane[0]] = (currentCo[plane[0]] + 1)
+                check[plane[1]] = (currentCo[plane[1]] - 1)
+                if self.plane == "3D":
+                    for i in check:
+                        if type(i) == str:
+                            check[int(i)] = currentCo[int(i)]
+                diagonals.append(check)
+
+                if self.plane == "2D":
+                    check = ["0", "1"]
+                else:
+                    check = ["0", "1", "2"]
+                check[plane[0]] = (currentCo[plane[0]] - 1)
+                check[plane[1]] = (currentCo[plane[1]] + 1)
+                if self.plane == "3D":
+                    for i in check:
+                        if type(i) == str:
+                            check[int(i)] = currentCo[int(i)]
+                diagonals.append(check)
+
+                if self.plane == "2D":
+                    check = ["0", "1"]
+                else:
+                    check = ["0", "1", "2"]
+                check[plane[0]] = (currentCo[plane[0]] - 1)
+                check[plane[1]] = (currentCo[plane[1]] - 1)
+                if self.plane == "3D":
+                    for i in check:
+                        if type(i) == str:
+                            check[int(i)] = currentCo[int(i)]
+                diagonals.append(check)
+
+                # diagonals.append([(currentCo[plane[0]] + 1), (currentCo[plane[1]] + 1)])
+                # diagonals.append([(currentCo[plane[0]] + 1), (currentCo[plane[1]] - 1)])
+                # diagonals.append([(currentCo[plane[0]] - 1), (currentCo[plane[1]] + 1)])
+                # diagonals.append([(currentCo[plane[0]] - 1), (currentCo[plane[1]] - 1)])
+            # diagonals = [[(currentCo[0] + 1), (currentCo[1] + 1)], [(currentCo[0] + 1), (currentCo[1] - 1)],
+            #              [(currentCo[0] - 1), (currentCo[1] + 1)], [(currentCo[0] - 1), (currentCo[1] - 1)]]
+            # di = [d for dc in dia for d in dc]
+            # print(diagonals)
             # Randomly shuffle the diagonals
             random.shuffle(diagonals)
 
@@ -116,10 +205,29 @@ class Protein(object):
                     if otherCo in surroundCo:
 
                         # Get the coordinates of the C
-                        if x == 1:
-                            CCo = [currentCo[0], diagonal[1]]
+                        # TODO: zorgen dat dit nog goed gaat worden voor 3D
+                        if self.plane == "2D":
+                            if x == 1:
+                                CCo = [currentCo[0], diagonal[1]]
+                            else:
+                                CCo = [diagonal[0], currentCo[1]]
                         else:
-                            CCo = [diagonal[0], currentCo[1]]
+                            difference = [(currentCo[i] - diagonal[i]) for i in range(len(currentCo))]
+                            sameCoIndex = difference.index(0)
+                            CCo = [0,0,0]
+                            CCo[sameCoIndex] = currentCo[sameCoIndex]
+
+                            xyz = [0,1,2]
+                            xyz.remove(xyz[sameCoIndex])
+                            CCo[xyz[0]] = currentCo[xyz[0]]
+                            CCo[xyz[1]] = diagonal[xyz[1]]
+                            # xyzDict = {0:x, 1:y, 2:z}
+                            # if xyzDict[xyz[0]] == 1:
+                            #      CCo[xyz[0]] = currentCo[xyz[0]]
+                            #      CCo[xyz[1]] = diagonal[xyz[1]]
+                            # else:
+                            #     CCo[]
+                            # print("CCo = ", CCo)
 
                         # Check if C is not occupied or if they are the coordinates of the previous amino acid
                         if (CCo not in self.occupied) or (CCo == previousCo):
@@ -137,6 +245,10 @@ class Protein(object):
 
         # Create a list of all the possible coordinates
         coordinates = [[(prevCo[0] - 1), prevCo[1]], [(prevCo[0] + 1), prevCo[1]], [prevCo[0], (prevCo[1] - 1)], [prevCo[0], (prevCo[1] + 1)]]
+        if self.plane == "3D":
+            [co.append(prevCo[2]) for co in coordinates]
+            coordinates.append([prevCo[0], prevCo[1], (prevCo[2] - 1)])
+            coordinates.append([prevCo[0], prevCo[1], (prevCo[2] + 1)])
 
         # Loop over all the coordinates
         for coordinate in coordinates:
@@ -156,23 +268,26 @@ class Protein(object):
 
     def createAminoList(self):
         """
-        This method folds the protein
+        This method folds the protein randomly
         """
 
         # TODO: misschien kunnen we ook voorkomen dat een eiwit niet goed vouwt
 
         # Loop over the letters in the proteinString
-        for id in range(len(self.proteinString)):
+        for id in range(self.proteinLength):
 
             # Add amino acid to the aminoList
             self.aminoList.append(Amino(id, self.proteinString[id].upper()))
 
             # Place the first and second amino-acid
-            # The coordinates of the first amino-acid are (0,0)
-            # The coordinates of the second amino-acis are (0,1)
+            # The coordinates of first amino-acid are (0,0) (or (0,0,0) for 3D)
+            # The coordinates of second amino-acid are (0,1) (or (0,1,0) for 3D)
             if id == 0 or id == 1:
-                self.aminoList[id].addCoordinate([0, id])
-                self.occupied.append([0, id])
+                thisCoordinate = [0, id]
+                if self.plane == "3D":
+                    thisCoordinate.append(0)
+                self.aminoList[id].addCoordinate(thisCoordinate)
+                self.occupied.append(thisCoordinate)
 
             # The remaining amino-acids are randomly placed
             else:
