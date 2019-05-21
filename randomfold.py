@@ -29,13 +29,13 @@ def randomFold(protein, minStability):
             return protein
 
         # Initialize new protein
-        newProtein = Protein(protein.proteinString)
+        newProtein = Protein(protein.proteinString, protein.plane)
 
         # Fold the protein again
         validFolding = newProtein.createAminoList()
 
         while not validFolding:
-            newProtein = Protein(protein.proteinString)
+            newProtein = Protein(protein.proteinString, protein.plane)
 
             # Fold the protein again
             validFolding = newProtein.createAminoList()

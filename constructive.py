@@ -19,7 +19,7 @@ def constructive(proteinString):
     """
 
     # Initialize protein
-    protein = Protein(proteinString)
+    protein = Protein(proteinString, "2D")
     for i in range(2):
         protein.aminoList.append(Amino(i, protein.proteinString[i].upper()))
         protein.aminoList[i].addCoordinate([0, i])

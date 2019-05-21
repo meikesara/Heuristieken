@@ -87,19 +87,38 @@ def simulatedAnnealing(protein, beginTemp):
 if __name__ == "__main__":
     proteinString = "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP"
 
+<<<<<<< HEAD
     temperature = 1
     finalStability = []
+=======
+    protein = Protein(proteinString, "2D")
+>>>>>>> 0c062a5e7584bc53e09d77cefacc1782d938dd73
 
     for i in range(1):
         # print(i)
         protein = Protein(proteinString)
         validFolding = protein.createAminoList()
 
+<<<<<<< HEAD
         while not validFolding:
             newProtein = Protein(proteinString)
                 # Fold the protein again
             validFolding = newProtein.createAminoList()
             protein = newProtein
+=======
+    temperature = 10000
+
+    # coolingRate = 0.0003
+
+    while not validFolding:
+        newProtein = Protein(proteinString, "2D")
+
+        # Fold the protein again
+        validFolding = newProtein.createAminoList()
+        protein = newProtein
+
+    bestProtein = protein
+>>>>>>> 0c062a5e7584bc53e09d77cefacc1782d938dd73
 
         # print("Initial solution stability: ", protein.stability)
 
