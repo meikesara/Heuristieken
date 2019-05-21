@@ -70,11 +70,17 @@ class Protein(object):
 
         # If the amino acid is in the middle get the coordinates of the next and previous amino acid
         else:
-            nextAmino = self.aminoList[index + 1]
+            nOrP = [index + 1, index - 1]
+
+            # # TODO: dit werkend maken
+            # random.shuffle(nOrP)
+
+            nextAmino = self.aminoList[nOrP[0]]
             otherCo = nextAmino.coordinate
 
-            previousAmino = self.aminoList[index - 1]
+            previousAmino = self.aminoList[nOrP[1]]
             previousCo = previousAmino.coordinate
+
 
         # Calculate the absolute difference between the x, y (and z) coordinates
         lengthCo = len(currentCo)
@@ -154,7 +160,7 @@ class Protein(object):
                     # Get the occupied surrounding coordinates of the diagonal
                     surroundCo = self.getSurroundCo(diagonal, True)
 
-                    # Check if the coordinates of the next aminoacid ar in the surrounding cordinates of the diagonal
+                    # Check if the coordinates of the next amino acid ar in the surrounding cordinates of the diagonal
                     if otherCo in surroundCo:
                         xyz = list(range(lengthCo))
                         difference = [(currentCo[i] - diagonal[i]) for i in range(lengthCo)]
@@ -362,6 +368,7 @@ class Protein(object):
         idToMove is the id of the aminoacid that needs to be moved.
         """
 
+        # Hierbij zorgen dat het ook voor i-1 klopt
         surCoPrev = self.getSurroundCo(self.aminoList[(idToMove + 1)].coordinate, True)
         if (self.aminoList[idToMove].coordinate in surCoPrev) or (idToMove < 0):
             return
