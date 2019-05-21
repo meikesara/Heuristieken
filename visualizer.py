@@ -1,6 +1,6 @@
 """
-Script for visualizing folded proteins and change in stability over a number of
-iterations.
+Script for visualizing folded proteins and change in stability over a
+number of iterations.
 
 Meike Kortleve, Nicole Jansen
 """
@@ -8,12 +8,15 @@ Meike Kortleve, Nicole Jansen
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
+
 def plotProtein(protein):
     """
-    Function for creating a visual representation of a folded protein.
+    Create a visual representation of a protein.
+
+    Argument:
+    protein -- protein of class Protein
     """
 
-    # Dictionaries containing colors and labels for the types of amino acids
     colorDict = {"P": "b", "H": "r", "C": "C6"}
     nameDict = {"P": "polair", "H": "hydrofoob", "C": "cysteine"}
 
@@ -30,7 +33,7 @@ def plotProtein(protein):
     if protein.plane == "2D":
         ax = plt.axes()
     elif protein.plane == "3D":
-        ax = plt.axes(projection='3d')
+        ax = plt.axes(projection="3d")
 
     # Plot lines between amino acids
     if protein.plane == "2D":
@@ -40,10 +43,8 @@ def plotProtein(protein):
 
     # Plot dotted lines to indicate bonds (HH, HC, CC)
     for amino in protein.aminoList:
-        # Check if there are bonds for current amino acid
         coordinates = getStabilityCo(amino, protein)
 
-        # Plot each dotted line seperately
         for coordinate in coordinates:
             if protein.plane == "2D":
                 ax.plot([amino.coordinate[0], coordinate[0]],
@@ -56,30 +57,40 @@ def plotProtein(protein):
     # Plot amino acids
     for i in colorDict:
         if protein.plane == "2D":
-            ax.scatter(xPoints[i], yPoints[i], color=colorDict[i], label=nameDict[i])
+            ax.scatter(xPoints[i], yPoints[i], color=colorDict[i],
+                       label=nameDict[i])
         else:
-            ax.scatter(xPoints[i], yPoints[i], zPoints[i], color=colorDict[i], label=nameDict[i])
+            ax.scatter(xPoints[i], yPoints[i], zPoints[i], color=colorDict[i],
+                       label=nameDict[i])
 
     plt.title("stabiliteit = " + str(protein.stability))
     ax.legend()
-    ax.axis('equal')
-    # ax.set_aspect('equal')
-    #ax.grid(True) # TODO: voor als wel grid willen, moet het op andere manier
-    # ax.axis('off')
+    if protein.plane == "2D":
+        ax.axis('equal')
+    else:
+        # Create cubic grid
+        minValue = min((xLines + yLines + zLines))
+        maxValue = max((xLines + yLines + zLines))
+        ax.set_xlim(minValue, maxValue)
+        ax.set_ylim(minValue, maxValue)
+        ax.set_zlim(minValue, maxValue)
+
+    ax.axis("off")
     plt.show()
 
 
 def plotStability(stabilityList):
     """
-    Function for plotting how stability changes over a number of iterations.
+    Plot how stability changes over a number of iterations.
+
+    Argument:
+    stabilityList -- list with stability at each iteration
     """
 
-    # Create plot
-    # fig = plt.figure()
-    # ax = plt.axes()
     plt.plot(stabilityList, "k")
     plt.xlim(0, len(stabilityList))
     plt.ylim((min(stabilityList) - 5), 0)
+    # TODO: verander deze namen naar Engels voor deadline
     plt.xlabel("Iteraties")
     plt.ylabel("Stabiliteit")
     plt.show()
@@ -87,10 +98,14 @@ def plotStability(stabilityList):
 
 def processData(protein):
     """
-    Function for processing data needed to create plot of folded protein.
+    Process data needed to create plot of protein.
+    Return dictionaries of x, y, and z coordinates where types are classified,
+    and lists of x, y, and z coordinates for creating lines between amino acids.
+
+    Argument:
+    protein -- protein of class Protein
     """
 
-    # Initialize dictionaries and lists for coordinates
     xPoints = {"P": [], "H": [], "C": []}
     yPoints = {"P": [], "H": [], "C": []}
     zPoints = {"P": [], "H": [], "C": []}
@@ -98,7 +113,6 @@ def processData(protein):
     yLines = []
     zLines = []
 
-    # Add coordinates of each amino acid to dictionaries and lists
     for amino in protein.aminoList:
         xLines.append(amino.coordinate[0])
         yLines.append(amino.coordinate[1])
@@ -118,27 +132,28 @@ def processData(protein):
 
 def getStabilityCo(amino, protein):
     """
-    Function for determining if bonds are made with the given amino acid.
+    Determine if stability bonds are made with the given amino acid.
+    Return list coordinates of aminos with which bonds are created.
+
+    Arguments:
+    amino -- amino acid of class Amino
+    protein -- protein of class Protein
     """
 
     coordinates = []
-
-    # Get type of given amino acid
     typeCo = amino.type
 
     # Bonds only created between amino acids of type H and C
     if typeCo in {"H", "C"}:
-        # Get surrounding coordinates of given amino acid that are occupied
-        aroundCos = protein.getSurroundCo(amino.coordinate, True)
+        aroundCos = protein.getSurroundCo(amino.coordinate, occupied=True)
 
         # For each amino next to given amino, check if they create a bond
         for aroundCo in aroundCos:
-            # Get id and type of amino acid next to given amino
             idAround = protein.occupied.index(aroundCo)
             aroundType = protein.aminoList[idAround].type
 
             if aroundType in {"H", "C"}:
-                # Check if amino is not connected in protein to amino
+                # Check if given amino is not connected in protein to amino
                 if idAround != (amino.id + 1) and idAround != (amino.id - 1):
                     # Bond only needs to be plotted once
                     if amino.id > idAround:
