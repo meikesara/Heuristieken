@@ -160,11 +160,7 @@ class Protein(object):
                     # Get the occupied surrounding coordinates of the diagonal
                     surroundCo = self.getSurroundCo(diagonal, True)
 
-<<<<<<< HEAD
                     # Check if the coordinates of the next amino acid ar in the surrounding cordinates of the diagonal
-=======
-                    # Check if the coordinates of the next aminoacid ar in the surrounding coordinates of the diagonal
->>>>>>> 5c1d4cc6ee3bf6b3eaf560869056e887eeb909fc
                     if otherCo in surroundCo:
                         xyz = list(range(lengthCo))
                         difference = [(currentCo[i] - diagonal[i]) for i in range(lengthCo)]

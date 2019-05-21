@@ -48,7 +48,7 @@ if __name__ == "__main__":
         for i in range(runnings):
             stability = simulatedAnnealing(proteinString, temperature, iterations, runnings)
             finalStability.append(stability)
-        if runnings = 1:
+        if runnings != 1:
             print(finalStability)
     else:
 

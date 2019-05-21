@@ -57,7 +57,7 @@ def simulatedAnnealing(proteinString, beginTemp, iterations, runnings):
         newProtein = protein.pullMove()
 
         # Update the temperature
-        temperature = D/math.log(k + 2)
+        temperature = D/math.log(k + 2 + 10)
 
         # Add temperature to the list of temperatures
         tempList.append(temperature)
