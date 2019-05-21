@@ -52,16 +52,16 @@ if __name__ == "__main__":
             validFolding = newProtein.createAminoList()
             protein = newProtein
 
-        # # Random folding of protein
-        # protein = randomFold(protein, -10)
+        # Random folding of protein
+        protein = randomFold(protein, -49)
         # print(protein)
         # print(protein.stability)
         # visualizer.plotProtein(protein)
 
-        print(protein.stability)
-        visualizer.plotProtein(protein)
-        # Hill climber
-        protein, stabilityList = hillClimber(protein, 1000, True)
+        # print(protein.stability)
+        # visualizer.plotProtein(protein)
+        # # Hill climber
+        # protein, stabilityList = hillClimber(protein, 1000, True)
 
         # Create a visual of the final fold
         print(protein.stability)

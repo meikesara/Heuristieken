@@ -154,7 +154,7 @@ class Protein(object):
                     # Get the occupied surrounding coordinates of the diagonal
                     surroundCo = self.getSurroundCo(diagonal, True)
 
-                    # Check if the coordinates of the next aminoacid ar in the surrounding cordinates of the diagonal
+                    # Check if the coordinates of the next aminoacid ar in the surrounding coordinates of the diagonal
                     if otherCo in surroundCo:
                         xyz = list(range(lengthCo))
                         difference = [(currentCo[i] - diagonal[i]) for i in range(lengthCo)]
@@ -283,8 +283,7 @@ class Protein(object):
                 if aroundType in {"H", "C"}:
 
                     # Check if amino is not connected in protein to given amino
-                    if idAround not in {(id + 1), (id - 1)}: #idAround != (id + 1) and idAround != (id - 1):
-
+                    if idAround not in {(id + 1), (id - 1)}:
                         # Stronger bond created when both aminos are type C
                         if typeCo == "C" and aroundType == "C":
                             if replace:
