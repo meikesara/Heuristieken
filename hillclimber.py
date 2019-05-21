@@ -27,7 +27,6 @@ def hillClimber(protein, iterations, stabilityChange=False):
         newProtein = protein.pullMove()
         if newProtein.stability <= protein.stability:
             protein = newProtein
-            print("ik ben slechter! i =", i, counter)
 
             counter = 0
         else:
@@ -37,7 +36,6 @@ def hillClimber(protein, iterations, stabilityChange=False):
             stabilityList.append(protein.stability)
 
     if stabilityChange:
-        print("ik ben slechter! i = ", i, counter)
         return protein, stabilityList
     else:
         return protein

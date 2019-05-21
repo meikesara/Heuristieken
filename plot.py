@@ -1,10 +1,12 @@
 import matplotlib.pyplot as plt
 
-proteinString = "HHPHHPHP"
-coordinates = [[0,0], [0,1], [0,2], [0,3], [1,3],[1,2],[1,1],[2,1]]
+proteinString = "HHPHHHPH"
+coordinates = [[1,1], [2,1], [2,2], [3,2], [4,2], [4,1], [3,1],[3,0]]
 
-possible = [[0,1],[-1,2],[0,1],[-1,0],[0,1], [1,0]]
+# possible = [[0,1],[-1,2],[0,1],[-1,0],[0,1], [1,0]]
 # possible = [[0,0], [-1,1], [0,0], [1,1]]
+# possible = [[4,1], [3,2]]
+possible = []
 
 fig, ax = plt.subplots()
 plt.rcParams.update({'font.size': 20})
@@ -29,6 +31,12 @@ for i in range(len(proteinString)):
     else:
         ax.scatter(coordinates[i][0], coordinates[i][1], color = "b", s = 100)
     plt.text(coordinates[i][0] + 0.08, coordinates[i][1]+ 0.08, (i + 1), fontsize=9)
+
+# ax.scatter(3,2, color = "black", alpha = 0.3, s= 100)
+# plt.text(3+0.08,2+0.08,6,fontsize = 9)
+#
+# ax.scatter(3,3, color = "black", alpha = 0.3, s= 100)
+# plt.text(3+0.08,3+0.08,5,fontsize = 9)
 
 xLines = [coordinate[0] for coordinate in coordinates]
 yLines = [coordinate[1] for coordinate in coordinates]

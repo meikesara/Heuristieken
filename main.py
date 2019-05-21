@@ -53,27 +53,28 @@ if __name__ == "__main__":
             protein = newProtein
 
         # Random folding of protein
-        protein = randomFold(protein, -38)
-        print(protein)
-        print(protein.stability)
-        visualizer.plotProtein(protein)
+        protein = randomFold(protein, 0)
+        # print(protein)
+        # print(protein.stability)
+        # visualizer.plotProtein(protein)
 
         # print(protein.stability)
         # visualizer.plotProtein(protein)
-    #     # Hill climber
-    #     protein, stabilityList = hillClimber(protein, 1000, True)
-    #
-    #     # Create a visual of the final fold
-    #     # print(protein.stability)
-    #     finalStability.append(protein.stability)
-    #
-    #     # Create a visual of the final fold
-    #     # print(protein.stability)
-    #     # print(protein)
-    #     # visualizer.plotProtein(protein)
-    #     # visualizer.plotStability(stabilityList)
-    #
-    # plt.hist(finalStability)
-    # plt.xlabel("Stabiliteit")
-    # plt.ylabel("Aantal vouwingen")
-    # plt.show()
+        # Hill climber
+        protein, stabilityList = hillClimber(protein, 5000, True)
+
+        # Create a visual of the final fold
+        # print(protein.stability)
+        finalStability.append(protein.stability)
+
+        # Create a visual of the final fold
+        # print(protein.stability)
+        # print(protein)
+        visualizer.plotProtein(protein)
+        visualizer.plotStability(stabilityList)
+
+    plt.hist(finalStability)
+    print(finalStability)
+    plt.xlabel("Stabiliteit")
+    plt.ylabel("Aantal vouwingen")
+    plt.show()
