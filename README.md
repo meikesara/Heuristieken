@@ -28,9 +28,10 @@ python main.py constructive protein
 ## Authors
 
 * Nicole Jansen
+* Meike Kortleve
 
 
-## Dankwoord (Acknowledgments)
+## Acknowledgments
 
 * StackOverflow
 * minor programmeren van de UvA
