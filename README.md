@@ -1,12 +1,13 @@
 # Protein Pow(d)er by 'EiwitVouwers'
 
+TODO
 Hier staat een korte beschrijving van het probleem evt. met plaatje.
 
 ## Getting Started
 
 ### Prerequisites
 
-Deze codebase is volledig geschreven in [Python3.6.3](https://www.python.org/downloads/). In requirements.txt staan alle benodigde packages om de code succesvol te draaien. Deze zijn gemakkelijk te installeren via pip dmv. de volgende instructie:
+This codebase hase been written in [Python3.6.3](https://www.python.org/downloads/). requirements.txt contains all the necessary packages to succesfully run this code. These can be installed by pip with the following instruction:
 
 ```
 pip install -r requirements.txt
