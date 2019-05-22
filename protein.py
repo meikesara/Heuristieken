@@ -58,7 +58,7 @@ class Protein(object):
 
         for id in range(self.proteinLength):
             self.aminoList.append(Amino(id, self.proteinString[id]))
-            thisCoordinate = [0] * self.plane
+            thisCoordinate = [0] * int(self.plane[0])
             thisCoordinate[1] = id
             self.aminoList[id].addCoordinate(thisCoordinate)
             self.occupied.append(thisCoordinate)
