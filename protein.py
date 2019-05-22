@@ -47,12 +47,10 @@ class Protein(object):
         return output
 
 
-    def createAminoList(self):
+    def initializeProtein(self):
         """
-        Random folding of the protein. The first and second amino acids are
-        always placed at coordinates (0, 0) and (0, 1) (or for 3D (0, 0, 0) and
-        (0, 1, 0)) respectively. This excludes some of the rotational
-        Returns True if whole protein could be placed/ folded, False if not
+        Initializes the protein by placing it in a straight line parallel to the
+        y-axis.
         """
 
         self.aminoList = []
@@ -60,41 +58,11 @@ class Protein(object):
 
         for id in range(self.proteinLength):
             self.aminoList.append(Amino(id, self.proteinString[id]))
-
-            if id in {0, 1}:
-                thisCoordinate = [0, id]
-                if self.plane == "3D":
-                    thisCoordinate.append(0)
-                self.aminoList[id].addCoordinate(thisCoordinate)
-                self.occupied.append(thisCoordinate)
-
-            # The remaining amino-acids are randomly placed
-            else:
-                # Get the coordinates of the previous amino-acid
-                prevCo = self.aminoList[(id - 1)].coordinate
-
-                # Get the surrounding coordinates that are not occupied
-                posCo = self.getSurroundCo(prevCo, False)
-
-                # If there are no surrounding coordinates available break from the loop
-                if not posCo:
-                    self.stability = 0
-                    return False
-
-                # Randomly choose one of the possible coordinates
-                coordinate = random.choice(posCo)
-
-                # Place the amino-acid on that coordinate
-                self.aminoList[id].addCoordinate(coordinate)
-
-                # Add the coordinate to the list of occupied coordinates
-                self.occupied.append(coordinate)
-
-                # Update the stability
-                self.stabilityUpdate(self.aminoList[id])
-
-        return True
-
+            thisCoordinate = [0] * self.plane
+            thisCoordinate[1] = id
+            self.aminoList[id].addCoordinate(thisCoordinate)
+            self.occupied.append(thisCoordinate)
+            
 
     def stabilityUpdate(self, amino, replace=False):
         """
