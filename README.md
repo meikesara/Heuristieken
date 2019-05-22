@@ -2,9 +2,9 @@
 
 Hier staat een korte beschrijving van het probleem evt. met plaatje.
 
-## Aan de slag (Getting Started)
+## Getting Started
 
-### Vereisten (Prerequisites)
+### Prerequisites
 
 Deze codebase is volledig geschreven in [Python3.6.3](https://www.python.org/downloads/). In requirements.txt staan alle benodigde packages om de code succesvol te draaien. Deze zijn gemakkelijk te installeren via pip dmv. de volgende instructie:
 
@@ -12,21 +12,22 @@ Deze codebase is volledig geschreven in [Python3.6.3](https://www.python.org/dow
 pip install -r requirements.txt
 ```
 
-### Structuur (Structure)
+### Structure
 
 Alle Python scripts staan in de folder Code. In de map Data zitten alle input waardes en in de map resultaten worden alle resultaten opgeslagen door de code.
 
-### Test (Testing)
+### Testing
 
-Om de code te draaien met de standaardconfiguratie (bv. brute-force en voorbeeld.csv) gebruik de instructie:
+To run the constructive (depth first) algorithm use (protein is a string of amino acids):
 
 ```
-python main.py
+python main.py constructive protein
 ```
 
-## Auteurs (Authors)
+## Authors
 
-* Ik
+* Nicole Jansen
+
 
 ## Dankwoord (Acknowledgments)
 
