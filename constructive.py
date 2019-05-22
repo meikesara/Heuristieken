@@ -1,6 +1,6 @@
 """
 This code contains a depth first search method to find the optimal stability
-for a protein. It checks all possible ways to fold the protein, but the
+for a protein. It checks all possible ways to fold the protein, except for the
 mirror images and the rotationally symmetric folds.
 
 Meike Kortleve, Nicole Jansen
@@ -22,8 +22,8 @@ def constructive(proteinString):
     This function creates the protein, places the first two amino acids and starts
     the placing of the rest of the amino acids.
 
-    The input (proteinString) of this function is a protein string consisting of the letters
-    H, P and C.
+    Argumment:
+    proteinString -- a string that contains the amino acids of the protein.
     """
 
     # Initialize protein
@@ -44,14 +44,12 @@ def constructive(proteinString):
 
 def createFolded(protein, idToMove):
     """
-    This function recusrively places amino aminoacids. To create all
+    This function recursively places amino amino acids. To create all
     possible ways to fold a protein.
 
-    The stability of the full protein only needs to be checked if the protein
-    folds right/left twice.
-
-    This first argument (protein) is an object of the protein class.
-    The second argument (idToMove) is the id of the aminoAcid that needs to be moved.
+    Arguments:
+    protein -- object of class Protein.
+    idToMove -- positive integer, id of the amino acid that will be moved.
     """
 
     # Stop this function if idToMove exceeds the length of the protein
@@ -118,7 +116,8 @@ def getStability(protein):
     """
     This function calculates the stability of a protein.
 
-    This function needs an object from the protein class.
+    Argument:
+    protein -- object of class Protein.
     """
 
     # Reset stability voor nieuwe vouwing

@@ -1,5 +1,6 @@
 """
-# TODO: comment hier
+Script to run a simulated annealing algorithm with a logarithmic cooling
+rate (temperature = D/ln(iteration + 1) - D/ln(1000000)).
 
 Meike Kortleve, Nicole Jansen
 """
@@ -14,36 +15,22 @@ import matplotlib.pyplot as plt
 from randomfold import randomFold
 
 
-def simulatedAnnealing(proteinString, beginTemp, iterations, runnings):
+def simulatedAnnealing(protein, D, iterations, runnings = False):
     """
-    Performs simulated annealing with a logarithmic cooling rate.
-    The first argument
-    # TODO: ddd
-    protein is the protein that will be changed
-    iterations is the amount of iterations the hill climber should be performed
+    Run simulated annealing.
+
+    Arguments:
+    proteinString -- a string that contains the amino acids of the protein
+    D -- positive integer, determines the cooling rate
+    iterations -- positive integer, the amount of iterations of the algorithm
+    runnings -- boolean, True if multiple runnings of the algorithm are run.
+                False if algorithm is run once (default).
     """
 
     # Initialize variables
     stabilityList = []
     tempList = []
-    temperature = beginTemp
-    D = 6
-
-    # TODO: dit in de main doen voor alle functies
-
-    # Initialize protein
-    protein = Protein(proteinString, "2D")
-
-    # protein = randomFold
-    validFolding = protein.createAminoList()
-
-    # Check if protein is folded correctly
-    while not validFolding:
-        newProtein = Protein(proteinString, "2D")
-
-        # Fold the protein again
-        validFolding = newProtein.createAminoList()
-        protein = newProtein
+    temperature = 100
 
     # Inititalize bestProtein
     bestProtein = protein
@@ -57,7 +44,7 @@ def simulatedAnnealing(proteinString, beginTemp, iterations, runnings):
         newProtein = protein.pullMove()
 
         # Update the temperature
-        temperature = D/math.log(k + 2 + 10)
+        temperature = D/math.log(k + 2) - D/math.log(1000000)
 
         # Add temperature to the list of temperatures
         tempList.append(temperature)
@@ -80,7 +67,9 @@ def simulatedAnnealing(proteinString, beginTemp, iterations, runnings):
         # temperature = beginTemp/(1 + math.log(k))
         # temperature = beginTemp * pow(alfa,k)
 
-    if runnings == 1:
+    if runnings:
+        return bestProtein.stability
+    else:
         # Add final stability to stabilityList
         stabilityList.append(protein.stability)
 
@@ -100,5 +89,3 @@ def simulatedAnnealing(proteinString, beginTemp, iterations, runnings):
         plt.plot([math.exp(-1/elem) for elem in tempList])
         plt.title("acceptance")
         plt.show()
-    else:
-        return bestProtein.stability

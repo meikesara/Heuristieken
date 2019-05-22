@@ -41,36 +41,53 @@ if __name__ == "__main__":
 
     if sys.argv[1] == "constructive":
         constructive(proteinString)
+
     elif sys.argv[1] == "simulated":
-        temperature = int(input("Enter the begin temperature: "))
+
+        protein = randomFold(proteinString, "2D")
+
+        D = int(input("Enter the D: "))
         runnings = int(input("Enter the amount of runnings: "))
         iterations = int(input("Enter the amount of iterations: "))
-        for i in range(runnings):
-            stability = simulatedAnnealing(proteinString, temperature, iterations, runnings)
-            finalStability.append(stability)
+
         if runnings != 1:
+            for i in range(runnings):
+                stability = simulatedAnnealing(protein, D, iterations, True)
+                finalStability.append(stability)
             print(finalStability)
-    else:
+        else:
+            simulatedAnnealing(protein, D, iterations, False)
+
+    elif sys.argv[1] == "hillclimber":
+
+        protein = randomFold(proteinString, "2D")
+
+        runnings = int(input("Enter the amount of runnings: "))
+        iterations = int(input("Enter the amount of iterations: "))
+
+        if runnings != 1:
+            finalStabilityList = []
+            for i in range(runnings):
+                stability = hillClimber(protein, iterations, True)
+                finalStabilityList.append(stability)
+            print(finalStabilityList)
+        else:
+            hillClimber(protein, iterations, False)
+
+    elif sys.argv[1] == "random":
+
+        randomList = []
+
+        iterations = int(input("Enter the amount of iterations: "))
+
+        for i in range(iterations):
+            random = randomFold(proteinString, "2D")
+            randomList.append(random)
+
+        print(randomList)
 
 
 
-
-        finalStability = []
-        times = 1
-        for j in range(times):
-
-            # Create the protein
-            protein = Protein(proteinString, "3D")
-
-            # Fold the protein once
-            validFolding = protein.createAminoList()
-
-            while not validFolding:
-                newProtein = Protein(proteinString, protein.plane)
-
-                # Fold the protein again
-                validFolding = newProtein.createAminoList()
-                protein = newProtein
 
             # # Random folding of protein
             # protein = randomFold(protein, -10)
@@ -78,21 +95,13 @@ if __name__ == "__main__":
             # print(protein.stability)
             # visualizer.plotProtein(protein)
 
-            print(protein.stability)
-            visualizer.plotProtein(protein)
-            # Hill climber
-            protein, stabilityList = hillClimber(protein, 1000, True)
-
-            # Create a visual of the final fold
-            print(protein.stability)
-            finalStability.append(protein.stability)
-
-            # Create a visual of the final fold
-            if j == (times - 1):
-                print(protein.stability)
-                print(protein)
-                visualizer.plotProtein(protein)
-                # visualizer.plotStability(stabilityList)
+            #
+            # # Create a visual of the final fold
+            # if j == (times - 1):
+            #     print(protein.stability)
+            #     print(protein)
+            #     visualizer.plotProtein(protein)
+            #     # visualizer.plotStability(stabilityList)
 
         # plt.hist(finalStability)
         # plt.xlabel("Stabiliteit")

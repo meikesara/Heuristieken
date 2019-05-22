@@ -218,6 +218,9 @@ class Protein(object):
         """
         # TODO: misschien kunnen we ook voorkomen dat een eiwit niet goed vouwt
 
+        self.aminoList = []
+        self.occupied = []
+
         # Loop over the letters in the proteinString
         for id in range(self.proteinLength):
 
@@ -373,7 +376,7 @@ class Protein(object):
         idToMove is the id of the aminoacid that needs to be moved.
         wayToMove -- 1 if to end of protein; -1 if to beginning of protein
         """
-        
+
         surCoPrev = self.getSurroundCo(self.aminoList[(idToMove - wayToMove)].coordinate, True)
         if ((wayToMove == -1 and idToMove < 0) or
             (wayToMove == 1 and (idToMove > (oldProtein.proteinLength - 1)))):

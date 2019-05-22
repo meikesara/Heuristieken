@@ -14,7 +14,7 @@ def plotProtein(protein):
     Create a visual representation of a protein.
 
     Argument:
-    protein -- protein of class Protein
+    protein -- object of class Protein
     """
 
     colorDict = {"P": "b", "H": "r", "C": "C6"}
@@ -103,7 +103,7 @@ def processData(protein):
     and lists of x, y, and z coordinates for creating lines between amino acids.
 
     Argument:
-    protein -- protein of class Protein
+    protein -- object of class Protein
     """
 
     xPoints = {"P": [], "H": [], "C": []}
@@ -136,8 +136,8 @@ def getStabilityCo(amino, protein):
     Return list coordinates of aminos with which bonds are created.
 
     Arguments:
-    amino -- amino acid of class Amino
-    protein -- protein of class Protein
+    amino -- object of class Amino
+    protein -- object of class Protein
     """
 
     coordinates = []
