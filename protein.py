@@ -72,8 +72,8 @@ class Protein(object):
         else:
             nOrP = [index + 1, index - 1]
 
-            # # TODO: dit werkend maken
-            # random.shuffle(nOrP)
+            # TODO: dit werkend maken
+            random.shuffle(nOrP)
 
             nextAmino = self.aminoList[nOrP[0]]
             otherCo = nextAmino.coordinate
@@ -182,7 +182,7 @@ class Protein(object):
 
                         # Check if C is not occupied or if they are the coordinates of the previous amino acid
                         if (CCo not in self.occupied) or (CCo == previousCo):
-                            return [diagonal, CCo]
+                            return [diagonal, CCo, nOrP[1]]
 
 
     def getSurroundCo(self, prevCo, occupied):
@@ -307,7 +307,14 @@ class Protein(object):
 
     def pullMove(self):
         """
-        # TODO: comment + ref
+        Performs pull moves on the protein.
+        Returns newly folded protein.
+
+        Based on: Lesh, N., Mitzenmacher, M., & Whitesides, S. (2003).
+        A complete and effective move set for simple protein folding. In
+        Proceedings of the 7th annual international conference on research
+        in computational molecular biology (RECOMB) (pp. 188–195). New York:
+        ACM Press.
         """
 
         # Choose random amino to move
@@ -334,9 +341,9 @@ class Protein(object):
 
         # if random chosen amino to move is not first or last, make sure other
         # amino acids are replaced to keep validity of the protein
-        if len(coordinates) == 2:
+        if len(coordinates) == 3:
 
-            previousAmino = self.aminoList[(amino.id - 1)]
+            previousAmino = self.aminoList[coordinates[2]]
             previousAminoCo = previousAmino.coordinate
             previousAminoId = previousAmino.id
 
@@ -345,38 +352,41 @@ class Protein(object):
 
                 newProtein.stabilityUpdate(previousAmino, True)
 
-                newProtein.aminoList[(amino.id - 1)].coordinate = coordinates[1]
-                newProtein.occupied[(amino.id - 1)] = coordinates[1]
+                newProtein.aminoList[coordinates[2]].coordinate = coordinates[1]
+                newProtein.occupied[coordinates[2]] = coordinates[1]
 
-                newProtein.stabilityUpdate(newProtein.aminoList[(amino.id - 1)])
+                newProtein.stabilityUpdate(newProtein.aminoList[coordinates[2]])
 
-            surCoPrev = newProtein.getSurroundCo(newProtein.aminoList[(amino.id - 1)].coordinate, True)
+            surCoPrev = newProtein.getSurroundCo(newProtein.aminoList[coordinates[2]].coordinate, True)
 
-            # NOTE: vraag me af of deze if-statement (nog) nodig is,
-            # aangezien hetzelfde gecontroleerd wordt in functie
-            if newProtein.aminoList[(amino.id - 2)].coordinate not in surCoPrev:
-                newProtein.moveAminos(self, (amino.id - 2))
+            dif = coordinates[2] - amino.id
+            index = amino.id + (2*dif)
+            newProtein.moveAminos(self, index, dif)
 
         return newProtein
 
 
-    def moveAminos(self, oldProtein, idToMove):
+    def moveAminos(self, oldProtein, idToMove, wayToMove):
         """
         Method for moving aminoacids to create a valid protein.
         oldProtein is the protein from which the new protein (neighbor) is created.
         idToMove is the id of the aminoacid that needs to be moved.
+        wayToMove -- 1 if to end of protein; -1 if to beginning of protein
         """
-
-        # Hierbij zorgen dat het ook voor i-1 klopt
-        surCoPrev = self.getSurroundCo(self.aminoList[(idToMove + 1)].coordinate, True)
-        if (self.aminoList[idToMove].coordinate in surCoPrev) or (idToMove < 0):
+        
+        surCoPrev = self.getSurroundCo(self.aminoList[(idToMove - wayToMove)].coordinate, True)
+        if ((wayToMove == -1 and idToMove < 0) or
+            (wayToMove == 1 and (idToMove > (oldProtein.proteinLength - 1)))):
+            return
+        if (self.aminoList[idToMove].coordinate in surCoPrev):
             return
 
         self.stabilityUpdate(self.aminoList[idToMove], True)
 
-        self.aminoList[idToMove].coordinate = oldProtein.aminoList[(idToMove + 2)].coordinate
-        self.occupied[idToMove] = oldProtein.aminoList[(idToMove + 2)].coordinate
+        index = idToMove - 2*wayToMove
+        self.aminoList[idToMove].coordinate = oldProtein.aminoList[index].coordinate
+        self.occupied[idToMove] = oldProtein.aminoList[index].coordinate
 
         self.stabilityUpdate(self.aminoList[idToMove])
 
-        self.moveAminos(oldProtein, (idToMove - 1))
+        self.moveAminos(oldProtein, (idToMove + wayToMove), wayToMove)
