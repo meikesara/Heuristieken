@@ -41,7 +41,7 @@ def hillClimber(protein, iterations, runnings = False):
     stabilityList.append(protein.stability)
 
     if runnings:
-        return stabilityList
+        return protein
     else:
         visualizer.plotProtein(protein)
         visualizer.plotStability(stabilityList)

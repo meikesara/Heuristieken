@@ -1,0 +1,11 @@
+Simulated Annealing CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC D: 10 10 x 50
+-9
+-13
+-13
+-13
+-9
+-18
+-9
+-14
+-9
+-18
