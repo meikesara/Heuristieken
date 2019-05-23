@@ -16,9 +16,10 @@ class Amino(object):
         Initializes an amino acid.
 
         Arguments:
-        id -- position of the amino acid in a protein.
-        type -- integer, should be either H/P/C.
+        id -- integer, position of the amino acid in a protein
+        type -- string, should be either H/P/C
         """
+
         self.id = id
         self.type = type
         self.coordinate = []

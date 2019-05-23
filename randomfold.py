@@ -4,20 +4,21 @@ This script contains the algorithm to randomly fold a protein.
 Meike Kortleve, Nicole Jansen
 """
 
+import copy
+import random
 from amino import Amino
 from protein import Protein
-import random
-import copy
+
 
 def randomFold(proteinString, plane):
     """
-    This method uses the method createRandom to fold protein until the protein
-    is validly folded.
+    This function uses the fucntion createRandom to fold protein until the
+    protein is validly folded.
     Returns the folded protein.
 
     Arguments:
-    proteinString -- this is a string containing the amino aminoacids
-    plane -- is either "2D" or "3D"
+    proteinString -- this is a string containing the amino acids
+    plane -- dimension in which protein is placed/ folded, either "2D" or "3D"
     """
 
     protein = Protein(proteinString, plane)
@@ -26,7 +27,6 @@ def randomFold(proteinString, plane):
     validFolding = createRandom(protein)
 
     while not validFolding:
-
         # Fold the protein again
         validFolding = createRandom(protein)
 
@@ -49,39 +49,26 @@ def createRandom(protein):
     protein.aminoList = []
 
     for id in range(protein.proteinLength):
-
-        # Add amino acid to the aminoList
         protein.aminoList.append(Amino(id, protein.proteinString[id]))
 
-        # Place the first and second amino-acid.
+        # Place the first and second amino acid
         if id in {0, 1}:
             thisCoordinate = [0, id]
             if protein.plane == "3D":
                 thisCoordinate.append(0)
             protein.aminoList[id].coordinate = thisCoordinate
             protein.occupied.append(thisCoordinate)
-
-        # The remaining amino acids are randomly placed
         else:
-
-            # Get the coordinates of the previous amino-acid
             prevCo = protein.aminoList[(id - 1)].coordinate
-
-            # Get the surrounding coordinates that are not occupied
-            posCo = protein.getSurroundCo(prevCo, False)
+            posCo = protein.getSurroundCo(prevCo, occupied=False)
 
             # If there are no surrounding coordinates available stop the folding
             if not posCo:
                 protein.stability = 0
                 return False
 
-            # Randomly choose one of the possible coordinates
             coordinate = random.choice(posCo)
-
-            # Place the amino-acid on that coordinate
             protein.aminoList[id].coordinate = coordinate
-
-            # Add the coordinate to the list of occupied coordinates
             protein.occupied.append(coordinate)
 
             protein.stabilityUpdate(protein.aminoList[id])

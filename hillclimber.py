@@ -6,35 +6,36 @@ previous protein.
 Meike Kortleve, Nicole Jansen
 """
 
+import copy
+import random
 from amino import Amino
 from protein import Protein
-import random
-import copy
 import visualizer
 
 
-def hillClimber(protein, iterations, runnings = False):
+def hillClimber(protein, iterations, runnings=False):
     """
-    Run a hill climber.
+    Runs a hill climber.
+    When more runnings will be performed, the protein with the best stability
+    will be returned, otherwise the protein will be visualized.
 
     Arguments:
-    protein -- object of class Protein.
-    iterations -- positive integer, the amount of iterations of the algorithm.
-    runnings -- boolean, True if multiple runnings of the algorithm are run.
-                False if algorithm is run once (default).
+    protein -- object of class Protein
+    iterations -- positive integer, the amount of iterations of the algorithm
+
+    Keyword argument:
+    runnings -- boolean, True if multiple runnings of the algorithm are run,
+                False if algorithm is run once (default)
     """
 
     stabilityList = []
 
     for i in range(iterations):
-
-        # Add current stability to stabilityList
         stabilityList.append(protein.stability)
 
         # Create a new protein from the current protein
         newProtein = protein.pullMove()
 
-        # If protein if stability is the same or better
         if newProtein.stability <= protein.stability:
             protein = newProtein
 
