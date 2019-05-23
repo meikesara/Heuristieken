@@ -32,7 +32,7 @@ def constructive(proteinString):
     # Place first and second amino acid to prevent rotational symmetry
     for i in range(2):
         protein.aminoList.append(Amino(i, protein.proteinString[i]))
-        protein.aminoList[i].addCoordinate([0, i])
+        protein.aminoList[i].coordinate = [0, i]
         protein.occupied.append([0, i])
 
     # This starts the recursive function createFolded
@@ -80,7 +80,7 @@ def createFolded(protein, idToMove):
     for possibleCo in possibleCos:
 
         # Place the current amino acid on possibleCos
-        protein.aminoList[idToMove].addCoordinate(possibleCo)
+        protein.aminoList[idToMove].coordinate = possibleCo
 
         # Add the current coordinate to the list of occupied coordinates.
         try:

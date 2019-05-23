@@ -37,54 +37,68 @@ if __name__ == "__main__":
 
     # Check the input and save the protein string
     proteinString = checkInput()
+
     finalStability = []
+    finalProtein = []
 
     if sys.argv[1] == "constructive":
         constructive(proteinString)
 
-    elif sys.argv[1] == "simulated":
+    else:
+        plane = input("Do you want a 2D or 3D protein? ")
 
-        protein = randomFold(proteinString, "2D")
+        if sys.argv[1] == "simulated":
 
-        D = int(input("Enter the D: "))
-        runnings = int(input("Enter the amount of runnings: "))
-        iterations = int(input("Enter the amount of iterations: "))
+            D = int(input("Enter the D: "))
+            runnings = int(input("Enter the amount of runnings: "))
+            iterations = int(input("Enter the amount of iterations: "))
 
-        if runnings != 1:
-            for i in range(runnings):
-                stability = simulatedAnnealing(protein, D, iterations, True)
-                finalStability.append(stability)
-            print(finalStability)
-        else:
-            simulatedAnnealing(protein, D, iterations, False)
+            if runnings != 1:
+                for i in range(runnings):
+                    protein = randomFold(proteinString, plane)
+                    protein, stability = simulatedAnnealing(protein, D, iterations, True)
+                    finalStability.append(stability)
+                    finalProtein.append(protein)
 
-    elif sys.argv[1] == "hillclimber":
+                for j in range(len(finalStability)):
+                    visualizer.plotProtein(finalProtein[j])
 
-        protein = randomFold(proteinString, "2D")
+            else:
+                protein = randomFold(proteinString, plane)
+                simulatedAnnealing(protein, D, iterations, False)
 
-        runnings = int(input("Enter the amount of runnings: "))
-        iterations = int(input("Enter the amount of iterations: "))
+        elif sys.argv[1] == "hillclimber":
 
-        if runnings != 1:
-            finalStabilityList = []
-            for i in range(runnings):
-                stability = hillClimber(protein, iterations, True)
-                finalStabilityList.append(stability)
-            print(finalStabilityList)
-        else:
-            hillClimber(protein, iterations, False)
+            runnings = int(input("Enter the amount of runnings: "))
+            iterations = int(input("Enter the amount of iterations: "))
 
-    elif sys.argv[1] == "random":
+            if runnings != 1:
+                finalStabilityList = []
 
-        randomList = []
+                for i in range(runnings):
+                    protein = randomFold(proteinString, plane)
+                    stability = hillClimber(protein, iterations, True)
+                    finalStabilityList.append(stability)
+                print(finalStabilityList)
 
-        iterations = int(input("Enter the amount of iterations: "))
+            else:
+                protein = randomFold(proteinString, plane)
+                hillClimber(protein, iterations, False)
 
-        for i in range(iterations):
-            random = randomFold(proteinString, "2D")
-            randomList.append(random)
+        elif sys.argv[1] == "random":
 
-        print(randomList)
+            randomList = []
+
+            iterations = int(input("Enter the amount of iterations: "))
+
+            for i in range(iterations):
+                random = randomFold(proteinString, plane)
+                randomList.append(random.stability)
+
+            if iterations == 1:
+                visualizer.plotProtein(random)
+            else:
+                print(randomList)
 
 
 

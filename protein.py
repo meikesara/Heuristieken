@@ -47,6 +47,23 @@ class Protein(object):
         return output
 
 
+    def initializeProtein(self):
+        """
+        Initializes the protein by placing it in a straight line parallel to the
+        y-axis.
+        """
+
+        self.aminoList = []
+        self.occupied = []
+
+        for id in range(self.proteinLength):
+            self.aminoList.append(Amino(id, self.proteinString[id]))
+            thisCoordinate = [0] * int(self.plane[0])
+            thisCoordinate[1] = id
+            self.aminoList[id].addCoordinate(thisCoordinate)
+            self.occupied.append(thisCoordinate)
+
+
     def stabilityUpdate(self, amino, replace=False):
         """
         Method for updating the stability of the protein.
@@ -91,30 +108,38 @@ class Protein(object):
                                 self.stability -= 1
 
 
-    def getSurroundCo(self, prevCo, occupied):
+    def getSurroundCo(self, givenCo, occupied):
         """
-        This method gets the 4 surrounding coordinates
-        occupied is true if you want to know which surrounding coordinates are occupied
-        occupied is false if you want to know which surrounding coordinates are not occupied
+        Returns a list of the surrounding coordinates that are either occupied
+        or not.
+        A surrounding coordinate is defined as having a difference of one in
+        either the x-, y-, or z-coordinate compared to the coordinates of
+        givenCo.
+
+        Arguments:
+        givenCo -- list of the coordinates (of an amino acid) of which to find
+                   to surrounding coordinates
+        occupied -- True if surrounding coordinates should be occupied, False if
+                    the surrounding coordinates should not be occupied
         """
 
-        posCo = []
+        possibleCos = []
 
         # Create a list of all the possible coordinates
-        coordinates = [[(prevCo[0] - 1), prevCo[1]], [(prevCo[0] + 1), prevCo[1]],
-                       [prevCo[0], (prevCo[1] - 1)], [prevCo[0], (prevCo[1] + 1)]]
+        coordinates = [[(givenCo[0] - 1), givenCo[1]],
+                       [(givenCo[0] + 1), givenCo[1]],
+                       [givenCo[0], (givenCo[1] - 1)],
+                       [givenCo[0], (givenCo[1] + 1)]]
         if self.plane == "3D":
-            [co.append(prevCo[2]) for co in coordinates]
-            coordinates.append([prevCo[0], prevCo[1], (prevCo[2] - 1)])
-            coordinates.append([prevCo[0], prevCo[1], (prevCo[2] + 1)])
+            [co.append(givenCo[2]) for co in coordinates]
+            coordinates.append([givenCo[0], givenCo[1], (givenCo[2] - 1)])
+            coordinates.append([givenCo[0], givenCo[1], (givenCo[2] + 1)])
 
         for coordinate in coordinates:
-            # Only add coordinates to possible coordinates list depending on occupied
-            # (whether the coordinates should be occupied or not)
             if (coordinate in self.occupied) is occupied:
-                posCo.append(coordinate)
+                possibleCos.append(coordinate)
 
-        return posCo
+        return possibleCos
 
 
     def getDiagonalCo(self, currentAmino):
