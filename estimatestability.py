@@ -54,7 +54,6 @@ def estimateStability(proteinString, plane="2D"):
                                       i <= (aminoIndex - 3))]
         lengthAll = len(all)
 
-        # NOTE: deze regel heb ik nu 2-3 keer precies hetzelfde (functie?)
         # Determine maximum amount of bonds that can be created
         bonds = 3 if aminoIndex in {0, (lengthProtein - 1)} else 2
         if plane == "3D":
@@ -80,23 +79,26 @@ def stabilityUpdate(allList, aminoType, aminoIndex, counterDict, counterDictCC,
     Updates the estimate of the stability.
     Returns updated stability and updated dictionaries with counters of bonds.
 
+    Will first try maximum amount of CC-bonds, as they are stronger. Uses
+    maximum amount of possible connections, either determined by place of amino
+    acid in the protein or other amino acids that bonds could be made with.
+
     Arguments:
     allList -- list with aminos with which the amino acid could make connections
-    aminoType -- type of the amino acid (P, H, or C)
-    aminoIndex -- place of the amino acid in the protein
+    aminoType -- string, type of the amino acid (P, H, or C)
+    aminoIndex -- integer, place of the amino acid in the protein
     counterDict -- dictionary to count amount of HH/CH-bonds when maximum of
                    bonds can only be achieved by using all possible connections
     counterDictCC -- dictionary to count amount of CC-bonds when maximum of
-                     bonds can only be achieved by using all possible connections
+                    bonds can only be achieved by using all possible connections
     bonds -- maximum amount of bonds that could be created for given amino acid
-    stability -- current stability estimate
+    stability -- integer, current stability estimate
     useListC -- list of coordinates of C's with which bonds could be created
     """
 
     if aminoType == "C":
         strengthBond = 5
 
-        # First use list with indices of C's, then with indices of H's
         useFirst = [i for i in useListC if (i >= (aminoIndex + 3) or
                                             i <= (aminoIndex - 3))]
         useSecond = allList
@@ -104,22 +106,19 @@ def stabilityUpdate(allList, aminoType, aminoIndex, counterDict, counterDictCC,
         lengthFirst = len(useFirst)
         lengthSecond = len(useSecond) - lengthFirst
 
-        # First update counters for CC-bonds, then for CH-bonds
         counterDictFirst = counterDictCC
         counterDictSecond = counterDict
     else:
         strengthBond = 1
 
-        # Only bonds of strength 1
+        # Only bonds of strength 1 could be created, so no need for extra checks
         useFirst = allList
         lengthFirst = len(useFirst)
         counterDictFirst = counterDict
 
     if lengthFirst > bonds:
-        # More aminos to create connections with than possible bonds, so use max bonds
         stability -= (bonds * strengthBond)
     else:
-        # Use all possible connections
         stability -= (lengthFirst * strengthBond)
 
         # Count used connections
@@ -129,7 +128,6 @@ def stabilityUpdate(allList, aminoType, aminoIndex, counterDict, counterDictCC,
             except:
                 counterDictFirst[i] = 1
 
-            # For C-aminos, first checked CC bonds, now check CH-bonds
             if aminoType == "C":
                 if lengthSecond >= (bonds - lengthFirst):
                     stability -= (bonds - lengthFirst)
@@ -150,8 +148,20 @@ def stabilityUpdate(allList, aminoType, aminoIndex, counterDict, counterDictCC,
 
 def removeBonds(counterDict, stability, lengthProtein, strengthBond, plane="2D"):
     """
-    Remove excessive amount of bonds from stability.
-    Returns the updated stability.
+    Removes excessive amount of bonds from stability estimate.
+    Returns the updated stability as an integer.
+
+    Arguments:
+    counterDict -- dictionary with amount of bonds of specific strength when
+                   maximum of bonds can only be achieved by using all possible
+                   connections
+    stability -- integer, the current stability which should be updated
+    lengthProtein -- integer, the length of the protein
+    strengthBond -- integer, strength of the bonds in the counterDict
+
+    Keyword argument:
+    plane -- string, dimension in which protein is placed, either "2D" or "3D"
+             (default "2D")
     """
 
     for aminoIndex in counterDict:
