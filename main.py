@@ -100,6 +100,7 @@ if __name__ == "__main__":
                     header = ["Simulated Annealing ", str(proteinString), " D: ",
                               str(D), " ", str(runnings), " x ", str(iterations),
                               "\n"]
+
                     stabilityFile.writelines(header)
                     proteinFile.writelines(header)
 
