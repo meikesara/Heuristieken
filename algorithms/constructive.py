@@ -10,9 +10,9 @@ import copy
 import re
 import time
 import matplotlib.pyplot as plt
-from amino import Amino
-from protein import Protein
-import visualizer
+from classes.amino import Amino
+from classes.protein import Protein
+import helper.visualizer as visualizer 
 
 optStability = [0]
 

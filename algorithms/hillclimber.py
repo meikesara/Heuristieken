@@ -8,9 +8,9 @@ Meike Kortleve, Nicole Jansen
 
 import copy
 import random
-from amino import Amino
-from protein import Protein
-import visualizer
+from classes.amino import Amino
+from classes.protein import Protein
+import helper.visualizer as visualizer 
 
 
 def hillClimber(protein, iterations, runnings=False):

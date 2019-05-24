@@ -7,13 +7,14 @@ Meike Kortleve, Nicole Jansen
 
 import sys
 import matplotlib.pyplot as plt
-from amino import Amino
-from protein import Protein
-from constructive import constructive
-from hillclimber import hillClimber
-from randomfold import randomFold
-from simulatedannealing import simulatedAnnealing
-import visualizer
+from classes.amino import Amino
+from classes.protein import Protein
+from algorithms.constructive import constructive
+from algorithms.hillclimber import hillClimber
+from algorithms.randomfold import randomFold
+from algorithms.simulatedannealing import simulatedAnnealing
+from helper.estimatestability import estimateStability
+import helper.visualizer as visualizer
 
 
 def checkInput():
@@ -23,91 +24,128 @@ def checkInput():
 
     # Check if the amount of arguments is 2
     if len(sys.argv) != 3:
-        print("A proteinstring is needed and method is needed")
+        print("A proteinstring and method is needed")
         exit(1)
+
+    methods = {"constructive", "simulated", "hillclimber", "random"}
+
+    # Check if method is valid
+    if sys.argv[1].lower() not in methods:
+        print("The method should be constructive, simulated, hillclimber or random.")
+        exit(3)
 
     # Check if the second argument only contains H, P or C's
     for i in sys.argv[2]:
         if i not in {"H", "P", "C", "h", "p", "c"}:
             print("Protein should only contain H, P or C")
             exit(2)
-    return sys.argv[2]
+    return sys.argv[1], sys.argv[2]
 
 
 if __name__ == "__main__":
 
-    # Check the input and save the protein string
-    proteinString = checkInput()
+    # Check the input and save the protein string and method
+    method, proteinString = checkInput()
 
-    if sys.argv[1] == "constructive":
+    if method == "constructive":
         constructive(proteinString)
 
     else:
-        plane = input("Do you want a 2D or 3D protein? ")
 
-        if sys.argv[1] == "simulated":
+        # Ask user for the plane
+        planes = {"2D", "3D"}
+        plane = input("Do you want a 2D or 3D protein (2D/3D)? ").upper()
 
-            D = int(input("Enter the D: "))
-            runnings = int(input("Enter the amount of runnings: "))
-            iterations = int(input("Enter the amount of iterations: "))
+        # Check input
+        while plane not in planes:
+            plane = input("Do you want a 2D or 3D protein (2D/3D)? ").upper()
 
-            if runnings != 1:
+        estimateStability(proteinString, plane)
 
-                stabilityFile = open("results/stabilitySimulatedAnnealing.txt", "w")
-                proteinFile = open("results/proteinSimulatedAnnealing.txt", "w")
-                header = [ "Simulated Annealing ", str(proteinString), " ", "D: ", str(D), " ", str(runnings), " x ", str(iterations), '\n']
-                stabilityFile.writelines(header)
-                proteinFile.writelines(header)
+        if method == "simulated" or method == "hillclimber":
 
-                for i in range(runnings):
+            # Ask user for the amount of runnings and iterations and check
+            while True:
+                runnings = input("Enter the amount of runnings: ")
+                val = runnings.isdigit()
+                if val:
+                    runnings = int(runnings)
+                    break
+            while True:
+                iterations = input("Enter the amount of iterations: ")
+                val = iterations.isdigit()
+                if val:
+                    iterations = int(iterations)
+                    break
+
+            if method == "simulated":
+
+                # Ask user for D and check
+                while True:
+                    D = input("Enter D (positive integer): ")
+                    val = D.isdigit()
+                    if val:
+                        D = int(D)
+                        break
+
+                if runnings != 1:
+
+                    stabilityFile = open("results/stabilitySimulatedAnnealing.txt", "w")
+                    proteinFile = open("results/proteinSimulatedAnnealing.txt", "w")
+                    header = [ "Simulated Annealing ", str(proteinString), " ", "D: ", str(D), " ", str(runnings), " x ", str(iterations), '\n']
+                    stabilityFile.writelines(header)
+                    proteinFile.writelines(header)
+
+                    for i in range(runnings):
+                        protein = randomFold(proteinString, plane)
+                        protein = simulatedAnnealing(protein, D, iterations, True)
+                        stabilityLine = [str(protein.stability), '\n']
+                        stabilityFile.writelines(stabilityLine)
+                        proteinLine = [str(protein), '\n']
+                        proteinFile.writelines(proteinLine)
+
+                    stabilityFile.close()
+                    proteinFile.close()
+
+                else:
                     protein = randomFold(proteinString, plane)
-                    protein = simulatedAnnealing(protein, D, iterations, True)
-                    stabilityLine = [str(protein.stability), '\n']
-                    stabilityFile.writelines(stabilityLine)
-                    proteinLine = [str(protein), '\n']
-                    proteinFile.writelines(proteinLine)
+                    simulatedAnnealing(protein, D, iterations, False)
 
-                stabilityFile.close()
-                proteinFile.close()
+            elif method == "hillclimber":
 
-            else:
-                protein = randomFold(proteinString, plane)
-                simulatedAnnealing(protein, D, iterations, False)
+                if runnings != 1:
+                    stabilityFile = open("results/stabilityHillClimber.txt", "w")
+                    proteinFile = open("results/proteinHillClimber.txt", "w")
+                    header = [ "Hill climber ", str(proteinString), " ", str(runnings), " x ", str(iterations), '\n']
+                    stabilityFile.writelines(header)
+                    proteinFile.writelines(header)
 
-        elif sys.argv[1] == "hillclimber":
+                    for i in range(runnings):
+                        protein = randomFold(proteinString, plane)
+                        protein = hillClimber(protein, iterations, True)
 
-            runnings = int(input("Enter the amount of runnings: "))
-            iterations = int(input("Enter the amount of iterations: "))
+                        stabilityLine = [str(protein.stability), '\n']
+                        stabilityFile.writelines(stabilityLine)
+                        proteinLine = [str(protein), '\n']
+                        proteinFile.writelines(proteinLine)
 
-            if runnings != 1:
-                stabilityFile = open("results/stabilityHillClimber.txt", "w")
-                proteinFile = open("results/proteinHillClimber.txt", "w")
-                header = [ "Hill climber ", str(proteinString), " ", str(runnings), " x ", str(iterations), '\n']
-                stabilityFile.writelines(header)
-                proteinFile.writelines(header)
+                    stabilityFile.close()
+                    proteinFile.close()
 
-                for i in range(runnings):
+                else:
                     protein = randomFold(proteinString, plane)
-                    protein = hillClimber(protein, iterations, True)
+                    hillClimber(protein, iterations, False)
 
-                    stabilityLine = [str(protein.stability), '\n']
-                    stabilityFile.writelines(stabilityLine)
-                    proteinLine = [str(protein), '\n']
-                    proteinFile.writelines(proteinLine)
+        elif method == "random":
 
-                stabilityFile.close()
-                proteinFile.close()
-
-            else:
-                protein = randomFold(proteinString, plane)
-                hillClimber(protein, iterations, False)
-
-        elif sys.argv[1] == "random":
-
-            iterations = int(input("Enter the amount of iterations: "))
+            while True:
+                iterations = input("Enter the amount of iterations: ")
+                val = iterations.isdigit()
+                if val:
+                    iterations = int(iterations)
+                    break
 
             if iterations != 1:
-
                 stabilityFile = open("results/stabilityRandom.txt", "w")
                 proteinFile = open("results/proteinRandom.txt", "w")
 

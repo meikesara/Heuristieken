@@ -7,7 +7,7 @@ Meike Kortleve, Nicole Jansen
 import copy
 import random
 import matplotlib.pyplot as plt
-from amino import Amino
+from classes.amino import Amino
 
 
 class Protein(object):
