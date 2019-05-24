@@ -42,8 +42,17 @@ def constructive(proteinString):
 
 def createFolded(protein, idToMove):
     """
-    This function recursively places amino amino acids. To create all
+    This function recursively places amino acids. To create all
     possible ways to fold a protein.
+
+    Mirror images are prevented by using the fact that when the sum of the
+    x-coordinates is zero and the next amino acid has three possible options,
+    two of those options will be mirror images, so one of those will be removed.
+
+    If the protein is not folded at least twice consecutively in the same
+    direction, there will be no amino acids laying next to each other. This will
+    result in the sum of the x- and y-coordinates to be two times the protein
+    length - and therefore the stability will not to be checked.
 
     Arguments:
     protein -- object of class Protein
@@ -61,11 +70,10 @@ def createFolded(protein, idToMove):
     prevCo = protein.aminoList[(idToMove - 1)].coordinate
 
     # Get the unoccupied surrounding amino acids of the previous coordinates
-    possibleCos = protein.getSurroundCo(prevCo, False)
+    possibleCos = protein.getSurroundCo(prevCo, occupied=False)
 
     protein.aminoList.append(Amino(idToMove, protein.proteinString[idToMove]))
 
-    # Calculate the sum of all the x-coordinates
     xTotal = sum([xCo[0] for xCo in protein.occupied])
 
     if xTotal == 0 and len(possibleCos) == 3:
@@ -80,13 +88,8 @@ def createFolded(protein, idToMove):
         except:
             protein.occupied.append(possibleCo)
 
-        # Calculate the sum of the x and y coordinates
         xTotal = abs(sum([xCo[0] for xCo in protein.occupied]))
         yTotal = abs(sum([yCo[1] for yCo in protein.occupied]))
-
-        # This total is two times the protein length if it is a straight line,
-        # only folds once either to the left or right or only folds to the
-        # left and right
         total =  xTotal + yTotal
 
         # Check if all the amino acids have been placed
@@ -106,7 +109,7 @@ def getStability(protein):
     This function calculates the stability of a protein.
 
     Argument:
-    protein -- object of class Protein.
+    protein -- object of class Protein
     """
 
     # Reset stability for new folding
@@ -126,7 +129,7 @@ def getStability(protein):
                     id = amino.id
 
                     # Check if amino is not connected in protein to given amino
-                    if idAround != (id + 1) and idAround != (id - 1):
+                    if idAround not in {(id + 1), (id - 1)}:
                         if id > idAround:
                             if typeCo == "C" and aroundType == "C":
                                 protein.stability -= 5
