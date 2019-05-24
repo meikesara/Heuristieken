@@ -69,8 +69,6 @@ if __name__ == "__main__":
         while plane not in planes:
             plane = input("Do you want a 2D or 3D protein (2D/3D)? ").upper()
 
-        # estimateStability(proteinString, plane)
-
         if method == "simulated" or method == "hillclimber":
 
             # Ask user for the amount of runnings and iterations and check
