@@ -32,7 +32,7 @@ Returns the optimal stability.
 
 <i>Notes:</i>
 * This algorithm only works in 2D
-* Will only run in respectable time for proteins with <b>20 amino acids or less<b/>
+* Will only run in respectable time for proteins with <b>20 amino acids or less</b>
 
 
 ##### Random
@@ -40,7 +40,7 @@ To run the random algorithm use (protein is a string of amino acids):
 ```
 python main.py random protein
 ```
-Thereafter, you are asked for the dimension in which the folding should be performed (either 2D or 3D) and the amount of runnings that should be performed. If one 
+Thereafter, you are asked for the dimension in which the folding should be performed (either 2D or 3D) and the amount of runnings that should be performed. If one
 
 Returns
 
