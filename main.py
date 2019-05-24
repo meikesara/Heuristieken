@@ -49,6 +49,25 @@ def checkInput():
             exit(2)
     return sys.argv[1], sys.argv[2]
 
+def openFile(algorithm, header):
+    """
+    Opens files for saving stability and protein.
+    Returns opened files.
+    """
+
+    stabilityFileName = ("results/stability" + algorithm + ".txt")
+    proteinFileName = ("results/protein" + algorithm + ".txt")
+
+    # Make a folder for results if this does not exist
+    os.makedirs(os.path.dirname(stabilityFileName), exist_ok = True)
+    stabilityFile = open(stabilityFileName, "w")
+    proteinFile = open(proteinFileName, "w")
+
+    stabilityFile.writelines(header)
+    proteinFile.writelines(header)
+
+    return stabilityFile, proteinFile
+
 
 if __name__ == "__main__":
 
@@ -99,22 +118,13 @@ if __name__ == "__main__":
                 if runnings != 1:
                     print("Results will be saved in files.")
 
-                    stabilityFileName = ("results/stabilitySimulated" +
-                                        "Annealing.txt")
-                    proteinFileName = "results/proteinSimulatedAnnealing.txt"
-
-                    # Make a folder for results if this does not exist
-                    os.makedirs(os.path.dirname(stabilityFileName),
-                                exist_ok = True)
-                    stabilityFile = open(stabilityFileName, "w")
-                    proteinFile = open(proteinFileName, "w")
-
-                    # Save header to the files
+                    # Header for the files
                     header = ["Simulated Annealing ", str(proteinString),
                               " D: ", str(D), " ", str(runnings), " x ",
                               str(iterations), "\n"]
-                    stabilityFile.writelines(header)
-                    proteinFile.writelines(header)
+
+                    stabilityFile, proteinFile = openFile("SimulatedAnnealing",
+                                                          header)
 
                     for i in range(runnings):
                         protein = randomFold(proteinString, plane)
@@ -143,20 +153,11 @@ if __name__ == "__main__":
                 if runnings != 1:
                     print("Results will be saved in files.")
 
-                    stabilityFileName = "results/stabilityHillClimber.txt"
-                    proteinFileName = "results/proteinHillClimber.txt"
-
-                    # Make a folder for results if this does not exist
-                    os.makedirs(os.path.dirname(stabilityFileName),
-                                exist_ok = True)
-                    stabilityFile = open(stabilityFileName, "w")
-                    proteinFile = open(proteinFileName, "w")
-
                     # Write the header to the files
                     header = ["Hill climber ", str(proteinString), " ",
                               str(runnings), " x ", str(iterations), "\n"]
-                    stabilityFile.writelines(header)
-                    proteinFile.writelines(header)
+
+                    stabilityFile, proteinFile = openFile("HillClimber", header)
 
                     for i in range(runnings):
                         protein = randomFold(proteinString, plane)
@@ -190,18 +191,10 @@ if __name__ == "__main__":
             if runnings != 1:
                 print("Results will be saved in files.")
 
-                stabilityFileName = "results/stabilityRandom.txt"
-                proteinFileName = "results/proteinRandom.txt"
-
-                # Make a folder for results if this does not exist
-                os.makedirs(os.path.dirname(stabilityFileName), exist_ok=True)
-                stabilityFile = open(stabilityFileName, "w")
-                proteinFile = open(proteinFileName, "w")
-
                 # Write header to the files
                 header = ["Random ", str(proteinString), " ", str(runnings), "\n"]
-                stabilityFile.writelines(header)
-                proteinFile.writelines(header)
+
+                stabilityFile, proteinFile = openFile("Random", header)
 
                 for i in range(runnings):
                     protein = randomFold(proteinString, plane)
