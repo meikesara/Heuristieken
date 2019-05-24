@@ -11,7 +11,7 @@ import random
 import matplotlib.pyplot as plt
 from classes.amino import Amino
 from classes.protein import Protein
-import helper.visualizer as visualizer 
+import helper.visualizer as visualizer
 
 
 def simulatedAnnealing(protein, D, iterations, runnings=False):
@@ -63,6 +63,7 @@ def simulatedAnnealing(protein, D, iterations, runnings=False):
 
     if runnings:
         return bestProtein
+        
     else:
         # Add final stability to stabilityList
         stabilityList.append(protein.stability)
