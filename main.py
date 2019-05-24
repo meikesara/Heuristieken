@@ -5,6 +5,7 @@ Main file
 Meike Kortleve, Nicole Jansen
 """
 
+import os
 import sys
 import matplotlib.pyplot as plt
 from classes.amino import Amino
@@ -51,6 +52,7 @@ if __name__ == "__main__":
         constructive(proteinString)
 
     else:
+        bestStability = []
 
         # Ask user for the plane
         planes = {"2D", "3D"}
@@ -60,7 +62,7 @@ if __name__ == "__main__":
         while plane not in planes:
             plane = input("Do you want a 2D or 3D protein (2D/3D)? ").upper()
 
-        estimateStability(proteinString, plane)
+        # estimateStability(proteinString, plane)
 
         if method == "simulated" or method == "hillclimber":
 
@@ -89,23 +91,30 @@ if __name__ == "__main__":
                         break
 
                 if runnings != 1:
-
-                    stabilityFile = open("results/stabilitySimulatedAnnealing.txt", "w")
-                    proteinFile = open("results/proteinSimulatedAnnealing.txt", "w")
-                    header = [ "Simulated Annealing ", str(proteinString), " ", "D: ", str(D), " ", str(runnings), " x ", str(iterations), '\n']
+                    print("Results will be saved in files.")
+                    stabilityFileName = "results/stabilitySimulatedAnnealing.txt"
+                    proteinFileName = "results/proteinSimulatedAnnealing.txt"
+                    os.makedirs(os.path.dirname(stabilityFileName), exist_ok=True)
+                    stabilityFile = open(stabilityFileName, "w")
+                    proteinFile = open(proteinFileName, "w")
+                    header = ["Simulated Annealing ", str(proteinString), " D: ",
+                              str(D), " ", str(runnings), " x ", str(iterations),
+                              "\n"]
                     stabilityFile.writelines(header)
                     proteinFile.writelines(header)
 
                     for i in range(runnings):
                         protein = randomFold(proteinString, plane)
                         protein = simulatedAnnealing(protein, D, iterations, True)
-                        stabilityLine = [str(protein.stability), '\n']
+                        stabilityLine = [str(protein.stability), "\n"]
                         stabilityFile.writelines(stabilityLine)
-                        proteinLine = [str(protein), '\n']
+                        proteinLine = [str(protein), "\n"]
                         proteinFile.writelines(proteinLine)
+                        bestStability.append(protein.stability)
 
                     stabilityFile.close()
                     proteinFile.close()
+                    print("Best stability: ", min(bestStability))
 
                 else:
                     protein = randomFold(proteinString, plane)
@@ -114,9 +123,14 @@ if __name__ == "__main__":
             elif method == "hillclimber":
 
                 if runnings != 1:
-                    stabilityFile = open("results/stabilityHillClimber.txt", "w")
-                    proteinFile = open("results/proteinHillClimber.txt", "w")
-                    header = [ "Hill climber ", str(proteinString), " ", str(runnings), " x ", str(iterations), '\n']
+                    print("Results will be saved in files.")
+                    stabilityFileName = "results/stabilityHillClimber.txt"
+                    proteinFileName = "results/proteinHillClimber.txt"
+                    os.makedirs(os.path.dirname(stabilityFileName), exist_ok=True)
+                    stabilityFile = open(stabilityFileName, "w")
+                    proteinFile = open(proteinFileName, "w")
+                    header = ["Hill climber ", str(proteinString), " ",
+                              str(runnings), " x ", str(iterations), "\n"]
                     stabilityFile.writelines(header)
                     proteinFile.writelines(header)
 
@@ -124,13 +138,15 @@ if __name__ == "__main__":
                         protein = randomFold(proteinString, plane)
                         protein = hillClimber(protein, iterations, True)
 
-                        stabilityLine = [str(protein.stability), '\n']
+                        stabilityLine = [str(protein.stability), "\n"]
                         stabilityFile.writelines(stabilityLine)
-                        proteinLine = [str(protein), '\n']
+                        proteinLine = [str(protein), "\n"]
                         proteinFile.writelines(proteinLine)
+                        bestStability.append(protein.stability)
 
                     stabilityFile.close()
                     proteinFile.close()
+                    print("Best stability: ", min(bestStability))
 
                 else:
                     protein = randomFold(proteinString, plane)
@@ -139,31 +155,37 @@ if __name__ == "__main__":
         elif method == "random":
 
             while True:
-                iterations = input("Enter the amount of iterations: ")
-                val = iterations.isdigit()
+                runnings = input("Enter the amount of runnings: ")
+                val = runnings.isdigit()
                 if val:
-                    iterations = int(iterations)
+                    runnings = int(runnings)
                     break
 
-            if iterations != 1:
-                stabilityFile = open("results/stabilityRandom.txt", "w")
-                proteinFile = open("results/proteinRandom.txt", "w")
-
-                header = [ "Random ", str(proteinString), " ", str(iterations), '\n']
+            if runnings != 1:
+                print("Results will be saved in files.")
+                stabilityFileName = "results/stabilityRandom.txt"
+                proteinFileName = "results/proteinRandom.txt"
+                os.makedirs(os.path.dirname(stabilityFileName), exist_ok=True)
+                stabilityFile = open(stabilityFileName, "w")
+                proteinFile = open(proteinFileName, "w")
+                header = ["Random ", str(proteinString), " ", str(runnings), "\n"]
                 stabilityFile.writelines(header)
                 proteinFile.writelines(header)
 
-                for i in range(iterations):
+                for i in range(runnings):
                     protein = randomFold(proteinString, plane)
 
-                    stabilityLine = [str(protein.stability), '\n']
+                    stabilityLine = [str(protein.stability), "\n"]
                     stabilityFile.writelines(stabilityLine)
-                    proteinLine = [str(protein), '\n']
+                    proteinLine = [str(protein), "\n"]
                     proteinFile.writelines(proteinLine)
+                    bestStability.append(protein.stability)
 
                 stabilityFile.close()
                 proteinFile.close()
+                print("Best stability: ", min(bestStability))
 
             else:
                 protein = randomFold(proteinString, plane)
                 visualizer.plotProtein(protein)
+        estimateStability(proteinString, plane)

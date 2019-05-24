@@ -40,7 +40,9 @@ To run the random algorithm use (protein is a string of amino acids):
 ```
 python main.py random protein
 ```
-Thereafter, you are asked for the dimension in which the folding should be performed (either 2D or 3D) and the amount of iterations that should be performed.
+Thereafter, you are asked for the dimension in which the folding should be performed (either 2D or 3D) and the amount of runnings that should be performed. If one 
+
+Returns
 
 
 ##### Hill Climber
