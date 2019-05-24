@@ -79,8 +79,8 @@ if __name__ == "__main__":
             iterations = int(input("Enter the amount of iterations: "))
 
             if runnings != 1:
-                stabilityFile = open("stabilityHillClimber.txt", "w")
-                proteinFile = open("proteinHillClimber.txt", "w")
+                stabilityFile = open("results/stabilityHillClimber.txt", "w")
+                proteinFile = open("results/proteinHillClimber.txt", "w")
                 header = [ "Hill climber ", str(proteinString), " ", str(runnings), " x ", str(iterations), '\n']
                 stabilityFile.writelines(header)
                 proteinFile.writelines(header)
@@ -107,8 +107,8 @@ if __name__ == "__main__":
 
             if iterations != 1:
 
-                stabilityFile = open("stabilityRandom.txt", "w")
-                proteinFile = open("proteinRandom.txt", "w")
+                stabilityFile = open("results/stabilityRandom.txt", "w")
+                proteinFile = open("results/proteinRandom.txt", "w")
 
                 header = [ "Random ", str(proteinString), " ", str(iterations), '\n']
                 stabilityFile.writelines(header)

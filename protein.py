@@ -4,22 +4,26 @@ Class for protein.
 Meike Kortleve, Nicole Jansen
 """
 
-from amino import Amino
+import copy
 import random
 import matplotlib.pyplot as plt
-import copy
+from amino import Amino
 
 
 class Protein(object):
     """
     Protein class containing necessary attributes and methods for setting up
-    and updating protein.
+    and updating a protein.
     """
 
     def __init__(self, proteinString, plane):
-
         """
-        This method initialises the variables of the Protein object
+        Initializes the variables of the Protein object.
+
+        Arguments:
+        proteinString -- string that represents the protein
+        plane -- either "2D" or "3D", determining in which dimension protein
+                 should be placed/ folded
         """
 
         self.proteinString = proteinString.upper()
@@ -32,18 +36,14 @@ class Protein(object):
 
     def __str__(self):
         """
-        This method prints the type of amino acids in the protein and their coordinates
+        Prints the type of the amino acids in the protein and their coordinates.
         """
 
         output = ""
-
-        # Loop over the aminoacids in the aminoList
         for amino in self.aminoList:
-            # Add the type to the output
             output += amino.type
-
-            # Add the coordinates to the output
             output += str(amino.coordinate) + " "
+
         return output
 
 
@@ -60,47 +60,43 @@ class Protein(object):
             self.aminoList.append(Amino(id, self.proteinString[id]))
             thisCoordinate = [0] * int(self.plane[0])
             thisCoordinate[1] = id
-            self.aminoList[id].addCoordinate(thisCoordinate)
+            self.aminoList[id].coordinate = thisCoordinate
             self.occupied.append(thisCoordinate)
 
 
     def stabilityUpdate(self, amino, replace=False):
         """
-        Method for updating the stability of the protein.
-        If replace is set to True, stability will be increased (worsened)
+        Updates the stability of the protein.
+
+        Argument:
+        amino -- amino acid of class Amino that is just (re)placed
+
+        Keyword argument:
+        replace -- when True stability will be increased (worsened), when False
+                   stability will be decreased (improved) (default False)
         """
 
-        # Get id, coordinate and type of the current amino-acid
         id = amino.id
         coordinate = amino.coordinate
         typeCo = amino.type
 
-        # Only need to update stability if amino is H or C
+        # Bonds only created between amino acids of type H and C
         if typeCo in {"H", "C"}:
-
-            # Get surrounding coordinates of given amino acid that are occupied
             aroundCos = self.getSurroundCo(coordinate, True)
 
             # For each amino next to given amino, check if they create a bond
             for aroundCo in aroundCos:
-
-                # Get the id and type of the neighboring amino acid
                 idAround = self.occupied.index(aroundCo)
                 aroundType = self.aminoList[idAround].type
 
-                # Bond can only be created when both amino acids are H and/or C
                 if aroundType in {"H", "C"}:
-
                     # Check if amino is not connected in protein to given amino
                     if idAround not in {(id + 1), (id - 1)}:
-                        # Stronger bond created when both aminos are type C
                         if typeCo == "C" and aroundType == "C":
                             if replace:
                                 self.stability += 5
                             else:
                                 self.stability -= 5
-
-                        # Weaker bond created when at least one amino is type H
                         else:
                             if replace:
                                 self.stability += 1
@@ -119,8 +115,8 @@ class Protein(object):
         Arguments:
         givenCo -- list of the coordinates (of an amino acid) of which to find
                    to surrounding coordinates
-        occupied -- True if surrounding coordinates should be occupied, False if
-                    the surrounding coordinates should not be occupied
+        occupied -- True if surrounding coordinates should be occupied, False
+                    if the surrounding coordinates should not be occupied
         """
 
         possibleCos = []
@@ -144,52 +140,53 @@ class Protein(object):
 
     def getDiagonalCo(self, currentAmino):
         """
-        This method returns a diagonal of the current amino acid, that is not occupied
-        and the C if the current amino acid is not the last or the first
+        Determines coordinates diagonally to given amino acid.
+        Returns a list of only the coordinates an unoccupied diagonal when given
+        amino acids is the first or last in the protein; or, when the given
+        amino acid is not first or last in protein, a list with an unoccupied
+        diagonal, coordinates of the C (as defined by Lesh et al., 2003 (see
+        pullMove)), and the index of the amino acid that should also be moved
+        (either the next or previous amino acid); or an empty list when no empty
+        diagonal could be found.
+
+        Argument:
+        currentAmino -- amino acid of class Amino for which a diagonal will be
+                        determined
         """
 
-        # Get the coordinates and position of the current amino acid
         currentCo = currentAmino.coordinate
         index = self.aminoList.index(currentAmino)
 
-        # If the amino acid is the last get the coordinates of the previous amino acid
         if (index + 1) == self.proteinLength:
             previousAmino = self.aminoList[index - 1]
             otherCo = previousAmino.coordinate
-
-        # If the amino acid is the first get the coordinates of the next amino acid
         elif index == 0:
             nextAmino = self.aminoList[index + 1]
             otherCo = nextAmino.coordinate
-
-        # If the amino acid is in the middle get the coordinates of the next and previous amino acid
         else:
-            nOrP = [index + 1, index - 1]
+            nextOrPrev = [index + 1, index - 1]
+            random.shuffle(nextOrPrev)
 
-            # TODO: dit werkend maken
-            random.shuffle(nOrP)
-
-            nextAmino = self.aminoList[nOrP[0]]
+            nextAmino = self.aminoList[nextOrPrev[0]]
             otherCo = nextAmino.coordinate
 
-            previousAmino = self.aminoList[nOrP[1]]
+            previousAmino = self.aminoList[nextOrPrev[1]]
             previousCo = previousAmino.coordinate
-
 
         # Calculate the absolute difference between the x, y (and z) coordinates
         lengthCo = len(currentCo)
         xyzDif = [abs(currentCo[i] - otherCo[i]) for i in range(lengthCo)]
 
-        # Check if the amino acid is the first or last in the protein
         if index in {0, (self.proteinLength - 1)}:
-            # Create a list of diagonals
+            # Create list of diagonals
             if self.plane == "2D":
                 if xyzDif[0] == 1:
-                    diagonals = [[otherCo[0], (otherCo[1] - 1)], [otherCo[0], (otherCo[1] + 1)]]
+                    diagonals = [[otherCo[0], (otherCo[1] - 1)],
+                                 [otherCo[0], (otherCo[1] + 1)]]
                 else:
-                    diagonals = [[(otherCo[0] + 1), otherCo[1]], [(otherCo[0] - 1), otherCo[1]]]
+                    diagonals = [[(otherCo[0] + 1), otherCo[1]],
+                                 [(otherCo[0] - 1), otherCo[1]]]
             else:
-                # NOTE: of dit zoals regel 191(?)
                 if xyzDif[0] == 1:
                     diagonals = [[otherCo[0], (otherCo[1] - 1), otherCo[2]],
                                  [otherCo[0], (otherCo[1] + 1), otherCo[2]],
@@ -206,8 +203,6 @@ class Protein(object):
                                  [otherCo[0], (otherCo[1] - 1), otherCo[2]],
                                  [otherCo[0], (otherCo[1] + 1), otherCo[2]]]
 
-
-            # Randomly shuffle the diagonals
             random.shuffle(diagonals)
 
             # Return the first diagonal that is not occupied
@@ -216,7 +211,6 @@ class Protein(object):
                     return [diagonal]
 
         else:
-            # Create a list of diagonals of the currentCoordinates
             diagonals = []
 
             # Planes in which the coordinate could lay
@@ -230,36 +224,28 @@ class Protein(object):
             # Get all possible diagonals
             for plane in planes:
                 # Places of the diagonal for the given plane
-                options = [[(currentCo[plane[0]] + 1), (currentCo[plane[1]] + 1)],
-                           [(currentCo[plane[0]] + 1), (currentCo[plane[1]] - 1)],
-                           [(currentCo[plane[0]] - 1), (currentCo[plane[1]] + 1)],
-                           [(currentCo[plane[0]] - 1), (currentCo[plane[1]] - 1)]]
+                opts = [[(currentCo[plane[0]] + 1), (currentCo[plane[1]] + 1)],
+                        [(currentCo[plane[0]] + 1), (currentCo[plane[1]] - 1)],
+                        [(currentCo[plane[0]] - 1), (currentCo[plane[1]] + 1)],
+                        [(currentCo[plane[0]] - 1), (currentCo[plane[1]] - 1)]]
 
-                # Actually create diagonal and append to list with diagonals
-                for option in options:
+                for option in opts:
                     diagonal = copy.copy(currentCo)
                     diagonal[plane[0]] = option[0]
                     diagonal[plane[1]] = option[1]
                     diagonals.append(diagonal)
 
-            # Randomly shuffle the diagonals
             random.shuffle(diagonals)
 
-            # Return the first available diagonal and C
             for diagonal in diagonals:
-
-                # Check if the diagonal is not occupied
                 if diagonal not in self.occupied:
+                    surroundCo = self.getSurroundCo(diagonal, occupied=True)
 
-                    # Get the occupied surrounding coordinates of the diagonal
-                    surroundCo = self.getSurroundCo(diagonal, True)
-
-                    # Check if the coordinates of the next amino acid ar in the surrounding cordinates of the diagonal
                     if otherCo in surroundCo:
                         xyz = list(range(lengthCo))
-                        difference = [(currentCo[i] - diagonal[i]) for i in range(lengthCo)]
+                        difference = [(currentCo[i] - diagonal[i])
+                                      for i in range(lengthCo)]
 
-                        # Initialize list for coordinates of the C
                         CCo = [None] * lengthCo
                         if self.plane == "3D":
                             sameCoIndex = difference.index(0)
@@ -270,13 +256,14 @@ class Protein(object):
                         if xyzDif[xyz[0]] == 1:
                             CCo[xyz[0]] = currentCo[xyz[0]]
                             CCo[xyz[1]] = diagonal[xyz[1]]
-                        else: #(elif xyzDif[xyz[1]] == 1)
+                        else:
                             CCo[xyz[0]] = diagonal[xyz[0]]
                             CCo[xyz[1]] = currentCo[xyz[1]]
 
-                        # Check if C is not occupied or if they are the coordinates of the previous amino acid
                         if (CCo not in self.occupied) or (CCo == previousCo):
-                            return [diagonal, CCo, nOrP[1]]
+                            return [diagonal, CCo, nextOrPrev[1]]
+
+        return []
 
 
     def pullMove(self):
@@ -347,7 +334,8 @@ class Protein(object):
         wayToMove -- 1 if to end of protein; -1 if to beginning of protein
         """
 
-        surCoPrev = self.getSurroundCo(self.aminoList[(idToMove - wayToMove)].coordinate, True)
+        prevId = (idToMove - wayToMove)
+        surCoPrev = self.getSurroundCo(self.aminoList[prevId].coordinate, True)
         if ((wayToMove == -1 and idToMove < 0) or
             (wayToMove == 1 and (idToMove > (oldProtein.proteinLength - 1)))):
             return

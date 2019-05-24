@@ -6,27 +6,25 @@ mirror images and the rotationally symmetric folds.
 Meike Kortleve, Nicole Jansen
 """
 
-from protein import Protein
-from amino import Amino
 import copy
-import visualizer
-import matplotlib.pyplot as plt
-import visualizer
-import time
 import re
+import time
+import matplotlib.pyplot as plt
+from amino import Amino
+from protein import Protein
+import visualizer
 
-optStability=[0]
+optStability = [0]
 
 def constructive(proteinString):
     """
-    This function creates the protein, places the first two amino acids and starts
-    the placing of the rest of the amino acids.
+    This function creates the protein, places the first two amino acids and
+    starts the placing of the rest of the amino acids.
 
-    Argumment:
-    proteinString -- a string that contains the amino acids of the protein.
+    Argument:
+    proteinString -- a string that contains the amino acids of the protein
     """
 
-    # Initialize protein
     protein = Protein(proteinString, "2D")
 
     # Place first and second amino acid to prevent rotational symmetry
@@ -38,8 +36,8 @@ def constructive(proteinString):
     # This starts the recursive function createFolded
     createFolded(protein, 2)
 
-    # Print the results
-    print("Protein", proteinString, "has an optimal stability of", optStability[0])
+    print("Protein", proteinString, "has an optimal stability of",
+          optStability[0])
 
 
 def createFolded(protein, idToMove):
@@ -48,63 +46,54 @@ def createFolded(protein, idToMove):
     possible ways to fold a protein.
 
     Arguments:
-    protein -- object of class Protein.
-    idToMove -- positive integer, id of the amino acid that will be moved.
+    protein -- object of class Protein
+    idToMove -- positive integer, id of the amino acid that will be moved
     """
 
     # Stop this function if idToMove exceeds the length of the protein
     if idToMove > (protein.proteinLength - 1):
         return
 
-    # Delete the amino acids from the current amino acid
-    del protein.aminoList[idToMove :]
-    del protein.occupied[idToMove :]
+    del protein.aminoList[idToMove:]
+    del protein.occupied[idToMove:]
 
     # Get the coordinate of the previous amino acid
     prevCo = protein.aminoList[(idToMove - 1)].coordinate
 
-    # Get the non-occupied surrounding amino acids of the previous coordinates.
+    # Get the unoccupied surrounding amino acids of the previous coordinates
     possibleCos = protein.getSurroundCo(prevCo, False)
 
-    # Place current amino acid in the aminoList
     protein.aminoList.append(Amino(idToMove, protein.proteinString[idToMove]))
 
     # Calculate the sum of all the x-coordinates
     xTotal = sum([xCo[0] for xCo in protein.occupied])
 
     if xTotal == 0 and len(possibleCos) == 3:
-
-        # Remove the last coordinate to prevent mirror images.
+        # Remove the last coordinate to prevent mirror images
         possibleCos.pop(1)
 
     for possibleCo in possibleCos:
-
-        # Place the current amino acid on possibleCos
         protein.aminoList[idToMove].coordinate = possibleCo
 
-        # Add the current coordinate to the list of occupied coordinates.
         try:
             protein.occupied[idToMove] = possibleCo
         except:
             protein.occupied.append(possibleCo)
 
-
-        # Calculate the sum of the x and y coordinates.
+        # Calculate the sum of the x and y coordinates
         xTotal = abs(sum([xCo[0] for xCo in protein.occupied]))
         yTotal = abs(sum([yCo[1] for yCo in protein.occupied]))
 
         # This total is two times the protein length if it is a straight line,
         # only folds once either to the left or right or only folds to the
-        # left and right.
+        # left and right
         total =  xTotal + yTotal
 
         # Check if all the amino acids have been placed
         if (idToMove == (protein.proteinLength - 1) and
             total != protein.proteinLength * 2):
-
             getStability(protein)
 
-            # Update the optimalStability
             if protein.stability < optStability[0]:
                 optStability[0] = protein.stability
 
@@ -120,37 +109,26 @@ def getStability(protein):
     protein -- object of class Protein.
     """
 
-    # Reset stability voor nieuwe vouwing
+    # Reset stability for new folding
     protein.stability = 0
 
     for amino in protein.aminoList:
 
         typeCo = amino.type
         if typeCo in {"H", "C"}:
+            aroundCos = protein.getSurroundCo(amino.coordinate, occupied=True)
 
-            # Get surrounding coordinates of given amino acid that are occupied
-            aroundCos = protein.getSurroundCo(amino.coordinate, True)
-
-            # For each amino next to given amino, check if they create a bond
             for aroundCo in aroundCos:
-
-                # Get id and type of amino acid next to given amino
                 idAround = protein.occupied.index(aroundCo)
                 aroundType = protein.aminoList[idAround].type
 
                 if aroundType in {"H", "C"}:
-
-                    # Check if amino is not connected in protein to amino
                     id = amino.id
+
+                    # Check if amino is not connected in protein to given amino
                     if idAround != (id + 1) and idAround != (id - 1):
-
-                        # Bond only needs to be plotted once
                         if id > idAround:
-
-                            # Stronger bond created when both aminos are type C
                             if typeCo == "C" and aroundType == "C":
                                 protein.stability -= 5
-
-                            # Weaker bond created when at least one amino is type H
                             else:
                                 protein.stability -= 1
