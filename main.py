@@ -29,7 +29,7 @@ def checkInput():
     This function checks the input into the main
     """
 
-    # Check if the amount of arguments is 2
+    # Check if correct number of arguments is given
     if len(sys.argv) != 3:
         print("A proteinstring and method is needed")
         exit(1)
