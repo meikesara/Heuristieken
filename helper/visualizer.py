@@ -18,7 +18,7 @@ def plotProtein(protein):
     """
 
     colorDict = {"P": "b", "H": "r", "C": "C6"}
-    nameDict = {"P": "polair", "H": "hydrofoob", "C": "cysteine"}
+    nameDict = {"P": "polar", "H": "hydrofobic", "C": "cysteine"}
 
     if protein.plane == "2D":
         xPoints, yPoints, xLines, yLines = processData(protein)
@@ -63,7 +63,7 @@ def plotProtein(protein):
             ax.scatter(xPoints[i], yPoints[i], zPoints[i], color=colorDict[i],
                        label=nameDict[i])
 
-    plt.title("stabiliteit = " + str(protein.stability))
+    plt.title("stability = " + str(protein.stability))
     ax.legend()
     if protein.plane == "2D":
         ax.axis('equal')
@@ -90,9 +90,8 @@ def plotStability(stabilityList):
     plt.plot(stabilityList, "k")
     plt.xlim(0, len(stabilityList))
     plt.ylim((min(stabilityList) - 5), 0)
-    # TODO: verander deze namen naar Engels voor deadline
-    plt.xlabel("Iteraties")
-    plt.ylabel("Stabiliteit")
+    plt.xlabel("Iterations")
+    plt.ylabel("Stability")
     plt.show()
 
 

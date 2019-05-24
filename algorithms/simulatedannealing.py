@@ -9,10 +9,9 @@ import copy
 import math
 import random
 import matplotlib.pyplot as plt
-from amino import Amino
-from protein import Protein
-from randomfold import randomFold
-import visualizer
+from classes.amino import Amino
+from classes.protein import Protein
+import helper.visualizer as visualizer 
 
 
 def simulatedAnnealing(protein, D, iterations, runnings=False):
@@ -61,9 +60,6 @@ def simulatedAnnealing(protein, D, iterations, runnings=False):
         # If the stability of newProtein is the best set as bestProtein
         if newProtein.stability < bestProtein.stability:
             bestProtein = newProtein
-
-        # temperature = beginTemp/(1 + math.log(k))
-        # temperature = beginTemp * pow(alfa,k)
 
     if runnings:
         return bestProtein

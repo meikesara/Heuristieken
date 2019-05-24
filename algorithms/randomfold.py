@@ -6,8 +6,8 @@ Meike Kortleve, Nicole Jansen
 
 import copy
 import random
-from amino import Amino
-from protein import Protein
+from classes.amino import Amino
+from classes.protein import Protein
 
 
 def randomFold(proteinString, plane):

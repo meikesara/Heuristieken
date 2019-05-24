@@ -69,8 +69,7 @@ def estimateStability(proteinString, plane="2D"):
     stability /= 2
     stability = floor(stability)
 
-    print("proteinString ({!s}): {!r}".format(plane, proteinString))
-    print(f"stability:  {stability}")
+    print(f"Estimated stability:  {stability}")
 
 
 def stabilityUpdate(allList, aminoType, aminoIndex, counterDict, counterDictCC,

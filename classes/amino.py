@@ -27,7 +27,7 @@ class Amino(object):
 
     def __str__(self):
         """
-        Returns string with id, type, and coordinate of amino acid.
+        Returns string with id, type, and coordinate of amino acid.s
         """
 
         return ("id:" + str(self.id) + ", type:" + str(self.type) +
