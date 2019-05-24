@@ -1,6 +1,12 @@
 """
-Main file
-# TODO: dd
+This script allows the folding of an object of the protein class using
+four different algorithms: constructive (depth first), random folding,
+hill climber and simulated annealing.
+
+Usage:
+python main.py algorithm protein
+
+For more details see README on https://github.com/meikesara/Heuristieken/
 
 Meike Kortleve, Nicole Jansen
 """
@@ -32,7 +38,8 @@ def checkInput():
 
     # Check if method is valid
     if sys.argv[1].lower() not in methods:
-        print("The method should be constructive, simulated, hillclimber or random.")
+        print("The method should be constructive, simulated, hillclimber" +
+                "or random.")
         exit(3)
 
     # Check if the second argument only contains H, P or C's
@@ -73,6 +80,7 @@ if __name__ == "__main__":
                 if val:
                     runnings = int(runnings)
                     break
+
             while True:
                 iterations = input("Enter the amount of iterations: ")
                 val = iterations.isdigit()
@@ -92,29 +100,40 @@ if __name__ == "__main__":
 
                 if runnings != 1:
                     print("Results will be saved in files.")
-                    stabilityFileName = "results/stabilitySimulatedAnnealing.txt"
+
+                    stabilityFileName = "results/stabilitySimulated" +
+                                        "Annealing.txt"
                     proteinFileName = "results/proteinSimulatedAnnealing.txt"
-                    os.makedirs(os.path.dirname(stabilityFileName), exist_ok=True)
+
+                    # Make a folder for results if this does not exist
+                    os.makedirs(os.path.dirname(stabilityFileName),
+                                exist_ok = True)
                     stabilityFile = open(stabilityFileName, "w")
                     proteinFile = open(proteinFileName, "w")
-                    header = ["Simulated Annealing ", str(proteinString), " D: ",
-                              str(D), " ", str(runnings), " x ", str(iterations),
-                              "\n"]
 
+                    # Save header to the files
+                    header = ["Simulated Annealing ", str(proteinString),
+                              " D: ", str(D), " ", str(runnings), " x ",
+                              str(iterations), "\n"]
                     stabilityFile.writelines(header)
                     proteinFile.writelines(header)
 
                     for i in range(runnings):
                         protein = randomFold(proteinString, plane)
-                        protein = simulatedAnnealing(protein, D, iterations, True)
+                        protein = simulatedAnnealing(protein, D, iterations,
+                                                     True)
+
+                        # Update the files with the stability and protein
                         stabilityLine = [str(protein.stability), "\n"]
                         stabilityFile.writelines(stabilityLine)
                         proteinLine = [str(protein), "\n"]
                         proteinFile.writelines(proteinLine)
+
                         bestStability.append(protein.stability)
 
                     stabilityFile.close()
                     proteinFile.close()
+
                     print("Best stability: ", min(bestStability))
 
                 else:
@@ -125,11 +144,17 @@ if __name__ == "__main__":
 
                 if runnings != 1:
                     print("Results will be saved in files.")
+
                     stabilityFileName = "results/stabilityHillClimber.txt"
                     proteinFileName = "results/proteinHillClimber.txt"
-                    os.makedirs(os.path.dirname(stabilityFileName), exist_ok=True)
+
+                    # Make a folder for results if this does not exist
+                    os.makedirs(os.path.dirname(stabilityFileName),
+                                exist_ok = True)
                     stabilityFile = open(stabilityFileName, "w")
                     proteinFile = open(proteinFileName, "w")
+
+                    # Write the header to the files
                     header = ["Hill climber ", str(proteinString), " ",
                               str(runnings), " x ", str(iterations), "\n"]
                     stabilityFile.writelines(header)
@@ -139,6 +164,7 @@ if __name__ == "__main__":
                         protein = randomFold(proteinString, plane)
                         protein = hillClimber(protein, iterations, True)
 
+                        # Update the files with the stability and protein
                         stabilityLine = [str(protein.stability), "\n"]
                         stabilityFile.writelines(stabilityLine)
                         proteinLine = [str(protein), "\n"]
@@ -155,6 +181,7 @@ if __name__ == "__main__":
 
         elif method == "random":
 
+            # Ask user for the amount of running
             while True:
                 runnings = input("Enter the amount of runnings: ")
                 val = runnings.isdigit()
@@ -164,11 +191,16 @@ if __name__ == "__main__":
 
             if runnings != 1:
                 print("Results will be saved in files.")
+
                 stabilityFileName = "results/stabilityRandom.txt"
                 proteinFileName = "results/proteinRandom.txt"
+
+                # Make a folder for results if this does not exist
                 os.makedirs(os.path.dirname(stabilityFileName), exist_ok=True)
                 stabilityFile = open(stabilityFileName, "w")
                 proteinFile = open(proteinFileName, "w")
+
+                # Write header to the files
                 header = ["Random ", str(proteinString), " ", str(runnings), "\n"]
                 stabilityFile.writelines(header)
                 proteinFile.writelines(header)
@@ -178,8 +210,10 @@ if __name__ == "__main__":
 
                     stabilityLine = [str(protein.stability), "\n"]
                     stabilityFile.writelines(stabilityLine)
+
                     proteinLine = [str(protein), "\n"]
                     proteinFile.writelines(proteinLine)
+
                     bestStability.append(protein.stability)
 
                 stabilityFile.close()
@@ -189,4 +223,5 @@ if __name__ == "__main__":
             else:
                 protein = randomFold(proteinString, plane)
                 visualizer.plotProtein(protein)
+        
         estimateStability(proteinString, plane)

@@ -42,7 +42,9 @@ def simulatedAnnealing(protein, D, iterations, runnings=False):
 
         # Update the temperature
         temperature = D/math.log(k + 2) - D/math.log(1000000)
-        # temperature = D/math.log(k + 2)
+
+        if temperature <= 0:
+            temperature = pow(10,-15) 
 
         tempList.append(temperature)
 
@@ -63,7 +65,7 @@ def simulatedAnnealing(protein, D, iterations, runnings=False):
 
     if runnings:
         return bestProtein
-        
+
     else:
         # Add final stability to stabilityList
         stabilityList.append(protein.stability)

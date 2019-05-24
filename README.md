@@ -49,7 +49,6 @@ If multiple runnings are performed, you will be prompted that the results will b
 Thereafter, both the best found stability and the estimated stability are returned.
 
 
-
 ##### Hill Climber
 To run the hill climber algorithm use (protein is a string of amino acids):
 ```
