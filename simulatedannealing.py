@@ -42,10 +42,8 @@ def simulatedAnnealing(protein, D, iterations, runnings=False):
         newProtein = protein.pullMove()
 
         # Update the temperature
-        try:
-            temperature = D/math.log(k + 2) - D/math.log(1000000)
-        except:
-            return bestProtein, bestProtein.stability
+        temperature = D/math.log(k + 2) - D/math.log(1000000)
+        # temperature = D/math.log(k + 2)
 
         tempList.append(temperature)
 
