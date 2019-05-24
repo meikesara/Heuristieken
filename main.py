@@ -6,7 +6,7 @@ hill climber and simulated annealing.
 Usage:
 python main.py algorithm protein
 
-For more details see README on https://github.com/meikesara/Heuristieken/
+For more details see README on https://github.com/meikesara/Heuristieken#usage
 
 Meike Kortleve, Nicole Jansen
 """
