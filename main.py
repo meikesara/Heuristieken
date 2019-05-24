@@ -101,8 +101,8 @@ if __name__ == "__main__":
                 if runnings != 1:
                     print("Results will be saved in files.")
 
-                    stabilityFileName = "results/stabilitySimulated" +
-                                        "Annealing.txt"
+                    stabilityFileName = """results/stabilitySimulated
+                                        Annealing.txt"""
                     proteinFileName = "results/proteinSimulatedAnnealing.txt"
 
                     # Make a folder for results if this does not exist
@@ -223,5 +223,5 @@ if __name__ == "__main__":
             else:
                 protein = randomFold(proteinString, plane)
                 visualizer.plotProtein(protein)
-        
+
         estimateStability(proteinString, plane)

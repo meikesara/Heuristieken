@@ -1,5 +1,6 @@
 """
-Function for estimating stability based on the protein as a string.
+Function for estimating the lower bound of the stability based on the protein
+as a string.
 
 Nicole Jansen, Meike Kortleve
 """
@@ -69,7 +70,7 @@ def estimateStability(proteinString, plane="2D"):
     stability /= 2
     stability = floor(stability)
 
-    print(f"Estimated stability:  {stability}")
+    print(f"Estimated highest stability:  {stability}")
 
 
 def stabilityUpdate(allList, aminoType, aminoIndex, counterDict, counterDictCC,
