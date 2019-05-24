@@ -7,7 +7,7 @@ Hier staat een korte beschrijving van het probleem evt. met plaatje.
 
 ### Prerequisites
 
-This codebase hase been written in [Python3.6.3](https://www.python.org/downloads/). requirements.txt contains all the necessary packages to succesfully run this code. These can be installed by pip with the following instruction:
+This codebase has been written in [Python3.7.1 and Python3.7.2](https://www.python.org/downloads/). requirements.txt contains all the necessary packages to successfully run this code. These can be installed by pip with the following instruction:
 
 ```
 pip install -r requirements.txt
