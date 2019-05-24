@@ -1,6 +1,8 @@
 """
 Class for protein.
 
+This algorithm uses objects of the class Amino.
+
 Meike Kortleve, Nicole Jansen
 """
 
@@ -23,7 +25,7 @@ class Protein(object):
         Arguments:
         proteinString -- string that represents the protein
         plane -- either "2D" or "3D", determining in which dimension protein
-                 should be placed/ folded
+                 should be placed/folded
         """
 
         self.proteinString = proteinString.upper()
@@ -126,6 +128,7 @@ class Protein(object):
                        [(givenCo[0] + 1), givenCo[1]],
                        [givenCo[0], (givenCo[1] - 1)],
                        [givenCo[0], (givenCo[1] + 1)]]
+
         if self.plane == "3D":
             [co.append(givenCo[2]) for co in coordinates]
             coordinates.append([givenCo[0], givenCo[1], (givenCo[2] - 1)])

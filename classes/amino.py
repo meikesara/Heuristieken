@@ -1,6 +1,8 @@
 """
 Class for amino acids.
 
+This class is used as a building block of objects of the Protein class.
+
 Meike Kortleve, Nicole Jansen
 """
 

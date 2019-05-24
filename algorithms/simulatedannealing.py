@@ -1,6 +1,7 @@
 """
 Script to run a simulated annealing algorithm with a logarithmic cooling
-rate (temperature = D/ln(iteration + 1) - D/ln(1000000)).
+rate (temperature = D/ln(iteration + 2) - D/ln(10^6)). From the 10^6-2th
+iteration the temperature will be D/ln(10^6 - 1) - D/ln(10^6).
 
 Meike Kortleve, Nicole Jansen
 """
@@ -30,7 +31,7 @@ def simulatedAnnealing(protein, D, iterations, runnings=False):
 
     stabilityList = []
     tempList = []
-    temperature = 100
+    translation = pow(10, 6)
 
     bestProtein = protein
 
@@ -41,10 +42,10 @@ def simulatedAnnealing(protein, D, iterations, runnings=False):
         newProtein = protein.pullMove()
 
         # Update the temperature
-        temperature = D/math.log(k + 2) - D/math.log(1000000)
-
-        if temperature <= 0:
-            temperature = pow(10,-15) 
+        if k < (translation - 2):
+            temperature = D/math.log(k + 2) - D/math.log(translation)
+        else:
+            temperature = D/math.log(translation -1) - D/math.log(translation)
 
         tempList.append(temperature)
 
@@ -76,10 +77,9 @@ def simulatedAnnealing(protein, D, iterations, runnings=False):
         visualizer.plotProtein(bestProtein)
         visualizer.plotStability(stabilityList)
 
-        # Plot temperatuur change
+        # Plot temperature change
         plt.plot(tempList)
         plt.title("Temperature")
-
 
         # Plot acceptance change
         plt.figure()

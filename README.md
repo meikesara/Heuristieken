@@ -42,8 +42,8 @@ python main.py random protein
 ```
 Thereafter, you are asked for the dimension in which the folding should be performed (either 2D or 3D) and the amount of runnings that should be performed.
 
-If one running is performed, the folded protein will be visualized and the estimate of the stability will also be given.</br>
-If multiple runnings are performed, you will be prompted that the results will be saved in files, which could be found in the folder results. In ```proteinRandom.txt``` the coordinates on which the amino acids are placed for each protein found are saved. In ```stabilityRandom.txt``` the stability found for each running is saved. Thereafter, both the best found stability and the estimated stability are returned.
+If one running is performed, the folded protein will be visualized and an estimate of the best stability will also be given.</br>
+If multiple runnings are performed, you will be prompted that the results will be saved in files. In ```proteinRandom.txt``` the coordinates on which the amino acids are placed for each protein found are saved. In ```stabilityRandom.txt``` the stability for each running is saved.</br> Thereafter, both the best found stability and an estimate of the lower bound of the best stability are returned.
 
 
 #### Hill Climber
@@ -54,7 +54,7 @@ python main.py hillclimber protein
 Thereafter, you are asked for the dimension in which the folding should be performed (either 2D or 3D), the amount of runnings that should be performed, and the amount of iterations per running that should be performed.
 
 If one running is performed, the folded protein and the change of the stability over the iterations will be visualized and the estimate of the stability will also be given.</br>
-If multiple runnings are performed, you will be prompted that the results will be saved in files, which could be found in the folder results. In ```proteinHillClimber.txt``` the coordinates on which the amino acids are placed (for the best folded protein of each run) are saved. In ```stabilityHillClimber.txt``` the best found stability for each running is saved. Thereafter, both the overall best found stability and the estimated stability are returned.
+If multiple runnings are performed, you will be prompted that the results will be saved in files, which could be found in the folder results. In ```proteinHillClimber.txt``` the coordinates on which the amino acids are placed (for the best folded protein of each run) are saved. In ```stabilityHillClimber.txt``` the best found stability for each running is saved. Thereafter, both the overall best found stability and an estimate of the lower bound of the stability are returned.
 
 #### Simulated Annealing
 To run the simulated annealing algorithm use (protein is a string of amino acids):
