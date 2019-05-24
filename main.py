@@ -5,15 +5,16 @@ Main file
 Meike Kortleve, Nicole Jansen
 """
 
-from amino import Amino
-from protein import Protein
 import sys
 import matplotlib.pyplot as plt
-import visualizer
+from amino import Amino
+from protein import Protein
+from constructive import constructive
 from hillclimber import hillClimber
 from randomfold import randomFold
-from constructive import constructive
 from simulatedannealing import simulatedAnnealing
+import visualizer
+
 
 def checkInput():
     """
